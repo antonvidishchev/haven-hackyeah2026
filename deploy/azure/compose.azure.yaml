@@ -1,0 +1,50 @@
+# Azure VM override: only Caddy is public; SurrealDB, the API and the web app stay on the
+# private Compose network. Use with:
+#   docker compose -f compose.yaml -f deploy/azure/compose.azure.yaml --profile full up -d --build
+# Variables come from /opt/haven/.env, written by cloud-init (see deploy/azure/README.md).
+
+services:
+  surrealdb:
+    ports: !reset []
+    restart: unless-stopped
+
+  migrate:
+    environment:
+      WEB_ORIGIN: https://${HAVEN_DOMAIN:?set HAVEN_DOMAIN}
+
+  api:
+    ports: !reset []
+    restart: unless-stopped
+    environment:
+      WEB_ORIGIN: https://${HAVEN_DOMAIN:?set HAVEN_DOMAIN}
+      # The web app forwards the visitor's IP from inside the Docker network.
+      TRUST_PROXY: loopback,uniquelocal
+
+  web:
+    ports: !reset []
+    restart: unless-stopped
+    environment:
+      HAVEN_SECURE_COOKIES: 'true'
+      # Caddy replaces X-Forwarded-For from untrusted clients, so visitors can't spoof it.
+      HAVEN_TRUST_FORWARDED_FOR: 'true'
+
+  caddy:
+    profiles: [full]
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    environment:
+      HAVEN_DOMAIN: ${HAVEN_DOMAIN:?set HAVEN_DOMAIN}
+    volumes:
+      - ./deploy/azure/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - web
+
+volumes:
+  caddy-data:
+  caddy-config:
