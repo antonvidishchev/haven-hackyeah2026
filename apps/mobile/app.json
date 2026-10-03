@@ -38,7 +38,37 @@
             "backgroundColor": "#131e1a"
           }
         }
-      ]
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Haven uses your location only when you tap “Use current location” to place a pin on your report."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Haven lets you attach photos and videos you choose to your report.",
+          "cameraPermission": "Haven uses the camera when you take a photo or record video for your report.",
+          "microphonePermission": "Haven records sound with videos you choose to record."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Haven uses the camera when you record video evidence.",
+          "microphonePermission": "Haven records sound with the video you choose to record.",
+          "recordAudioAndroid": true
+        }
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Haven uses the microphone when you choose to record audio evidence."
+        }
+      ],
+      "expo-image",
+      "expo-video"
     ],
     "experiments": {
       "typedRoutes": true
