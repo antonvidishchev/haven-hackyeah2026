@@ -29,6 +29,9 @@ export default function DistrictMap({
 }) {
   const counts = new Map(zones.map((zone) => [zone.zoneId, zone.count]));
   const max = Math.max(0, ...zones.map((zone) => zone.count ?? 0));
+  // react-leaflet applies `style` and `onEachFeature` only when the layer is created, so a new
+  // filter or language remounts the districts layer (the map keeps its position).
+  const layerKey = JSON.stringify([zones, tooltips]);
   return (
     <MapContainer
       center={[KRAKOW_CENTER.lat, KRAKOW_CENTER.lng]}
@@ -43,6 +46,7 @@ export default function DistrictMap({
         url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <GeoJSON
+        key={layerKey}
         data={krakowDistricts as unknown as GeoJsonData}
         style={(feature) => {
           const id = feature?.properties?.id as DistrictId;

@@ -38,6 +38,11 @@ test('filtering by incident type keeps the privacy threshold', async ({ page }) 
   await expect(filtered.getByRole('listitem')).toHaveCount(18);
   await expect(filtered.getByText('III Prądnik Czerwony — below privacy threshold')).toBeVisible();
 
+  // The map follows the filter: it mutes exactly the districts the list says are suppressed.
+  const map = page.getByLabel('Map of Kraków districts shaded by filed reports');
+  const suppressed = await filtered.getByText('below privacy threshold').count();
+  await expect(map.locator('path.district-suppressed')).toHaveCount(suppressed);
+
   await filter.getByRole('link', { name: 'All incident types' }).click();
   await expect(page).toHaveURL('/area-reports');
   await expect(
