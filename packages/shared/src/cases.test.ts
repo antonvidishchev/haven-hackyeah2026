@@ -53,6 +53,31 @@ describe('nextCaseStatus', () => {
       nextCaseStatus({ state: 'closed', triageStatus: 'handled' }, { type: 'cancel' }),
     ).toThrow(CaseClosedError);
   });
+
+  it('an official claims, records actions, then closes for good', () => {
+    const handled: CaseStatus = { state: 'open', triageStatus: 'handled' };
+    const claimed = nextCaseStatus(handled, { type: 'claim' });
+    expect(claimed).toEqual({ state: 'in_review', triageStatus: 'handled' });
+    expect(nextCaseStatus(claimed, { type: 'external_action' })).toEqual(claimed);
+    const closed = nextCaseStatus(claimed, { type: 'close' });
+    expect(closed).toEqual({ state: 'closed', triageStatus: 'handled' });
+    for (const type of ['claim', 'external_action', 'close'] as const) {
+      expect(() => nextCaseStatus(closed, { type })).toThrow(CaseClosedError);
+    }
+    expect(nextCaseStatus(closed, { type: 'resident_update' })).toEqual(closed);
+  });
+
+  it('closing takes a case out of review', () => {
+    expect(nextCaseStatus(open, { type: 'close' })).toEqual({
+      state: 'closed',
+      triageStatus: 'handled',
+    });
+  });
+
+  it('officials cannot act on cancelled cases', () => {
+    const cancelled: CaseStatus = { state: 'cancelled', triageStatus: 'handled' };
+    expect(() => nextCaseStatus(cancelled, { type: 'claim' })).toThrow(CaseClosedError);
+  });
 });
 
 describe('decisionDisposition', () => {

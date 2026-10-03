@@ -1,8 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import {
   cancelReasons,
@@ -16,16 +14,11 @@ import {
   type ReplyKind,
 } from '@haven/shared';
 
-import {
-  cancelCase,
-  promoteCase,
-  replyToResident,
-  type DecisionError,
-  type DecisionResult,
-} from '@/app/actions/operator';
+import { cancelCase, promoteCase, replyToResident } from '@/app/actions/operator';
+import { DecisionFeedback, useCaseDecision } from '@/components/haven/case-decision';
 import { ConfirmDialog } from '@/components/haven/confirm-dialog';
 import { Field } from '@/components/haven/field';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -48,11 +41,7 @@ export function DecisionPanel({ caseId, version, organizationId, recommendation 
   const t = useTranslations('decision');
   const tc = useTranslations('common');
   const labels = enumLabels[useLocale() as keyof typeof enumLabels];
-  const router = useRouter();
-
-  const [error, setError] = useState<DecisionError | null>(null);
-  const [done, setDone] = useState<string | null>(null);
-  const [pending, setPending] = useState(false);
+  const { error, done, pending, run, clearError } = useCaseDecision();
 
   const [replyKind, setReplyKind] = useState<ReplyKind>('request_information');
   const [replyBody, setReplyBody] = useState('');
@@ -62,23 +51,6 @@ export function DecisionPanel({ caseId, version, organizationId, recommendation 
   const [reason, setReason] = useState('');
   const [cancelReason, setCancelReason] = useState<CancelReason>('not_actionable');
   const [cancelComment, setCancelComment] = useState('');
-
-  async function run(action: () => Promise<DecisionResult>, doneMessage: string) {
-    setPending(true);
-    setError(null);
-    setDone(null);
-    try {
-      const result = await action();
-      if (result.ok) {
-        setDone(doneMessage);
-        return true;
-      }
-      setError(result.error);
-      return false;
-    } finally {
-      setPending(false);
-    }
-  }
 
   const reply = (followed = false, kind = replyKind, body = replyBody) =>
     run(
@@ -124,36 +96,13 @@ export function DecisionPanel({ caseId, version, organizationId, recommendation 
         {t('title')}
       </h2>
 
-      {error ? (
-        <div
-          role="alert"
-          className="flex flex-col gap-3 rounded-lg border border-destructive/40 p-3"
-        >
-          <p className="text-sm font-medium text-destructive">{t(`error.${error}`)}</p>
-          {error === 'stale' || error === 'closed' ? (
-            <div className="flex flex-wrap gap-2">
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={() => {
-                  setError(null);
-                  router.refresh();
-                }}
-              >
-                {t('reload')}
-              </Button>
-              <Link href="/queue" className={buttonVariants({ variant: 'ghost', size: 'lg' })}>
-                {t('backToQueue')}
-              </Link>
-            </div>
-          ) : null}
-        </div>
-      ) : null}
-      {done ? (
-        <p role="status" className="text-sm font-medium text-success">
-          {done}
-        </p>
-      ) : null}
+      <DecisionFeedback
+        error={error}
+        done={done}
+        onDismiss={clearError}
+        backHref="/queue"
+        backLabel={t('backToQueue')}
+      />
 
       {recommendation?.status === 'suggested' ? (
         <FollowRecommendation

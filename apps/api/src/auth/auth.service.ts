@@ -22,7 +22,8 @@ export class AuthService {
   ) {}
 
   async login(username: string, password: string, ip: string): Promise<AuthResponse> {
-    if (!this.loginLimiter.hit(ip)) {
+    // Per address and account: slows guessing one account without one office locking out another.
+    if (!this.loginLimiter.hit(`${ip}:${username.toLowerCase()}`)) {
       throw apiError(
         429,
         'too_many_attempts',

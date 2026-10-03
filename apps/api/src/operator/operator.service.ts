@@ -8,6 +8,7 @@ import {
   queuePriorityRank,
   reportFieldsSchema,
   type cancelCaseRequestSchema,
+  type CaseActionItem,
   type CaseStatus,
   type OperatorCaseDetail,
   type OperatorCaseListResponse,
@@ -25,16 +26,21 @@ import { apiError } from '../common/http-exception.filter.js';
 import { toIso } from '../db/values.js';
 import { EvidenceRepository } from '../evidence/evidence.repository.js';
 import { ReportsRepository } from '../reports/reports.repository.js';
-import { type CaseDecisionWrite, type CaseRow, OperatorRepository } from './operator.repository.js';
+import {
+  type CaseActionRow,
+  type CaseDecisionWrite,
+  type CaseRow,
+  OperatorRepository,
+} from './operator.repository.js';
 
 export const VAULT_LIMIT = 200;
 
 export const caseNotFound = () => apiError(404, 'case_not_found', 'We could not find that case');
 
-const caseClosed = () =>
+export const caseClosed = () =>
   apiError(409, 'case_closed', 'This case is closed and can no longer change');
 
-const staleVersion = () =>
+export const staleVersion = () =>
   apiError(409, 'stale_version', 'This case changed somewhere else. Reload to see the latest.');
 
 /** Parsed request bodies (defaults applied). */
@@ -61,6 +67,17 @@ export function toCaseSummary(row: CaseRow): OperatorCaseSummary {
     updatedAt: toIso(row.updated_at),
   };
 }
+
+export const toCaseAction = (a: CaseActionRow): CaseActionItem => ({
+  id: String(a.id.id),
+  type: a.type,
+  actorName: a.actor_name ?? 'Unknown',
+  payload: a.payload,
+  disposition: a.disposition ?? null,
+  priorVersion: a.prior_version,
+  resultingVersion: a.resulting_version,
+  createdAt: toIso(a.created_at),
+});
 
 /** Highest queue priority first, then the longest-waiting report. */
 export function compareQueue(a: OperatorCaseSummary, b: OperatorCaseSummary): number {
@@ -121,16 +138,7 @@ export class OperatorService {
           }
         : null,
       messages: messages.map(toResidentMessage),
-      actions: actions.map((a) => ({
-        id: String(a.id.id),
-        type: a.type,
-        actorName: a.actor_name ?? 'Unknown',
-        payload: a.payload,
-        disposition: a.disposition ?? null,
-        priorVersion: a.prior_version,
-        resultingVersion: a.resulting_version,
-        createdAt: toIso(a.created_at),
-      })),
+      actions: actions.map(toCaseAction),
       cancelReasonCategory: row.cancel_reason_category ?? null,
       cancelComment: row.cancel_comment ?? null,
     };
@@ -196,9 +204,12 @@ export class OperatorService {
     caseId: string,
     body: { expectedVersion: number; followedRecommendation: boolean },
     decision: OperatorDecision,
-    plan: (
-      row: CaseRow,
-    ) => Pick<CaseDecisionWrite, 'type' | 'payload' | 'organizationId' | 'cancel' | 'message'>,
+    plan: (row: CaseRow) => Pick<
+      CaseDecisionWrite,
+      'payload' | 'organizationId' | 'cancel' | 'message'
+    > & {
+      type: Extract<CaseDecisionWrite['type'], `operator.${string}`>;
+    },
   ): Promise<OperatorCaseDetail> {
     const row = await this.operator.findCase(caseId);
     if (!row) throw caseNotFound();

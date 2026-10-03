@@ -1,6 +1,11 @@
 import {
   apiErrorBodySchema,
   type CancelCaseRequest,
+  type ClaimCaseRequest,
+  type CloseCaseRequest,
+  type OfficialCaseDetail,
+  type OfficialCaseListResponse,
+  type RecordActionRequest,
   type OperatorCaseDetail,
   type OperatorCaseListResponse,
   type PromoteCaseRequest,
@@ -155,6 +160,27 @@ export function createHavenClient(options: HavenClientOptions) {
         }),
       vault: (init?: Omit<RequestOptions, 'body'>) =>
         request<VaultListResponse>('GET', '/operator/evidence', init),
+    },
+    official: {
+      cases: (init?: Omit<RequestOptions, 'body'>) =>
+        request<OfficialCaseListResponse>('GET', '/official/cases', init),
+      case: (id: string, init?: Omit<RequestOptions, 'body'>) =>
+        request<OfficialCaseDetail>('GET', `/official/cases/${encodeURIComponent(id)}`, init),
+      claim: (id: string, body: ClaimCaseRequest, init?: Omit<RequestOptions, 'body'>) =>
+        request<OfficialCaseDetail>('POST', `/official/cases/${encodeURIComponent(id)}/claim`, {
+          ...init,
+          body,
+        }),
+      recordAction: (id: string, body: RecordActionRequest, init?: Omit<RequestOptions, 'body'>) =>
+        request<OfficialCaseDetail>('POST', `/official/cases/${encodeURIComponent(id)}/actions`, {
+          ...init,
+          body,
+        }),
+      close: (id: string, body: CloseCaseRequest, init?: Omit<RequestOptions, 'body'>) =>
+        request<OfficialCaseDetail>('POST', `/official/cases/${encodeURIComponent(id)}/close`, {
+          ...init,
+          body,
+        }),
     },
     hotspots: {
       list: (init?: Omit<RequestOptions, 'body'>) =>

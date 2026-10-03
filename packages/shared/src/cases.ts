@@ -57,6 +57,34 @@ export const replyCaseRequestSchema = z.object({
 });
 export type ReplyCaseRequest = z.input<typeof replyCaseRequestSchema>;
 
+/** What an official did outside Haven. */
+export const externalActionTypes = [
+  'phone_call',
+  'site_visit',
+  'referral',
+  'meeting',
+  'other',
+] as const;
+export type ExternalActionType = (typeof externalActionTypes)[number];
+
+const versioned = { expectedVersion: z.number().int().min(1) };
+
+export const claimCaseRequestSchema = z.object(versioned);
+export type ClaimCaseRequest = z.input<typeof claimCaseRequestSchema>;
+
+export const recordActionRequestSchema = z.object({
+  ...versioned,
+  type: z.enum(externalActionTypes),
+  note: z.string().trim().min(1).max(MESSAGE_BODY_MAX),
+});
+export type RecordActionRequest = z.input<typeof recordActionRequestSchema>;
+
+export const closeCaseRequestSchema = z.object({
+  ...versioned,
+  comment: z.string().trim().min(1).max(MESSAGE_BODY_MAX),
+});
+export type CloseCaseRequest = z.input<typeof closeCaseRequestSchema>;
+
 // --- Triage rules ---
 
 export type OperatorDecision =
@@ -64,7 +92,10 @@ export type OperatorDecision =
   | { type: 'cancel' }
   | { type: 'reply'; kind: ReplyKind };
 
-export type CaseEvent = OperatorDecision | { type: 'resident_update' };
+/** What an official does with a case routed to their organisation. */
+export type OfficialEvent = { type: 'claim' } | { type: 'external_action' } | { type: 'close' };
+
+export type CaseEvent = OperatorDecision | OfficialEvent | { type: 'resident_update' };
 
 export type CaseStatus = { state: CaseState; triageStatus: TriageStatus };
 
@@ -100,6 +131,12 @@ export function nextCaseStatus(current: CaseStatus, event: CaseEvent): CaseStatu
       return { state: 'open', triageStatus: 'handled' };
     case 'cancel':
       return { state: 'cancelled', triageStatus: 'handled' };
+    case 'claim':
+      return { ...current, state: 'in_review' };
+    case 'external_action':
+      return current;
+    case 'close':
+      return { state: 'closed', triageStatus: 'handled' };
   }
 }
 
@@ -199,6 +236,27 @@ export type OperatorCaseDetail = OperatorCaseSummary & {
   actions: CaseActionItem[];
   cancelReasonCategory: CancelReason | null;
   cancelComment: string | null;
+};
+
+export type AssignedOfficial = { id: string; name: string };
+
+/** A case as an official sees it in their organisation's list. */
+export type OfficialCaseSummary = Omit<OperatorCaseSummary, 'hasSuggestion'> & {
+  assignedOfficial: AssignedOfficial | null;
+};
+
+export type OfficialCaseListResponse = { items: OfficialCaseSummary[] };
+
+/**
+ * One case for an official: the report, its evidence and routing, and what happened to the
+ * case. Never the advisory recommendation or the messages to the resident.
+ */
+export type OfficialCaseDetail = OfficialCaseSummary & {
+  fields: ReportFields;
+  evidence: EvidenceItem[];
+  routing: RoutingResult;
+  actions: CaseActionItem[];
+  closureComment: string | null;
 };
 
 export type VaultItem = {
