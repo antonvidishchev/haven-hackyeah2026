@@ -25,10 +25,7 @@ const roles: { name: string; landing: string; heading: string; visits: [string, 
     name: 'Local Operator',
     landing: '/queue',
     heading: 'Response queue',
-    visits: [
-      ['/queue/sample', 'Case'],
-      ['/vault', 'Evidence vault'],
-    ],
+    visits: [['/vault', 'Evidence vault']],
   },
   {
     name: 'Local Administrator',

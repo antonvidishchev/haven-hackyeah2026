@@ -9,6 +9,6 @@ import { ReportsService } from './reports.service.js';
   imports: [CasesModule],
   controllers: [ReportsController],
   providers: [ReportsRepository, ReportsService, EvidenceRepository],
-  exports: [ReportsService, EvidenceRepository],
+  exports: [ReportsService, ReportsRepository, EvidenceRepository],
 })
 export class ReportsModule {}

@@ -1,11 +1,27 @@
 import { Injectable } from '@nestjs/common';
-import type { OrganizationId, RoutingResult } from '@haven/shared';
-import { RecordId } from 'surrealdb';
+import type { OrganizationId, ResidentMessage, RoutingResult } from '@haven/shared';
+import { type DateTime, RecordId } from 'surrealdb';
 import { SurrealService } from '../db/surreal.service.js';
+import { toIso } from '../db/values.js';
+
+export type CaseMessageRow = {
+  id: RecordId<'case_message'>;
+  kind: ResidentMessage['kind'];
+  body: string;
+  created_at: DateTime;
+};
+
+/** A case message as residents see it: never the author. */
+export const toResidentMessage = (row: CaseMessageRow): ResidentMessage => ({
+  id: String(row.id.id),
+  kind: row.kind,
+  body: row.body,
+  createdAt: toIso(row.created_at),
+});
 
 const reportRecord = (id: string) => new RecordId('report', id);
 
-/** Reads the routing decision and case created at filing. */
+/** Reads the routing decision, case and case messages created for a filed report. */
 @Injectable()
 export class CasesRepository {
   constructor(private readonly surreal: SurrealService) {}
@@ -37,5 +53,16 @@ export class CasesRepository {
       { report: reportRecord(reportId), org: organizationId },
     );
     return rows.length > 0;
+  }
+
+  /** The messages on the report's case, oldest first; none for drafts. */
+  async messagesForReport(reportId: string): Promise<ResidentMessage[]> {
+    const [rows] = await this.surreal.query<[CaseMessageRow[]]>(
+      `SELECT id, kind, body, created_at FROM case_message
+       WHERE case IN (SELECT VALUE id FROM haven_case WHERE report = $report)
+       ORDER BY created_at ASC, id ASC`,
+      { report: reportRecord(reportId) },
+    );
+    return rows.map(toResidentMessage);
   }
 }

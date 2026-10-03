@@ -1,5 +1,12 @@
 import {
   apiErrorBodySchema,
+  type CancelCaseRequest,
+  type OperatorCaseDetail,
+  type OperatorCaseListResponse,
+  type PromoteCaseRequest,
+  type ReplyCaseRequest,
+  type TriageStatus,
+  type VaultListResponse,
   type AuthResponse,
   type EscalateReportRequest,
   type EvidenceItem,
@@ -125,6 +132,29 @@ export function createHavenClient(options: HavenClientOptions) {
       remove: (id: string, init?: Omit<RequestOptions, 'body'>) =>
         request<void>('DELETE', `/evidence/${encodeURIComponent(id)}`, init),
       mediaPath: (id: string) => `/evidence/${encodeURIComponent(id)}/media`,
+    },
+    operator: {
+      cases: (view: TriageStatus, init?: Omit<RequestOptions, 'body'>) =>
+        request<OperatorCaseListResponse>('GET', `/operator/cases${queryString({ view })}`, init),
+      case: (id: string, init?: Omit<RequestOptions, 'body'>) =>
+        request<OperatorCaseDetail>('GET', `/operator/cases/${encodeURIComponent(id)}`, init),
+      promote: (id: string, body: PromoteCaseRequest, init?: Omit<RequestOptions, 'body'>) =>
+        request<OperatorCaseDetail>('POST', `/operator/cases/${encodeURIComponent(id)}/promote`, {
+          ...init,
+          body,
+        }),
+      cancel: (id: string, body: CancelCaseRequest, init?: Omit<RequestOptions, 'body'>) =>
+        request<OperatorCaseDetail>('POST', `/operator/cases/${encodeURIComponent(id)}/cancel`, {
+          ...init,
+          body,
+        }),
+      reply: (id: string, body: ReplyCaseRequest, init?: Omit<RequestOptions, 'body'>) =>
+        request<OperatorCaseDetail>('POST', `/operator/cases/${encodeURIComponent(id)}/reply`, {
+          ...init,
+          body,
+        }),
+      vault: (init?: Omit<RequestOptions, 'body'>) =>
+        request<VaultListResponse>('GET', '/operator/evidence', init),
     },
     hotspots: {
       list: (init?: Omit<RequestOptions, 'body'>) =>

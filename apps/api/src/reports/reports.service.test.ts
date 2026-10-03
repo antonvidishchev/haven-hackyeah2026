@@ -51,7 +51,10 @@ describe('ReportsService.update', () => {
   const service = new ReportsService(
     reports as unknown as ReportsRepository,
     evidence as unknown as EvidenceRepository,
-    { routingFor: vi.fn(async () => null) } as unknown as CasesRepository,
+    {
+      routingFor: vi.fn(async () => null),
+      messagesForReport: vi.fn(async () => []),
+    } as unknown as CasesRepository,
     { AI_RECOMMENDATION_MODE: 'local' } as AppConfig,
   );
 

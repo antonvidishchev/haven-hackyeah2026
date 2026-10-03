@@ -163,12 +163,15 @@ export class EvidenceService {
   }
 
   /**
-   * The owner, operators and admins may view evidence. Officials see it only when the report's
-   * case is routed to their own organisation; everyone else is answered "not found".
+   * The owner may view evidence. Operators and admins see it once the report is filed (drafts
+   * stay private to the resident); officials only when the report's case is routed to their own
+   * organisation. Everyone else is answered "not found".
    */
   private async canView(principal: SessionPrincipal, row: EvidenceWithReport): Promise<boolean> {
     if (String(row.owner.id) === principal.id) return true;
-    if (principal.role === 'operator' || principal.role === 'admin') return true;
+    if (principal.role === 'operator' || principal.role === 'admin') {
+      return row.report_state === 'submitted';
+    }
     if (principal.role === 'official' && principal.organizationId) {
       return this.cases.organizationHasReport(String(row.report.id), principal.organizationId);
     }

@@ -158,7 +158,9 @@
     "filed": "Filed",
     "state": "State",
     "triage": "Triage",
-    "organisation": "Organisation"
+    "organisation": "Organisation",
+    "severity": "Severity",
+    "status": "Status"
   },
   "queue": {
     "title": "Response queue",
@@ -173,13 +175,86 @@
     "advisoryBody": "A deterministic, rule-based suggestion. It never decides for you.",
     "actions": "Decision",
     "promote": "Send to organisation",
-    "cancelCase": "Cancel case"
+    "cancelCase": "Cancel case",
+    "viewsLabel": "Queue views",
+    "empty": {
+      "needs_review": {
+        "title": "Nothing needs review",
+        "body": "Newly filed reports and resident updates appear here."
+      },
+      "awaiting_resident": {
+        "title": "No one to wait for",
+        "body": "Cases where you asked the resident for more information appear here."
+      },
+      "handled": {
+        "title": "Nothing handled yet",
+        "body": "Promoted and cancelled cases appear here."
+      }
+    },
+    "aiSuggests": "AI suggests",
+    "escalated": "Escalated",
+    "caseHeading": "Case {reference}",
+    "yes": "Yes",
+    "no": "No",
+    "unrated": "Not rated",
+    "weapon": "Weapon or immediate threat",
+    "repeat": "Repeat incident",
+    "eventTime": "When",
+    "place": "Place",
+    "description": "What happened",
+    "revision": "Report version",
+    "evidence": "Evidence",
+    "noEvidence": "No evidence attached.",
+    "revisions": "Revisions",
+    "revisionNote": {
+      "created": "Draft started",
+      "edited": "Edited by the resident",
+      "evidence_added": "Evidence added",
+      "filed": "Filed",
+      "escalated": "Escalated by the resident"
+    },
+    "routingRule": "Rule",
+    "routedTo": "Routed at filing to",
+    "currentDestination": "Current destination",
+    "advisorySource": "Simulated local recommendation",
+    "recommendation": {
+      "request_more_evidence": "Suggested: ask the resident for the evidence they mention",
+      "transfer_to_ngo": "Suggested: send to the community volunteer network",
+      "none": "No suggestion"
+    },
+    "noSuggestion": "No suggestion is available for this case.",
+    "messagesTitle": "Messages to the resident",
+    "noMessages": "No messages sent yet.",
+    "history": "Decision history",
+    "noHistory": "No decisions yet.",
+    "action": {
+      "operator_promote": "{actor} sent the case to an organisation",
+      "operator_cancel": "{actor} cancelled the case",
+      "operator_reply": "{actor} wrote to the resident",
+      "official_claim": "{actor} claimed the case",
+      "official_external_action": "{actor} recorded an action",
+      "official_close": "{actor} closed the case"
+    },
+    "disposition": {
+      "followed": "Followed the AI recommendation",
+      "rejected": "Went against the AI recommendation",
+      "different": "Differed from the AI recommendation"
+    },
+    "versionChange": "version {from} → {to}"
   },
   "vault": {
     "title": "Evidence vault",
     "lead": "Photos, video and audio attached to filed reports.",
     "emptyTitle": "No evidence yet",
-    "emptyBody": "Evidence from filed reports appears here."
+    "emptyBody": "Evidence from filed reports appears here.",
+    "custodyTitle": "Private custody",
+    "custodyBody": "Evidence is stored privately and is never public. Open a file only when the case needs it; every viewing is logged.",
+    "file": "File",
+    "type": "Type",
+    "size": "Size",
+    "sha256": "SHA-256",
+    "added": "Added",
+    "view": "View evidence"
   },
   "cases": {
     "title": "Assigned cases",
@@ -332,6 +407,56 @@
       "request_information": "We need a little more information",
       "comment": "Update",
       "cancellation_notice": "This report is closed"
+    },
+    "cancellationNotice": "Thank you for your report. Haven’s team has reviewed it and closed it. No further action is planned.",
+    "editCta": "Edit details or add evidence"
+  },
+  "decision": {
+    "title": "Decision",
+    "follow": "Follow AI recommendation",
+    "followTitle": "Follow the recommendation?",
+    "followReplyBody": "This asks the resident for more information. Edit the message before sending.",
+    "followPromoteBody": "This sends the case to the Neighborhood Volunteer Network (fictional). Edit the reason before confirming.",
+    "followReplyPrefill": "Thank you for your report. You mentioned a photo, video or recording — could you add it to your report? It helps us find the right support.",
+    "followPromotePrefill": "Lower-severity harassment; community support is the best fit.",
+    "followConfirm": "Confirm",
+    "replyTitle": "Reply to resident",
+    "replyKind": "Kind of message",
+    "replyKinds": {
+      "request_information": "Request information",
+      "comment": "Comment"
+    },
+    "replyBody": "Message",
+    "replyHint": "The resident sees this text, never your name.",
+    "sendReply": "Send to resident",
+    "promoteTitle": "Promote",
+    "destination": "Destination",
+    "reason": "Reason",
+    "promote": "Send to organisation",
+    "cancelTitle": "Cancel case",
+    "cancelReason": "Cancellation reason",
+    "cancelReasons": {
+      "spam": "Spam",
+      "duplicate": "Duplicate",
+      "not_actionable": "Not actionable",
+      "other": "Other"
+    },
+    "cancelComment": "Internal comment",
+    "cancelCommentHint": "Staff only. The resident gets a neutral closing notice.",
+    "cancelCase": "Cancel case",
+    "cancelConfirmTitle": "Cancel this case?",
+    "cancelConfirmBody": "The case closes for good and the resident gets a neutral notice. This can’t be undone.",
+    "replied": "Message sent to the resident.",
+    "promoted": "Case sent to {organisation}.",
+    "cancelled": "Case cancelled.",
+    "closedNote": "This case is closed. No further decisions can be made.",
+    "reload": "Reload case",
+    "backToQueue": "Back to queue",
+    "error": {
+      "stale": "Someone else changed this case while you were looking at it. Reload it to see the latest version.",
+      "closed": "This case has been closed in the meantime.",
+      "invalid": "Check the form and try again.",
+      "unavailable": "The decision wasn’t saved. Try again in a moment."
     }
   }
 }

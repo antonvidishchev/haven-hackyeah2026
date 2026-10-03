@@ -84,7 +84,11 @@ export default async function ReportPage({ params }: PageProps<'/report/[id]'>) 
 
       {draft ? null : <HavenMessages messages={report.messages} />}
 
-      {draft ? null : <h2>{t('editTitle')}</h2>}
+      {draft ? null : (
+        <h2 id="edit-title" tabIndex={-1} className="outline-none">
+          {t('editTitle')}
+        </h2>
+      )}
 
       <ReportEditor
         report={report}

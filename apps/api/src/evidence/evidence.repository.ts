@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import type { EvidenceItem, ReportState } from '@haven/shared';
 import { type DateTime, RecordId } from 'surrealdb';
 import { principalRecord } from '../auth/principal.repository.js';
+import { residentUpdateSurql } from '../cases/triage.js';
 import { SurrealService } from '../db/surreal.service.js';
 import { toIso } from '../db/values.js';
 
@@ -67,7 +68,8 @@ export class EvidenceRepository {
 
   /**
    * Stores the row and touches the report. A filed report also gets an `evidence_added`
-   * revision; drafts keep their revision so the editor's next autosave doesn't conflict.
+   * revision (and a case awaiting the resident goes back to review); drafts keep their
+   * revision so the editor's next autosave doesn't conflict.
    */
   async create(evidence: NewEvidence): Promise<EvidenceItem> {
     const results = await this.surreal.query<unknown[]>(
@@ -83,6 +85,7 @@ export class EvidenceRepository {
            report: $report, revision: $current.current_revision + 1, fields: $current.fields,
            note: 'evidence_added', author: $owner
          };
+         ${residentUpdateSurql('report')}
        } ELSE {
          UPDATE $report SET updated_at = time::now();
        };

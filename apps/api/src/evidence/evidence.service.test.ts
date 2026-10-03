@@ -64,7 +64,16 @@ describe('EvidenceService.media access', () => {
     expect(cases.organizationHasReport).not.toHaveBeenCalled();
   });
 
-  it('lets operators view without a case lookup', async () => {
+  it('answers 404 to an operator for draft evidence', async () => {
+    evidence.findWithReport.mockResolvedValueOnce({ ...evidenceRow, report_state: 'draft' });
+    const error = (await service
+      .media({ id: 'op', role: 'operator', name: 'Op' }, 'e1', undefined)
+      .catch((e: unknown) => e)) as HttpException;
+    expect(error.getStatus()).toBe(404);
+    expect(storage.size).not.toHaveBeenCalled();
+  });
+
+  it('lets operators view filed evidence without a case lookup', async () => {
     const media = await service.media({ id: 'op', role: 'operator', name: 'Op' }, 'e1', undefined);
     expect(media.status).toBe(200);
     expect(cases.organizationHasReport).not.toHaveBeenCalled();

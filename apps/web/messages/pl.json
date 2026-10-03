@@ -158,7 +158,9 @@
     "filed": "Złożono",
     "state": "Stan",
     "triage": "Selekcja",
-    "organisation": "Organizacja"
+    "organisation": "Organizacja",
+    "severity": "Waga",
+    "status": "Status"
   },
   "queue": {
     "title": "Kolejka zgłoszeń",
@@ -173,13 +175,86 @@
     "advisoryBody": "Deterministyczna sugestia oparta na regułach. Nigdy nie decyduje za Ciebie.",
     "actions": "Decyzja",
     "promote": "Przekaż organizacji",
-    "cancelCase": "Anuluj sprawę"
+    "cancelCase": "Anuluj sprawę",
+    "viewsLabel": "Widoki kolejki",
+    "empty": {
+      "needs_review": {
+        "title": "Nic nie czeka na przegląd",
+        "body": "Tu pojawią się nowe zgłoszenia i aktualizacje od mieszkańców."
+      },
+      "awaiting_resident": {
+        "title": "Na nikogo nie czekamy",
+        "body": "Tu pojawią się sprawy, w których poprosiłeś mieszkańca o więcej informacji."
+      },
+      "handled": {
+        "title": "Nic jeszcze nie załatwiono",
+        "body": "Tu pojawią się sprawy przekazane i anulowane."
+      }
+    },
+    "aiSuggests": "Sugestia AI",
+    "escalated": "Eskalowane",
+    "caseHeading": "Sprawa {reference}",
+    "yes": "Tak",
+    "no": "Nie",
+    "unrated": "Nie oceniono",
+    "weapon": "Broń lub bezpośrednie zagrożenie",
+    "repeat": "Powtarzające się zdarzenie",
+    "eventTime": "Kiedy",
+    "place": "Miejsce",
+    "description": "Co się stało",
+    "revision": "Wersja zgłoszenia",
+    "evidence": "Dowody",
+    "noEvidence": "Brak załączonych dowodów.",
+    "revisions": "Wersje",
+    "revisionNote": {
+      "created": "Rozpoczęto szkic",
+      "edited": "Edytowane przez mieszkańca",
+      "evidence_added": "Dodano dowody",
+      "filed": "Złożono",
+      "escalated": "Eskalowane przez mieszkańca"
+    },
+    "routingRule": "Reguła",
+    "routedTo": "Przy złożeniu skierowano do",
+    "currentDestination": "Obecny adresat",
+    "advisorySource": "Symulowana lokalna rekomendacja",
+    "recommendation": {
+      "request_more_evidence": "Sugestia: poproś mieszkańca o wspomniane dowody",
+      "transfer_to_ngo": "Sugestia: przekaż sieci wolontariuszy",
+      "none": "Brak sugestii"
+    },
+    "noSuggestion": "Brak sugestii dla tej sprawy.",
+    "messagesTitle": "Wiadomości do mieszkańca",
+    "noMessages": "Nie wysłano jeszcze wiadomości.",
+    "history": "Historia decyzji",
+    "noHistory": "Brak decyzji.",
+    "action": {
+      "operator_promote": "{actor} przekazał(a) sprawę organizacji",
+      "operator_cancel": "{actor} anulował(a) sprawę",
+      "operator_reply": "{actor} napisał(a) do mieszkańca",
+      "official_claim": "{actor} przejął(ęła) sprawę",
+      "official_external_action": "{actor} zapisał(a) działanie",
+      "official_close": "{actor} zamknął(ęła) sprawę"
+    },
+    "disposition": {
+      "followed": "Zgodnie z rekomendacją AI",
+      "rejected": "Wbrew rekomendacji AI",
+      "different": "Inaczej niż rekomendacja AI"
+    },
+    "versionChange": "wersja {from} → {to}"
   },
   "vault": {
     "title": "Archiwum dowodów",
     "lead": "Zdjęcia, nagrania wideo i audio dołączone do złożonych zgłoszeń.",
     "emptyTitle": "Brak dowodów",
-    "emptyBody": "Dowody ze złożonych zgłoszeń pojawią się tutaj."
+    "emptyBody": "Dowody ze złożonych zgłoszeń pojawią się tutaj.",
+    "custodyTitle": "Prywatne przechowywanie",
+    "custodyBody": "Dowody są przechowywane prywatnie i nigdy nie są publiczne. Otwieraj plik tylko wtedy, gdy sprawa tego wymaga; każde otwarcie jest rejestrowane.",
+    "file": "Plik",
+    "type": "Typ",
+    "size": "Rozmiar",
+    "sha256": "SHA-256",
+    "added": "Dodano",
+    "view": "Zobacz dowód"
   },
   "cases": {
     "title": "Przydzielone sprawy",
@@ -332,6 +407,56 @@
       "request_information": "Potrzebujemy trochę więcej informacji",
       "comment": "Aktualizacja",
       "cancellation_notice": "To zgłoszenie jest zamknięte"
+    },
+    "cancellationNotice": "Dziękujemy za zgłoszenie. Zespół Haven je przejrzał i zamknął. Nie planujemy dalszych działań.",
+    "editCta": "Edytuj szczegóły lub dodaj dowody"
+  },
+  "decision": {
+    "title": "Decyzja",
+    "follow": "Zastosuj rekomendację AI",
+    "followTitle": "Zastosować rekomendację?",
+    "followReplyBody": "Mieszkaniec zostanie poproszony o więcej informacji. Możesz edytować wiadomość przed wysłaniem.",
+    "followPromoteBody": "Sprawa trafi do Sąsiedzkiej Sieci Wolontariuszy (fikcyjnej). Możesz edytować uzasadnienie.",
+    "followReplyPrefill": "Dziękujemy za zgłoszenie. Wspomniałeś(-aś) o zdjęciu, filmie lub nagraniu — czy możesz dodać je do zgłoszenia? Pomoże nam to dobrać właściwe wsparcie.",
+    "followPromotePrefill": "Nękanie o niższej wadze; najlepiej pasuje wsparcie społeczne.",
+    "followConfirm": "Potwierdź",
+    "replyTitle": "Odpowiedz mieszkańcowi",
+    "replyKind": "Rodzaj wiadomości",
+    "replyKinds": {
+      "request_information": "Prośba o informacje",
+      "comment": "Komentarz"
+    },
+    "replyBody": "Wiadomość",
+    "replyHint": "Mieszkaniec widzi ten tekst, nigdy Twojego imienia.",
+    "sendReply": "Wyślij mieszkańcowi",
+    "promoteTitle": "Przekaż",
+    "destination": "Adresat",
+    "reason": "Uzasadnienie",
+    "promote": "Przekaż organizacji",
+    "cancelTitle": "Anuluj sprawę",
+    "cancelReason": "Powód anulowania",
+    "cancelReasons": {
+      "spam": "Spam",
+      "duplicate": "Duplikat",
+      "not_actionable": "Brak możliwych działań",
+      "other": "Inny"
+    },
+    "cancelComment": "Komentarz wewnętrzny",
+    "cancelCommentHint": "Tylko dla zespołu. Mieszkaniec otrzyma neutralną informację o zamknięciu.",
+    "cancelCase": "Anuluj sprawę",
+    "cancelConfirmTitle": "Anulować tę sprawę?",
+    "cancelConfirmBody": "Sprawa zostanie trwale zamknięta, a mieszkaniec otrzyma neutralną informację. Tego nie można cofnąć.",
+    "replied": "Wiadomość wysłana do mieszkańca.",
+    "promoted": "Sprawa przekazana: {organisation}.",
+    "cancelled": "Sprawa anulowana.",
+    "closedNote": "Ta sprawa jest zamknięta. Nie można podjąć kolejnych decyzji.",
+    "reload": "Odśwież sprawę",
+    "backToQueue": "Wróć do kolejki",
+    "error": {
+      "stale": "Ktoś inny zmienił tę sprawę w międzyczasie. Odśwież ją, aby zobaczyć najnowszą wersję.",
+      "closed": "Ta sprawa została w międzyczasie zamknięta.",
+      "invalid": "Sprawdź formularz i spróbuj ponownie.",
+      "unavailable": "Decyzja nie została zapisana. Spróbuj ponownie za chwilę."
     }
   }
 }

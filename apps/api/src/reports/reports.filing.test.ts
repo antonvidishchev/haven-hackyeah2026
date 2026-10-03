@@ -53,7 +53,10 @@ function setup(mode: AppConfig['AI_RECOMMENDATION_MODE'] = 'local') {
     revisions: vi.fn(async () => []),
   };
   const evidence = { listForReport: vi.fn(async () => [] as unknown[]) };
-  const cases = { routingFor: vi.fn(async () => null) };
+  const cases = {
+    routingFor: vi.fn(async () => null),
+    messagesForReport: vi.fn(async () => [] as unknown[]),
+  };
   const service = new ReportsService(
     reports as unknown as ReportsRepository,
     evidence as unknown as EvidenceRepository,
@@ -224,5 +227,28 @@ describe('ReportsService.escalate', () => {
     const detail = await t.service.escalate(owner, 'r1');
     expect(t.reports.escalate).not.toHaveBeenCalled();
     expect(detail).toMatchObject({ escalated: true, revision: 3 });
+  });
+});
+
+describe('ReportsService resident messages', () => {
+  it("returns the case's messages without their author, oldest first", async () => {
+    const t = setup();
+    const messages = [
+      { id: 'm1', kind: 'request_information', body: 'Which tram?', createdAt: 'a' },
+      { id: 'm2', kind: 'cancellation_notice', body: 'Closed', createdAt: 'b' },
+    ];
+    t.cases.messagesForReport.mockResolvedValue(messages);
+    t.reports.findOwned.mockResolvedValue(row('submitted', fileable, 2));
+    const detail = await t.service.get(owner, 'r1');
+    expect(t.cases.messagesForReport).toHaveBeenCalledWith('r1');
+    expect(detail.messages).toEqual(messages);
+  });
+
+  it('has none for a draft', async () => {
+    const t = setup();
+    t.reports.findOwned.mockResolvedValue(row('draft', fileable));
+    const detail = await t.service.get(owner, 'r1');
+    expect(detail.messages).toEqual([]);
+    expect(t.cases.messagesForReport).not.toHaveBeenCalled();
   });
 });

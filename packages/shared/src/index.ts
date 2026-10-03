@@ -10,3 +10,4 @@ export * from './reports.js';
 export * from './evidence.js';
 export * from './router.js';
 export * from './hotspots.js';
+export * from './cases.js';

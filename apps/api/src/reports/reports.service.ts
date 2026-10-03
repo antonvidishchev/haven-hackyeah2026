@@ -178,10 +178,12 @@ export class ReportsService {
 
   private async detail(row: ReportRow): Promise<ReportDetail> {
     const id = String(row.id.id);
-    const [revisions, evidence, routing] = await Promise.all([
+    const filed = row.state === 'submitted';
+    const [revisions, evidence, routing, messages] = await Promise.all([
       this.reports.revisions(id),
       this.evidence.listForReport(id),
-      row.state === 'submitted' ? this.cases.routingFor(id) : null,
+      filed ? this.cases.routingFor(id) : null,
+      filed ? this.cases.messagesForReport(id) : [],
     ]);
     return {
       id,
@@ -191,7 +193,7 @@ export class ReportsService {
       fields: fieldsOf(row),
       evidence,
       revisions,
-      messages: [],
+      messages,
       routing,
       escalated: row.escalated,
       escalatedAt: toIsoOrNull(row.escalated_at),

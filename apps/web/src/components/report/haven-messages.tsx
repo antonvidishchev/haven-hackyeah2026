@@ -19,7 +19,10 @@ export async function HavenMessages({ messages }: { messages: ResidentMessage[] 
                 <MessageSquare aria-hidden className="size-4 text-primary" />
                 {t(`kind.${message.kind}`)}
               </p>
-              <p className="whitespace-pre-line text-foreground">{message.body}</p>
+              <p className="whitespace-pre-line text-foreground">
+                {/* The notice is fixed text, so it can follow the resident's language. */}
+                {message.kind === 'cancellation_notice' ? t('cancellationNotice') : message.body}
+              </p>
               <p>
                 <time dateTime={message.createdAt}>
                   {format.dateTime(new Date(message.createdAt), {
@@ -28,6 +31,11 @@ export async function HavenMessages({ messages }: { messages: ResidentMessage[] 
                   })}
                 </time>
               </p>
+              {message.id === ordered[0]?.id && message.kind === 'request_information' ? (
+                <a href="#edit-title" className="resident-button self-start">
+                  {t('editCta')}
+                </a>
+              ) : null}
             </li>
           ))}
         </ul>

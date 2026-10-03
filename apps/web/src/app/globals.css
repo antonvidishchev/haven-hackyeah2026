@@ -189,6 +189,9 @@
   .staff-panel {
     @apply rounded-lg border bg-card p-4 text-card-foreground;
   }
+  .staff-form :where(select, textarea):not([data-slot]) {
+    @apply w-full rounded-lg border border-input bg-background px-2.5 py-2 text-sm focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none;
+  }
 }
 
 /* Kraków district outlines on the location map (themed, so they follow dark mode). */

@@ -5,6 +5,7 @@ import { principalRecord } from '../auth/principal.repository.js';
 import { SurrealService } from '../db/surreal.service.js';
 import { toIso } from '../db/values.js';
 import type { FilingPlan } from '../cases/routing.js';
+import { residentUpdateSurql } from '../cases/triage.js';
 import type { ReportCursor } from './cursor.js';
 
 export type ReportRow = {
@@ -98,7 +99,8 @@ export class ReportsRepository {
 
   /**
    * Saves new fields as revision `expectedRevision + 1`, only if the report is still at
-   * `expectedRevision`. Returns false when someone else saved first.
+   * `expectedRevision`. Returns false when someone else saved first. A case awaiting the
+   * resident goes back to review in the same transaction.
    */
   async updateFields(
     id: string,
@@ -116,6 +118,7 @@ export class ReportsRepository {
          CREATE report_revision CONTENT {
            report: $id, revision: $expected + 1, fields: $fields, note: 'edited', author: $author
          };
+         ${residentUpdateSurql('id')}
        };
        RETURN array::len($updated);
        COMMIT TRANSACTION;`,
