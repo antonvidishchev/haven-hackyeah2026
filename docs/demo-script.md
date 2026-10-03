@@ -16,7 +16,9 @@ pnpm db:up && pnpm db:migrate && pnpm db:seed && pnpm dev   # or: pnpm demo:up
 - The seed includes showcase cases in every state (see the README), so the staff screens are
   never empty.
 
-All organisations, people and resources are fictional, and nothing leaves the laptop.
+All organisations, people and resources are fictional, and no real service is contacted. Locally,
+nothing leaves the laptop. The same flow also works on the live web demo,
+<https://haven-hackyeah.polandcentral.cloudapp.azure.com/>; for the phone part, use a local API.
 
 ## 3-minute version
 

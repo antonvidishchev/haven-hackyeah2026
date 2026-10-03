@@ -1,30 +1,99 @@
 # Haven
 
-Haven is a safe, low-barrier way for residents of Kraków to report social-safety incidents —
-mainly anti-immigrant and xenophobic harassment — and get routed to the right kind of human help.
-Built for the HackYeah 2026 **Smart City** open task.
+**A safe middle path for reporting harassment and discrimination in Kraków.**
+Built from scratch for the HackYeah 2026 **Smart City** open task.
+
+**Live demo:** <https://haven-hackyeah.polandcentral.cloudapp.azure.com/>. You can report without an
+account. To try the staff roles, use the one-tap demo cards on **Sign in**.
 
 > **Prototype.** All organisations, people and resources are fictional, and no real services are
 > contacted. In danger, call **112**.
 
-Harassment on trams, at stops and in neighbourhoods mostly goes unreported, because the only
-options feel like "call the police" or "say nothing". Haven is the middle path:
+## The problem
 
-- **Residents** report in under a minute, without an account if they like, in English or Polish,
-  on the web or in the Expo app. They can add photos, video or audio and follow replies.
-- A deterministic **Smart Router** (explainable rules, not AI) sends each filed report to the
-  right kind of human help: a volunteer network, a professional support service, or, only for an
-  emergency with a weapon, a police coordination unit.
-- **Operators** triage every case: send it to an organisation, ask the resident for more, or
-  cancel it with a neutral notice. A simulated advisory suggestion can be followed in one click.
-- **Officials** claim cases for their organisation, record what they did outside Haven and close
-  them. **Admins** read an append-only audit log.
-- **Support matchmaking** links each report to fictional local help, with "matched because…".
-- **Area reports**, the front page, show privacy-protected counts per district, for all
-  incidents or one incident type (fewer than 3 reports are suppressed).
+A person harassed on a tram, at a stop or in their neighbourhood often feels they have two
+options: "call the police" (slow, intimidating, fear of retaliation) or "say nothing". Most say
+nothing.
 
-More: [demo script](docs/demo-script.md) · [pilot estimate](docs/pilot-estimate.md) ·
-[submission package](docs/submission.md)
+- A [nationwide study of women in Poland](https://czasopisma.inp.pan.pl/index.php/bk/article/view/5715)
+  found that one in ten had experienced stalking and one in eight sexual harassment at work. Only
+  15% reported the incidents to the police.
+- [Police figures cited in the press](https://notesfrompoland.com/2026/07/17/reported-hate-crimes-against-ukrainians-in-poland-up-30-this-year/)
+  show roughly 30% more hate-crime reports involving Ukrainians in the first half of 2026 than a
+  year earlier.
+
+These figures measure different harms, not a single Kraków trend. The common thread is a city
+problem: when speaking up feels risky or complicated, residents miss out on support, and the
+city's services can't see where help is needed.
+
+## What Haven does
+
+Haven gives residents a low-barrier way to tell someone, and makes sure a human answers.
+
+- **Report in a few minutes.** Residents can report as a guest or with an account, in English
+  or Polish, on the web or in the Expo mobile app. A report covers verbal harassment,
+  intimidation, threats, discrimination, online harassment, or hate symbols and vandalism. It can
+  include photos, video, audio and a place on the map. Drafts stay private and autosave until the
+  resident chooses to file.
+- **Get routed to the right kind of help.** A deterministic **Smart Router** (published rules,
+  not AI) proposes a responder and a priority:
+  - a volunteer network for low-severity cases
+  - a professional support service for medium and high severity
+  - a police coordination unit only for emergencies with a weapon, at **Top priority**
+- **See help that fits now.** Each report is matched to local support services (legal aid,
+  counselling, NGOs, helplines), each with a plain "matched because…".
+- **A human reviews every report.** **Operators** work a prioritised queue. They send a case to
+  an organisation, ask the resident for more, or close it with a neutral notice. A labelled,
+  simulated advisory recommendation can be followed in one click, and whether it was followed is
+  audited.
+- **Partners act on it.** **Officials** of the receiving organisation claim the case, record
+  what they did (a call, a visit, a referral) and close it. **Admins** read an append-only audit
+  log.
+- **The city sees demand, not people.** **Area reports**, the front page, show how many reports
+  were filed in each of Kraków's 18 districts, filterable by incident type. Districts with fewer
+  than 3 reports show no number, and exact locations are never shown.
+
+### One report's journey
+
+1. On tram 8 near Teatr Bagatela, a man shouts insults at a resident about their accent. Without
+   signing up, the resident opens Haven on their phone, describes what happened, marks the stop
+   and files. They get a reference, `HV-2026-…`.
+2. The Smart Router matches rule 1 (low severity) and proposes the volunteer network. The
+   resident immediately sees matched local help.
+3. The operator sees the case in _Needs review_, checks the details and the advisory
+   recommendation, and sends it to the volunteer network.
+4. A volunteer official claims the case, records a phone call with the resident and closes it
+   with an outcome.
+5. The report is now one more count for I Stare Miasto on Area reports, shown only once the
+   district has at least 3 reports.
+
+See the [demo script](docs/demo-script.md) to walk through it yourself.
+
+### Trust and privacy by design
+
+- **Explainable:** every routing decision stores its rule, the ruleset version and a SHA-256
+  digest of the rules.
+- **Evidence:** fingerprinted with SHA-256, streamed only to authorised staff, and listed in a
+  read-only evidence vault.
+- **Accountable:** every staff decision goes into an append-only audit log, and concurrent edits
+  are rejected rather than overwritten.
+- **Minimal exposure:** guests need no name or contact details. Area reports use k=3
+  suppression and never label a place as unsafe.
+- **Accessible:** targets WCAG 2.1 AA, with axe checks on every role's pages, EN/PL, light and
+  dark themes, and 44 px touch targets.
+
+### What's next
+
+- An AI-assisted guide that helps a stressed resident capture the details and evidence that
+  matter.
+- AI-supported triage that recommends a priority and next step for the operator to confirm.
+- A governed Evidence Vault (retention, legal holds, export) hardened to stand as evidence in
+  court.
+- Real integrations with official organisations, NGOs and volunteer groups, plus Ukrainian copy.
+- A 6-month pilot in three districts (I Stare Miasto, II Grzegórzki, XIII Podgórze) for about
+  500,000 PLN. See the [pilot estimate](docs/pilot-estimate.md).
+
+More: [pitch deck](docs/pitch/haven-pitch.pdf) · [submission package](docs/submission.md)
 
 ## Architecture
 
@@ -151,19 +220,19 @@ The 25 support resources are fictional too.
 
 ## Real vs simulated
 
-| Area                    | Real in the prototype                                                       | Simulated or out of scope                                  |
-| ----------------------- | --------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| Reporting               | Guest and account drafts, autosave, revisions, history, filing references   | Offline drafts                                             |
-| Evidence                | Upload with type and size limits, SHA-256, authorised playback              | Malware scanning, retention, legal holds, export           |
-| Routing                 | Deterministic, versioned Smart Router with a digest of the rules            | Dispatch: no institution, email or SMS is ever contacted   |
-| Advisory recommendation | Rule-based fixture, stored immutably, with dispositions in the audit trail  | Any real AI or LLM call                                    |
-| Escalation              | Recorded on the report and in the queue                                     | Identity verification (a demo checkbox)                    |
-| Staff workflows         | Operator, official and admin flows with optimistic concurrency and audit    | Real organisations; all are fictional                      |
-| Area reports            | Counts per Kraków district and incident type with k=3 suppression           | —                                                          |
-| Matchmaking             | Keyword and tag scoring with SurrealDB full-text search, "matched because…" | The resources themselves                                   |
-| Location                | Kraków district boundaries, map pin, device location (mobile)               | Third-party geocoding                                      |
-| Mobile                  | Expo Go app: report, evidence, in-app audio and video capture, My reports   | Background recording; staff screens are web-only           |
-| Deployment              | Docker Compose (`pnpm demo:up`)                                             | Cloud hosting, guest-to-account transfer, grant management |
+| Area                    | Real in the prototype                                                       | Simulated or out of scope                                |
+| ----------------------- | --------------------------------------------------------------------------- | -------------------------------------------------------- |
+| Reporting               | Guest and account drafts, autosave, revisions, history, filing references   | Offline drafts                                           |
+| Evidence                | Upload with type and size limits, SHA-256, authorised playback              | Malware scanning, retention, legal holds, export         |
+| Routing                 | Deterministic, versioned Smart Router with a digest of the rules            | Dispatch: no institution, email or SMS is ever contacted |
+| Advisory recommendation | Rule-based fixture, stored immutably, with dispositions in the audit trail  | Any real AI or LLM call                                  |
+| Escalation              | Recorded on the report and in the queue                                     | Identity verification (a demo checkbox)                  |
+| Staff workflows         | Operator, official and admin flows with optimistic concurrency and audit    | Real organisations; all are fictional                    |
+| Area reports            | Counts per Kraków district and incident type with k=3 suppression           | —                                                        |
+| Matchmaking             | Keyword and tag scoring with SurrealDB full-text search, "matched because…" | The resources themselves                                 |
+| Location                | Kraków district boundaries, map pin, device location (mobile)               | Third-party geocoding                                    |
+| Mobile                  | Expo Go app: report, evidence, in-app audio and video capture, My reports   | Background recording; staff screens are web-only         |
+| Deployment              | Docker Compose (`pnpm demo:up`); one Azure VM with Caddy and HTTPS (web)    | Guest-to-account transfer, grant management              |
 
 ## Accessibility
 
@@ -190,7 +259,9 @@ app. Staff use the web app.
 ## Deploying to Azure
 
 A single VM with Docker Compose and automatic HTTPS, for a public web demo: see
-[`deploy/azure/README.md`](deploy/azure/README.md).
+[`deploy/azure/README.md`](deploy/azure/README.md). The live demo runs at
+<https://haven-hackyeah.polandcentral.cloudapp.azure.com/>. Only the web app is public; the mobile
+app needs a local API (see [Mobile](#mobile)).
 
 ## Environment
 
@@ -213,3 +284,8 @@ anything beyond local use (`openssl rand -hex 32`).
 
 The full list of tools, libraries and the AI disclosure is in
 [`docs/submission.md`](docs/submission.md).
+
+## Credits
+
+Made by Anton Vidishchev for HackYeah 2026. The ring-tailed lemur in the credit bar at the top of
+every page is the team's mascot.
