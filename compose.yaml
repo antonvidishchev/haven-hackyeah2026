@@ -1,0 +1,81 @@
+name: haven
+
+services:
+  surrealdb:
+    image: surrealdb/surrealdb:v3.3.0
+    command: start --log info --user ${SURREAL_USER:-root} --pass ${SURREAL_PASS:-root} rocksdb:/data/haven.db
+    user: root
+    ports:
+      - '${SURREAL_HOST_PORT:-8000}:8000'
+    volumes:
+      - surreal-data:/data
+    healthcheck:
+      test: ['CMD', '/surreal', 'is-ready', '--endpoint', 'http://127.0.0.1:8000']
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  migrate:
+    profiles: [full]
+    image: haven-api
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    command: ['node', 'dist/db/cli.js', 'setup']
+    environment: &api-env
+      NODE_ENV: production
+      SURREAL_URL: ws://surrealdb:8000/rpc
+      SURREAL_NS: haven
+      SURREAL_DB: haven
+      SURREAL_USER: ${SURREAL_USER:-root}
+      SURREAL_PASS: ${SURREAL_PASS:-root}
+      JWT_SECRET: ${JWT_SECRET:-dev-only-haven-jwt-secret-change-me-0123456789}
+      EVIDENCE_DIR: /data/evidence
+      AI_RECOMMENDATION_MODE: ${AI_RECOMMENDATION_MODE:-local}
+      WEB_ORIGIN: http://127.0.0.1:3000
+    depends_on:
+      surrealdb:
+        condition: service_healthy
+
+  api:
+    profiles: [full]
+    image: haven-api
+    environment: *api-env
+    ports:
+      - '3001:3001'
+    volumes:
+      - evidence-data:/data/evidence
+    depends_on:
+      surrealdb:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:3001/api/v1/health/ready').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  web:
+    profiles: [full]
+    image: haven-web
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    environment:
+      HAVEN_API_URL: http://api:3001/api/v1
+    ports:
+      - '3000:3000'
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  surreal-data:
+  evidence-data:

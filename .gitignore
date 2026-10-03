@@ -150,3 +150,25 @@ vite.config.ts.timestamp-*
 
 # Dialogue session data
 .dialogue/
+
+# Expo / React Native
+.expo/
+expo-env.d.ts
+web-build/
+ios/
+android/
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Next.js
+next-env.d.ts
+
+# Local evidence storage
+.data/
+
+# OS
+.DS_Store

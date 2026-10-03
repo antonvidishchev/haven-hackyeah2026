@@ -1,0 +1,13 @@
+**/node_modules
+**/dist
+**/.next
+**/.expo
+**/coverage
+**/test-results
+**/playwright-report
+**/*.tsbuildinfo
+.git
+.dialogue
+.data
+.env
+apps/mobile

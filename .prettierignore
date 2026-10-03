@@ -1,0 +1,7 @@
+pnpm-lock.yaml
+**/dist
+**/.next
+**/.expo
+**/coverage
+packages/shared/src/data/*.json
+docs/plans
