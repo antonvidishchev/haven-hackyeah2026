@@ -1,0 +1,86 @@
+import type {
+  CaseState,
+  DistrictId,
+  OrganizationId,
+  QueuePriority,
+  ReportCategory,
+  ReportState,
+  Role,
+  Severity,
+  TriageStatus,
+} from '../enums.js';
+
+/** Enum wording shared by web, mobile and the API. */
+export const en = {
+  role: {
+    guest: 'Guest',
+    resident: 'Resident',
+    operator: 'Operator',
+    official: 'Official',
+    admin: 'Administrator',
+  } satisfies Record<Role, string>,
+  category: {
+    unclassified: 'Unclassified',
+    verbal_harassment: 'Verbal harassment',
+    physical_intimidation: 'Physical intimidation',
+    threat: 'Threat',
+    discrimination: 'Discrimination',
+    online_harassment: 'Online harassment',
+    vandalism_hate_symbols: 'Vandalism or hate symbols',
+    other: 'Other',
+  } satisfies Record<ReportCategory, string>,
+  severity: {
+    low: 'Low',
+    medium: 'Medium',
+    high: 'High',
+    emergency: 'Emergency',
+  } satisfies Record<Severity, string>,
+  organization: {
+    police_municipal: 'District Police Coordination Unit (fictional)',
+    professional_paid: 'Kraków Community Support Services (fictional)',
+    community_volunteer: 'Neighborhood Volunteer Network (fictional)',
+  } satisfies Record<OrganizationId, string>,
+  reportState: {
+    draft: 'Private draft',
+    submitted: 'Filed',
+  } satisfies Record<ReportState, string>,
+  caseState: {
+    open: 'Open',
+    in_review: 'In review',
+    closed: 'Closed',
+    cancelled: 'Cancelled',
+  } satisfies Record<CaseState, string>,
+  triageStatus: {
+    needs_review: 'Needs review',
+    awaiting_resident: 'Awaiting resident',
+    handled: 'Handled',
+  } satisfies Record<TriageStatus, string>,
+  queuePriority: {
+    normal: 'Normal',
+    expedited: 'Expedited',
+    fast_laned: 'Fast-laned',
+    jumps_queue: 'Top priority',
+  } satisfies Record<QueuePriority, string>,
+  district: {
+    I: 'I Stare Miasto',
+    II: 'II Grzegórzki',
+    III: 'III Prądnik Czerwony',
+    IV: 'IV Prądnik Biały',
+    V: 'V Krowodrza',
+    VI: 'VI Bronowice',
+    VII: 'VII Zwierzyniec',
+    VIII: 'VIII Dębniki',
+    IX: 'IX Łagiewniki-Borek Fałęcki',
+    X: 'X Swoszowice',
+    XI: 'XI Podgórze Duchackie',
+    XII: 'XII Bieżanów-Prokocim',
+    XIII: 'XIII Podgórze',
+    XIV: 'XIV Czyżyny',
+    XV: 'XV Mistrzejowice',
+    XVI: 'XVI Bieńczyce',
+    XVII: 'XVII Wzgórza Krzesławickie',
+    XVIII: 'XVIII Nowa Huta',
+  } satisfies Record<DistrictId, string>,
+};
+
+export type EnumLabels = typeof en;

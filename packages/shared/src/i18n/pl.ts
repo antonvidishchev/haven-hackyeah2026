@@ -1,0 +1,73 @@
+import type { EnumLabels } from './en.js';
+
+export const pl: EnumLabels = {
+  role: {
+    guest: 'Gość',
+    resident: 'Mieszkaniec',
+    operator: 'Operator',
+    official: 'Urzędnik',
+    admin: 'Administrator',
+  },
+  category: {
+    unclassified: 'Bez kategorii',
+    verbal_harassment: 'Nękanie słowne',
+    physical_intimidation: 'Zastraszanie fizyczne',
+    threat: 'Groźba',
+    discrimination: 'Dyskryminacja',
+    online_harassment: 'Nękanie w internecie',
+    vandalism_hate_symbols: 'Wandalizm lub symbole nienawiści',
+    other: 'Inne',
+  },
+  severity: {
+    low: 'Niska',
+    medium: 'Średnia',
+    high: 'Wysoka',
+    emergency: 'Nagły wypadek',
+  },
+  organization: {
+    police_municipal: 'Dzielnicowa Jednostka Koordynacji Policji (fikcyjna)',
+    professional_paid: 'Krakowskie Społeczne Służby Wsparcia (fikcyjne)',
+    community_volunteer: 'Sąsiedzka Sieć Wolontariuszy (fikcyjna)',
+  },
+  reportState: {
+    draft: 'Prywatny szkic',
+    submitted: 'Zgłoszone',
+  },
+  caseState: {
+    open: 'Otwarta',
+    in_review: 'W trakcie',
+    closed: 'Zamknięta',
+    cancelled: 'Anulowana',
+  },
+  triageStatus: {
+    needs_review: 'Do przeglądu',
+    awaiting_resident: 'Czeka na mieszkańca',
+    handled: 'Obsłużona',
+  },
+  queuePriority: {
+    normal: 'Zwykły',
+    expedited: 'Przyspieszony',
+    fast_laned: 'Szybka ścieżka',
+    jumps_queue: 'Najwyższy priorytet',
+  },
+  district: {
+    I: 'I Stare Miasto',
+    II: 'II Grzegórzki',
+    III: 'III Prądnik Czerwony',
+    IV: 'IV Prądnik Biały',
+    V: 'V Krowodrza',
+    VI: 'VI Bronowice',
+    VII: 'VII Zwierzyniec',
+    VIII: 'VIII Dębniki',
+    IX: 'IX Łagiewniki-Borek Fałęcki',
+    X: 'X Swoszowice',
+    XI: 'XI Podgórze Duchackie',
+    XII: 'XII Bieżanów-Prokocim',
+    XIII: 'XIII Podgórze',
+    XIV: 'XIV Czyżyny',
+    XV: 'XV Mistrzejowice',
+    XVI: 'XVI Bieńczyce',
+    XVII: 'XVII Wzgórza Krzesławickie',
+    XVIII: 'XVIII Nowa Huta',
+  },
+};

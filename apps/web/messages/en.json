@@ -1,0 +1,167 @@
+{
+  "meta": {
+    "description": "Report incidents safely in Kraków — anonymously, with human help."
+  },
+  "common": {
+    "simulation": "Prototype simulation — no services are contacted.",
+    "example": "Example layout with sample data. Real records appear here in a later phase.",
+    "comingSoon": "Available in a later phase of this prototype.",
+    "cancel": "Cancel",
+    "back": "Back",
+    "optional": "optional",
+    "notFound": "We couldn't find that page.",
+    "goHome": "Go to the home page"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "pl": "Polski"
+  },
+  "nav": {
+    "main": "Main",
+    "workspace": "Workspace",
+    "skip": "Skip to content",
+    "homeLabel": "Haven home",
+    "home": "Home",
+    "myReports": "My reports",
+    "areaReports": "Area reports",
+    "account": "Account",
+    "report": "Report an incident",
+    "signIn": "Sign in",
+    "menu": "Menu",
+    "queue": "Response queue",
+    "vault": "Evidence vault",
+    "cases": "Assigned cases",
+    "audit": "Audit log",
+    "operatorWorkspace": "Operator workspace",
+    "caseWorkspace": "Case workspace",
+    "adminWorkspace": "Admin workspace"
+  },
+  "disclaimer": {
+    "title": "In danger right now? Call 112.",
+    "body": "Haven is not an emergency service and nobody watches reports in real time. If you or someone else is in immediate danger, call 112."
+  },
+  "home": {
+    "title": "Start with what you have",
+    "lead": "Tell us what happened, in your own words. Save a private draft, add photos or video when you can, and decide later whether to file it.",
+    "primary": "Report an incident",
+    "secondary": "See area reports",
+    "noAccountTitle": "No account needed",
+    "noAccountBody": "You can report as a guest. Drafts stay private until you choose to file them. You never have to give your name or contact the police.",
+    "nextTitle": "What happens when you file",
+    "next1": "Your report gets a reference number you can keep.",
+    "next2": "It is routed to the kind of human help it needs — a support service, a volunteer network or the police, only if you agree.",
+    "next3": "You can follow updates in My reports."
+  },
+  "login": {
+    "title": "Sign in",
+    "lead": "Sign in to follow your reports from another device, or to open a staff workspace.",
+    "placeholder": "Sign-in with demo accounts arrives in the next phase.",
+    "guest": "You don't need an account to report."
+  },
+  "stages": {
+    "label": "Report progress",
+    "describe": "Describe",
+    "place": "Where and when",
+    "review": "Review and file",
+    "draft": "Private draft",
+    "filed": "Filed",
+    "routed": "Routed to help"
+  },
+  "reportNew": {
+    "title": "Report an incident",
+    "lead": "Take your time. Everything stays a private draft until you choose to file it.",
+    "whatLabel": "What happened?",
+    "whatHint": "Write it in your own words. Short is fine.",
+    "categoryLabel": "What kind of incident was it?",
+    "categoryHint": "Not sure? Leave it as Unclassified.",
+    "save": "Save private draft"
+  },
+  "myReports": {
+    "title": "My reports",
+    "lead": "Your private drafts and filed reports.",
+    "emptyTitle": "No reports yet",
+    "emptyBody": "When you start a report, it appears here as a private draft.",
+    "start": "Report an incident"
+  },
+  "report": {
+    "title": "Report",
+    "reference": "Reference",
+    "status": "Status",
+    "timeline": "Updates",
+    "sampleWhat": "A group shouted insults at me at the tram stop because of my accent.",
+    "eventFiled": "You filed this report.",
+    "eventRouted": "Routed to a support service.",
+    "eventMessage": "A caseworker asked whether you'd like a call back."
+  },
+  "area": {
+    "title": "Area reports",
+    "lead": "How many incidents were filed in each Kraków district. Exact locations are never shown.",
+    "notScore": "The public map is not a safety score.",
+    "district": "District",
+    "count": "Filed reports",
+    "belowThreshold": "Below privacy threshold",
+    "mapSoon": "The district map arrives in a later phase."
+  },
+  "settings": {
+    "title": "Account and settings",
+    "accountTitle": "Account",
+    "guest": "You are using Haven as a guest.",
+    "signIn": "Sign in",
+    "appearance": "Appearance",
+    "themeSystem": "Match my device",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "languageTitle": "Language"
+  },
+  "staff": {
+    "reference": "Reference",
+    "category": "Category",
+    "district": "District",
+    "priority": "Priority",
+    "filed": "Filed",
+    "state": "State",
+    "triage": "Triage",
+    "organisation": "Organisation"
+  },
+  "queue": {
+    "title": "Response queue",
+    "lead": "Filed reports waiting for an operator decision, most urgent first.",
+    "emptyTitle": "The queue is clear",
+    "emptyBody": "New filed reports appear here.",
+    "caseTitle": "Case",
+    "report": "Report",
+    "routing": "Routing",
+    "routingBody": "Smart Router result and rule appear here.",
+    "advisory": "Advisory recommendation",
+    "advisoryBody": "A deterministic, rule-based suggestion. It never decides for you.",
+    "actions": "Decision",
+    "promote": "Send to organisation",
+    "cancelCase": "Cancel case"
+  },
+  "vault": {
+    "title": "Evidence vault",
+    "lead": "Photos, video and audio attached to filed reports.",
+    "emptyTitle": "No evidence yet",
+    "emptyBody": "Evidence from filed reports appears here."
+  },
+  "cases": {
+    "title": "Assigned cases",
+    "lead": "Cases routed to your organisation.",
+    "emptyTitle": "No assigned cases",
+    "emptyBody": "Cases sent to your organisation appear here.",
+    "caseTitle": "Case",
+    "claim": "Claim case",
+    "close": "Close case"
+  },
+  "audit": {
+    "title": "Audit log",
+    "lead": "Every access and decision, append-only.",
+    "when": "When",
+    "actor": "Actor",
+    "action": "Action",
+    "subject": "Subject",
+    "emptyTitle": "No audit events yet",
+    "emptyBody": "Events are recorded as people use Haven."
+  }
+}

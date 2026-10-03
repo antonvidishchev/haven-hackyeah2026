@@ -1,0 +1,167 @@
+{
+  "meta": {
+    "description": "Bezpiecznie zgłaszaj incydenty w Krakowie — anonimowo, z pomocą ludzi."
+  },
+  "common": {
+    "simulation": "Symulacja prototypu — żadne służby nie są powiadamiane.",
+    "example": "Przykładowy układ z danymi demonstracyjnymi. Prawdziwe wpisy pojawią się tu w kolejnym etapie.",
+    "comingSoon": "Dostępne w kolejnym etapie prototypu.",
+    "cancel": "Anuluj",
+    "back": "Wstecz",
+    "optional": "opcjonalnie",
+    "notFound": "Nie znaleźliśmy tej strony.",
+    "goHome": "Przejdź na stronę główną"
+  },
+  "language": {
+    "label": "Język",
+    "en": "English",
+    "pl": "Polski"
+  },
+  "nav": {
+    "main": "Główna nawigacja",
+    "workspace": "Obszar roboczy",
+    "skip": "Przejdź do treści",
+    "homeLabel": "Haven — strona główna",
+    "home": "Start",
+    "myReports": "Moje zgłoszenia",
+    "areaReports": "Zgłoszenia w okolicy",
+    "account": "Konto",
+    "report": "Zgłoś incydent",
+    "signIn": "Zaloguj się",
+    "menu": "Menu",
+    "queue": "Kolejka zgłoszeń",
+    "vault": "Archiwum dowodów",
+    "cases": "Przydzielone sprawy",
+    "audit": "Dziennik audytu",
+    "operatorWorkspace": "Panel operatora",
+    "caseWorkspace": "Panel spraw",
+    "adminWorkspace": "Panel administratora"
+  },
+  "disclaimer": {
+    "title": "Grozi Ci niebezpieczeństwo? Dzwoń pod 112.",
+    "body": "Haven nie jest służbą ratunkową i nikt nie śledzi zgłoszeń na bieżąco. Jeśli Tobie lub komuś innemu grozi bezpośrednie niebezpieczeństwo, zadzwoń pod 112."
+  },
+  "home": {
+    "title": "Zacznij od tego, co masz",
+    "lead": "Opisz własnymi słowami, co się stało. Zapisz prywatny szkic, dodaj zdjęcia lub nagranie, kiedy możesz, i zdecyduj później, czy go złożyć.",
+    "primary": "Zgłoś incydent",
+    "secondary": "Zobacz zgłoszenia w okolicy",
+    "noAccountTitle": "Konto nie jest potrzebne",
+    "noAccountBody": "Możesz zgłosić jako gość. Szkice pozostają prywatne, dopóki ich nie złożysz. Nigdy nie musisz podawać nazwiska ani kontaktować się z policją.",
+    "nextTitle": "Co się dzieje po złożeniu zgłoszenia",
+    "next1": "Zgłoszenie otrzymuje numer referencyjny, który możesz zachować.",
+    "next2": "Trafia do odpowiedniej pomocy — służby wsparcia, sieci wolontariuszy lub policji, tylko jeśli się zgodzisz.",
+    "next3": "Aktualizacje śledzisz w zakładce Moje zgłoszenia."
+  },
+  "login": {
+    "title": "Zaloguj się",
+    "lead": "Zaloguj się, aby śledzić zgłoszenia na innym urządzeniu lub otworzyć panel pracowników.",
+    "placeholder": "Logowanie kontami demonstracyjnymi pojawi się w kolejnym etapie.",
+    "guest": "Do zgłoszenia nie potrzebujesz konta."
+  },
+  "stages": {
+    "label": "Postęp zgłoszenia",
+    "describe": "Opis",
+    "place": "Gdzie i kiedy",
+    "review": "Sprawdź i złóż",
+    "draft": "Prywatny szkic",
+    "filed": "Złożone",
+    "routed": "Przekazane do pomocy"
+  },
+  "reportNew": {
+    "title": "Zgłoś incydent",
+    "lead": "Nie spiesz się. Wszystko pozostaje prywatnym szkicem, dopóki nie zdecydujesz się go złożyć.",
+    "whatLabel": "Co się stało?",
+    "whatHint": "Opisz to własnymi słowami. Krótko też wystarczy.",
+    "categoryLabel": "Jakiego rodzaju był to incydent?",
+    "categoryHint": "Nie masz pewności? Zostaw „Bez kategorii”.",
+    "save": "Zapisz prywatny szkic"
+  },
+  "myReports": {
+    "title": "Moje zgłoszenia",
+    "lead": "Twoje prywatne szkice i złożone zgłoszenia.",
+    "emptyTitle": "Nie masz jeszcze zgłoszeń",
+    "emptyBody": "Gdy zaczniesz zgłoszenie, pojawi się tu jako prywatny szkic.",
+    "start": "Zgłoś incydent"
+  },
+  "report": {
+    "title": "Zgłoszenie",
+    "reference": "Numer referencyjny",
+    "status": "Status",
+    "timeline": "Aktualizacje",
+    "sampleWhat": "Grupa osób obrażała mnie na przystanku tramwajowym z powodu mojego akcentu.",
+    "eventFiled": "Złożono to zgłoszenie.",
+    "eventRouted": "Przekazano do służby wsparcia.",
+    "eventMessage": "Opiekun sprawy zapytał, czy chcesz, żeby oddzwonić."
+  },
+  "area": {
+    "title": "Zgłoszenia w okolicy",
+    "lead": "Ile incydentów zgłoszono w każdej dzielnicy Krakowa. Dokładne miejsca nigdy nie są pokazywane.",
+    "notScore": "Publiczna mapa nie jest oceną bezpieczeństwa.",
+    "district": "Dzielnica",
+    "count": "Złożone zgłoszenia",
+    "belowThreshold": "Poniżej progu prywatności",
+    "mapSoon": "Mapa dzielnic pojawi się w kolejnym etapie."
+  },
+  "settings": {
+    "title": "Konto i ustawienia",
+    "accountTitle": "Konto",
+    "guest": "Korzystasz z Haven jako gość.",
+    "signIn": "Zaloguj się",
+    "appearance": "Wygląd",
+    "themeSystem": "Jak na urządzeniu",
+    "themeLight": "Jasny",
+    "themeDark": "Ciemny",
+    "languageTitle": "Język"
+  },
+  "staff": {
+    "reference": "Numer",
+    "category": "Kategoria",
+    "district": "Dzielnica",
+    "priority": "Priorytet",
+    "filed": "Złożono",
+    "state": "Stan",
+    "triage": "Selekcja",
+    "organisation": "Organizacja"
+  },
+  "queue": {
+    "title": "Kolejka zgłoszeń",
+    "lead": "Złożone zgłoszenia czekające na decyzję operatora, najpilniejsze na górze.",
+    "emptyTitle": "Kolejka jest pusta",
+    "emptyBody": "Nowe złożone zgłoszenia pojawią się tutaj.",
+    "caseTitle": "Sprawa",
+    "report": "Zgłoszenie",
+    "routing": "Przekierowanie",
+    "routingBody": "Tu pojawi się wynik i reguła Smart Routera.",
+    "advisory": "Rekomendacja doradcza",
+    "advisoryBody": "Deterministyczna sugestia oparta na regułach. Nigdy nie decyduje za Ciebie.",
+    "actions": "Decyzja",
+    "promote": "Przekaż organizacji",
+    "cancelCase": "Anuluj sprawę"
+  },
+  "vault": {
+    "title": "Archiwum dowodów",
+    "lead": "Zdjęcia, nagrania wideo i audio dołączone do złożonych zgłoszeń.",
+    "emptyTitle": "Brak dowodów",
+    "emptyBody": "Dowody ze złożonych zgłoszeń pojawią się tutaj."
+  },
+  "cases": {
+    "title": "Przydzielone sprawy",
+    "lead": "Sprawy przekazane Twojej organizacji.",
+    "emptyTitle": "Brak przydzielonych spraw",
+    "emptyBody": "Sprawy przekazane Twojej organizacji pojawią się tutaj.",
+    "caseTitle": "Sprawa",
+    "claim": "Przejmij sprawę",
+    "close": "Zamknij sprawę"
+  },
+  "audit": {
+    "title": "Dziennik audytu",
+    "lead": "Każdy dostęp i każda decyzja, tylko do dopisywania.",
+    "when": "Kiedy",
+    "actor": "Kto",
+    "action": "Działanie",
+    "subject": "Obiekt",
+    "emptyTitle": "Brak zdarzeń audytu",
+    "emptyBody": "Zdarzenia są zapisywane, gdy ludzie korzystają z Haven."
+  }
+}
