@@ -152,7 +152,7 @@ export class ReportsRepository {
            input_hash: $rec.inputHash, output_hash: $rec.outputHash
          };`
       : '';
-    const results = await this.surreal.query<unknown[]>(
+    const results = await this.surreal.transaction<unknown[]>(
       `BEGIN TRANSACTION;
        LET $has_evidence = count((SELECT VALUE id FROM evidence WHERE report = $id)) > 0;
        LET $updated = UPDATE $id SET
