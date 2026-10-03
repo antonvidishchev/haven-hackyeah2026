@@ -1,8 +1,15 @@
 'use client';
 
-import { Check, Crosshair, MapPin, RotateCw, X } from 'lucide-react';
+import { Check, Crosshair, MapPin, RotateCw, Send, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  useTransition,
+} from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import {
   apiErrorBodySchema,
@@ -23,6 +30,7 @@ import {
   type ReportStage,
 } from '@haven/shared';
 
+import { fileReport } from '@/app/actions/reports';
 import { describedBy, Field } from '@/components/haven/field';
 import { fromLocalInput, toLocalInput } from '@/lib/datetime';
 
@@ -42,6 +50,8 @@ type SaveState =
 
 type Locating = 'idle' | 'busy' | 'denied' | 'outside';
 
+type FilingError = 'incomplete' | 'unavailable' | null;
+
 const subscribeNothing = () => () => {};
 
 /** False during server rendering and hydration, true afterwards (time zones differ). */
@@ -53,8 +63,9 @@ const useHydrated = () =>
   );
 
 /**
- * The three-stage report editor. Every change autosaves to the private draft; the server
- * keeps a revision per save and refuses a save based on an outdated revision.
+ * The three-stage report editor. Every change to a draft autosaves; a filed report saves only
+ * on "Save changes", since each save is a new revision staff can see. The server keeps a
+ * revision per save and refuses a save based on an outdated revision.
  */
 export function ReportEditor({
   report,
@@ -77,8 +88,11 @@ export function ReportEditor({
   const [fields, setFields] = useState<ReportFields>(report.fields);
   const [evidence, setEvidence] = useState<EvidenceItem[]>(report.evidence);
   const [save, setSave] = useState<SaveState>({ kind: 'idle' });
+  const [lastSaved, setLastSaved] = useState<ReportFields>(report.fields);
   const [mapOpen, setMapOpen] = useState(false);
   const [locating, setLocating] = useState<Locating>('idle');
+  const [filing, startFiling] = useTransition();
+  const [filingError, setFilingError] = useState<FilingError>(null);
 
   const headingRef = useRef<HTMLHeadingElement>(null);
   const mapOpenerRef = useRef<HTMLButtonElement>(null);
@@ -91,6 +105,8 @@ export function ReportEditor({
   const inFlight = useRef(false);
   const again = useRef(false);
   const stopped = useRef(false);
+  const lastSaveFailed = useRef(false);
+  const justFiled = useRef(false);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const filed = report.state === 'submitted';
@@ -120,6 +136,8 @@ export function ReportEditor({
       if (response.ok) {
         revision.current = (body as ReportDetail).revision;
         savedFields.current = sending;
+        setLastSaved(sending);
+        lastSaveFailed.current = false;
         setSave({ kind: 'saved', at: new Date() });
         // Refresh the server-rendered header and history; this editor keeps its state.
         router.refresh();
@@ -129,10 +147,12 @@ export function ReportEditor({
           stopped.current = true;
           setSave({ kind: 'conflict' });
         } else {
+          lastSaveFailed.current = true;
           setSave({ kind: 'failed' });
         }
       }
     } catch {
+      lastSaveFailed.current = true;
       setSave({ kind: 'failed' });
     } finally {
       inFlight.current = false;
@@ -143,10 +163,62 @@ export function ReportEditor({
     }
   }, [report.id, router]);
 
+  /** Saves until the server holds the latest edit. False when that isn't possible now. */
+  async function settle(): Promise<boolean> {
+    for (let attempt = 0; attempt < 100; attempt++) {
+      if (stopped.current) return false;
+      if (inFlight.current) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        continue;
+      }
+      if (latest.current === savedFields.current) return true;
+      await saveNow();
+      if (lastSaveFailed.current && latest.current !== savedFields.current) return false;
+    }
+    return false;
+  }
+
+  function file() {
+    setFilingError(null);
+    startFiling(async () => {
+      if (!(await settle())) return setFilingError('unavailable');
+      const result = await fileReport(report.id, revision.current);
+      if (result.ok) {
+        revision.current = result.revision;
+        justFiled.current = true;
+      } else if (result.error === 'conflict') {
+        stopped.current = true;
+        setSave({ kind: 'conflict' });
+      } else {
+        setFilingError(result.error);
+      }
+    });
+  }
+
+  // Adding evidence to a filed report makes a new revision with the same fields; adopt it so the
+  // next "Save changes" isn't refused as a conflict.
+  useEffect(() => {
+    if (
+      report.revision > revision.current &&
+      JSON.stringify(report.fields) === JSON.stringify(savedFields.current)
+    ) {
+      revision.current = report.revision;
+    }
+  }, [report.revision, report.fields]);
+
+  // Once the page re-renders as filed, move focus to the confirmation.
+  useEffect(() => {
+    if (!filed || !justFiled.current) return;
+    justFiled.current = false;
+    const confirmation = document.getElementById('filed-title');
+    confirmation?.scrollIntoView({ block: 'center' });
+    confirmation?.focus();
+  }, [filed]);
+
   function change(next: ReportFields) {
     latest.current = next;
     setFields(next);
-    if (stopped.current) return;
+    if (stopped.current || filed) return;
     clearTimeout(timer.current);
     timer.current = setTimeout(() => void saveNow(), AUTOSAVE_DELAY_MS);
   }
@@ -157,7 +229,7 @@ export function ReportEditor({
   // Don't lose the last edit when the tab is hidden or closed before the timer fires.
   useEffect(() => {
     function flush() {
-      if (document.visibilityState !== 'hidden' || stopped.current) return;
+      if (document.visibilityState !== 'hidden' || stopped.current || filed) return;
       if (latest.current === savedFields.current || inFlight.current) return;
       clearTimeout(timer.current);
       void fetch(`/api/proxy/reports/${encodeURIComponent(report.id)}`, {
@@ -172,7 +244,7 @@ export function ReportEditor({
       document.removeEventListener('visibilitychange', flush);
       clearTimeout(timer.current);
     };
-  }, [report.id]);
+  }, [report.id, filed]);
 
   useEffect(() => {
     if (stageChanged.current) headingRef.current?.focus();
@@ -181,7 +253,7 @@ export function ReportEditor({
   function goTo(next: ReportStage) {
     stageChanged.current = true;
     setStage(next);
-    void saveNow();
+    if (!filed) void saveNow();
   }
 
   function setPin(point: LatLng | null) {
@@ -477,7 +549,10 @@ export function ReportEditor({
               <EvidenceUploader
                 reportId={report.id}
                 maxBytes={evidenceMaxBytes}
-                onUploaded={(item) => setEvidence((list) => [...list, item])}
+                onUploaded={(item) => {
+                  setEvidence((list) => [...list, item]);
+                  if (filed) router.refresh();
+                }}
               />
               <VaultDisclosure />
             </section>
@@ -517,7 +592,9 @@ export function ReportEditor({
               </dl>
             </section>
 
-            <FilingChecklist title={t('required')} gaps={gaps} labels={gapLabels} t={t} />
+            {filed ? null : (
+              <FilingChecklist title={t('required')} gaps={gaps} labels={gapLabels} t={t} />
+            )}
             {disclaimer}
           </>
         ) : null}
@@ -542,22 +619,56 @@ export function ReportEditor({
                 {t('continue')}
               </button>
             ) : null}
-            <button
-              type="submit"
-              className="resident-button secondary"
-              disabled={save.kind === 'conflict'}
-            >
-              {t('saveDraft')}
-            </button>
+            {filed ? (
+              <button
+                type="submit"
+                className="resident-button"
+                disabled={save.kind === 'conflict' || fields === lastSaved}
+              >
+                {t('saveChanges')}
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="resident-button secondary"
+                disabled={save.kind === 'conflict'}
+              >
+                {t('saveDraft')}
+              </button>
+            )}
+            {!filed && stage === 'evidence' ? (
+              <button
+                type="button"
+                className="resident-button"
+                disabled={gaps.length > 0 || filing || save.kind === 'conflict'}
+                aria-describedby="file-hint"
+                onClick={file}
+              >
+                <Send aria-hidden className="size-5" />
+                {filing ? t('filing') : t('file')}
+              </button>
+            ) : null}
           </div>
+          {!filed && stage === 'evidence' ? (
+            <p id="file-hint" className="text-sm text-muted-foreground">
+              {gaps.length > 0 ? t('fileBlocked') : t('fileHint')}
+            </p>
+          ) : null}
+          {filingError ? (
+            <p role="alert" className="text-sm text-destructive">
+              {filingError === 'incomplete' ? t('fileIncomplete') : t('fileFailed')}
+            </p>
+          ) : null}
           <p role="status" className="text-sm text-muted-foreground">
             {save.kind === 'saving'
               ? t('saving')
-              : save.kind === 'saved'
-                ? t('savedAt', { time: timeFormat.format(save.at) })
-                : save.kind === 'failed'
-                  ? t('saveFailed')
-                  : ''}
+              : filed && fields !== lastSaved
+                ? t('unsaved')
+                : save.kind === 'saved'
+                  ? t('savedAt', { time: timeFormat.format(save.at) })
+                  : save.kind === 'failed'
+                    ? t('saveFailed')
+                    : ''}
           </p>
         </div>
       </form>

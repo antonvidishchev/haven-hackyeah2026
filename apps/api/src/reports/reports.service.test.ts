@@ -7,6 +7,8 @@ import {
 } from '@haven/shared';
 import { DateTime, RecordId } from 'surrealdb';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { CasesRepository } from '../cases/cases.repository.js';
+import type { AppConfig } from '../config/env.js';
 import type { EvidenceRepository } from '../evidence/evidence.repository.js';
 import type { ReportRow, ReportsRepository } from './reports.repository.js';
 import { descriptionExcerpt, ReportsService } from './reports.service.js';
@@ -49,6 +51,8 @@ describe('ReportsService.update', () => {
   const service = new ReportsService(
     reports as unknown as ReportsRepository,
     evidence as unknown as EvidenceRepository,
+    { routingFor: vi.fn(async () => null) } as unknown as CasesRepository,
+    { AI_RECOMMENDATION_MODE: 'local' } as AppConfig,
   );
 
   beforeEach(() => vi.clearAllMocks());
@@ -109,7 +113,14 @@ describe('ReportsService.update', () => {
     reports.updateFields.mockResolvedValue(true);
     const detail = await service.update(owner, 'r1', { expectedRevision: 3, fields: next });
     expect(reports.updateFields).toHaveBeenCalledWith('r1', 3, next, owner.id);
-    expect(detail).toMatchObject({ revision: 4, fields: next, messages: [] });
+    expect(detail).toMatchObject({
+      revision: 4,
+      fields: next,
+      messages: [],
+      routing: null,
+      escalated: false,
+      escalatedAt: null,
+    });
   });
 
   it('does not add a revision when nothing changed', async () => {

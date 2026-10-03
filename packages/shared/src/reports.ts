@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import type { RoutingResult } from './router.js';
 import {
   districtIdSchema,
   reportCategorySchema,
@@ -136,7 +137,18 @@ export const updateReportRequestSchema = z.object({
 });
 export type UpdateReportRequest = z.infer<typeof updateReportRequestSchema>;
 
-export type RevisionNote = 'created' | 'edited' | 'evidence_added' | 'filed';
+export const submitReportRequestSchema = z.object({
+  expectedRevision: z.number().int().min(1),
+});
+export type SubmitReportRequest = z.infer<typeof submitReportRequestSchema>;
+
+/** The verification is a simulated stand-in; the resident must tick it. */
+export const escalateReportRequestSchema = z.object({
+  verificationConfirmed: z.literal(true),
+});
+export type EscalateReportRequest = z.infer<typeof escalateReportRequestSchema>;
+
+export type RevisionNote = 'created' | 'edited' | 'evidence_added' | 'filed' | 'escalated';
 
 export type ReportRevision = {
   revision: number;
@@ -182,6 +194,10 @@ export type ReportDetail = {
   evidence: EvidenceItem[];
   revisions: ReportRevision[];
   messages: ResidentMessage[];
+  /** The Smart Router's result, frozen at filing; null for drafts. */
+  routing: RoutingResult | null;
+  escalated: boolean;
+  escalatedAt: string | null;
   createdAt: string;
   updatedAt: string;
   submittedAt: string | null;

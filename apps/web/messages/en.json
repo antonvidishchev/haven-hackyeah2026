@@ -116,9 +116,14 @@
       "created": "You started this draft.",
       "edited": "You edited the report.",
       "evidence_added": "You added evidence.",
-      "filed": "You filed this report."
+      "filed": "You filed this report.",
+      "escalated": "You escalated this report."
     },
-    "sampleWhat": "A group shouted insults at me at the tram stop because of my accent."
+    "sampleWhat": "A group shouted insults at me at the tram stop because of my accent.",
+    "filedTitle": "Report filed",
+    "filedBody": "Your reference is <ref>{reference}</ref>. Keep it if you want to follow up.",
+    "editTitle": "Report details",
+    "escalated": "This report has been escalated."
   },
   "area": {
     "title": "Area reports",
@@ -261,7 +266,15 @@
     "saveFailed": "Couldn’t save just now. Your changes are still here; we’ll try again.",
     "conflictTitle": "This report changed somewhere else",
     "conflictBody": "It was saved from another tab or device. Reload to see the latest version; copy anything you want to keep first.",
-    "reload": "Reload report"
+    "reload": "Reload report",
+    "saveChanges": "Save changes",
+    "unsaved": "You have unsaved changes.",
+    "file": "File a report",
+    "filing": "Filing…",
+    "fileHint": "Filing sends your report to Haven’s team. You can still add details afterwards.",
+    "fileBlocked": "Complete the “Required to file” list to file this report.",
+    "fileIncomplete": "Something required is still missing. Check the “Required to file” list.",
+    "fileFailed": "We couldn’t file the report just now. Your draft is safe; please try again."
   },
   "evidence": {
     "title": "Evidence",
@@ -290,5 +303,33 @@
     "vaultTitle": "Private custody",
     "vaultBody": "Files are stored privately with your report. Only you and the Haven response team can open them, and a partner service only once your case is routed to it. Every viewing is logged.",
     "notScanned": "Pilot: uploaded files are not scanned for malware."
+  },
+  "routing": {
+    "title": "Routing (simulated)",
+    "responder": "Sent to",
+    "queue": "Priority",
+    "autoDispatch": "Automatic dispatch (simulated)",
+    "confirmationRequired": "Confirmation required.",
+    "confirmationHint": "Haven’s team will check the details with you before acting.",
+    "explain": "Haven’s Smart Router picks a responder from fixed, published rules — it is not AI. A person on Haven’s team reviews every report.",
+    "call112": "Residents in danger should call 112."
+  },
+  "escalation": {
+    "title": "Escalate this report",
+    "lead": "If the situation is getting worse, you can ask for this report to be treated as more urgent. Escalating needs a verified identity.",
+    "verification": "Simulated identity verification (demo stand-in)",
+    "submit": "Escalate this report",
+    "escalating": "Escalating…",
+    "unconfirmed": "Tick the identity verification first.",
+    "failed": "We couldn’t escalate the report just now. Please try again."
+  },
+  "messages": {
+    "title": "Messages from Haven",
+    "empty": "No messages yet. We’ll show them here.",
+    "kind": {
+      "request_information": "We need a little more information",
+      "comment": "Update",
+      "cancellation_notice": "This report is closed"
+    }
   }
 }

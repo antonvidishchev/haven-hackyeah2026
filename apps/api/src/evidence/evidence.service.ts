@@ -8,6 +8,7 @@ import {
 } from '@haven/shared';
 import type { MultipartFile } from '@fastify/multipart';
 import type { Readable } from 'node:stream';
+import { CasesRepository } from '../cases/cases.repository.js';
 import { apiError } from '../common/http-exception.filter.js';
 import { APP_CONFIG, type AppConfig } from '../config/env.js';
 import { randomRecordId } from '../db/values.js';
@@ -52,6 +53,7 @@ export class EvidenceService {
     private readonly evidence: EvidenceRepository,
     private readonly storage: EvidenceStorage,
     private readonly reports: ReportsService,
+    private readonly cases: CasesRepository,
     @Inject(APP_CONFIG) private readonly config: AppConfig,
   ) {}
 
@@ -131,7 +133,7 @@ export class EvidenceService {
     rangeHeader: string | undefined,
   ): Promise<MediaResponse> {
     const row = await this.evidence.findWithReport(id);
-    if (!row || !canView(principal, row)) throw evidenceNotFound();
+    if (!row || !(await this.canView(principal, row))) throw evidenceNotFound();
 
     const size = await this.storage.size(row.storage_path);
     if (size === null) {
@@ -159,14 +161,17 @@ export class EvidenceService {
       evidence: row,
     };
   }
-}
 
-/**
- * The owner, operators and admins may view evidence. Officials see it only through a case of
- * their own organisation; cases arrive in Phase 5, which adds that check with
- * `assertOrganizationScope`, so until then officials are answered "not found" like everyone else.
- */
-function canView(principal: SessionPrincipal, row: EvidenceWithReport): boolean {
-  if (String(row.owner.id) === principal.id) return true;
-  return principal.role === 'operator' || principal.role === 'admin';
+  /**
+   * The owner, operators and admins may view evidence. Officials see it only when the report's
+   * case is routed to their own organisation; everyone else is answered "not found".
+   */
+  private async canView(principal: SessionPrincipal, row: EvidenceWithReport): Promise<boolean> {
+    if (String(row.owner.id) === principal.id) return true;
+    if (principal.role === 'operator' || principal.role === 'admin') return true;
+    if (principal.role === 'official' && principal.organizationId) {
+      return this.cases.organizationHasReport(String(row.report.id), principal.organizationId);
+    }
+    return false;
+  }
 }

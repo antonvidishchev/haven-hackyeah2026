@@ -116,9 +116,14 @@
       "created": "Rozpoczęto szkic.",
       "edited": "Zgłoszenie zostało zmienione.",
       "evidence_added": "Dodano dowody.",
-      "filed": "Zgłoszenie zostało złożone."
+      "filed": "Zgłoszenie zostało złożone.",
+      "escalated": "Eskalowano to zgłoszenie."
     },
-    "sampleWhat": "Grupa osób obrażała mnie na przystanku tramwajowym z powodu mojego akcentu."
+    "sampleWhat": "Grupa osób obrażała mnie na przystanku tramwajowym z powodu mojego akcentu.",
+    "filedTitle": "Zgłoszenie złożone",
+    "filedBody": "Twój numer referencyjny to <ref>{reference}</ref>. Zachowaj go na wypadek dalszego kontaktu.",
+    "editTitle": "Szczegóły zgłoszenia",
+    "escalated": "To zgłoszenie zostało eskalowane."
   },
   "area": {
     "title": "Zgłoszenia w okolicy",
@@ -261,7 +266,15 @@
     "saveFailed": "Nie udało się teraz zapisać. Zmiany są nadal tutaj; spróbujemy ponownie.",
     "conflictTitle": "To zgłoszenie zmieniło się gdzie indziej",
     "conflictBody": "Zapisano je w innej karcie lub na innym urządzeniu. Wczytaj ponownie, aby zobaczyć najnowszą wersję; najpierw skopiuj to, co chcesz zachować.",
-    "reload": "Wczytaj ponownie"
+    "reload": "Wczytaj ponownie",
+    "saveChanges": "Zapisz zmiany",
+    "unsaved": "Masz niezapisane zmiany.",
+    "file": "Złóż zgłoszenie",
+    "filing": "Składanie…",
+    "fileHint": "Złożenie zgłoszenia przekazuje je zespołowi Haven. Szczegóły możesz uzupełnić później.",
+    "fileBlocked": "Uzupełnij listę „Wymagane do złożenia”, aby złożyć zgłoszenie.",
+    "fileIncomplete": "Wciąż brakuje czegoś wymaganego. Sprawdź listę „Wymagane do złożenia”.",
+    "fileFailed": "Nie udało się teraz złożyć zgłoszenia. Twój szkic jest bezpieczny; spróbuj ponownie."
   },
   "evidence": {
     "title": "Dowody",
@@ -290,5 +303,33 @@
     "vaultTitle": "Prywatne przechowywanie",
     "vaultBody": "Pliki są przechowywane prywatnie razem ze zgłoszeniem. Mogą je otworzyć tylko Ty i zespół reagowania Haven, a organizacja partnerska dopiero po przekazaniu jej sprawy. Każde otwarcie jest rejestrowane.",
     "notScanned": "Pilotaż: przesłane pliki nie są skanowane pod kątem złośliwego oprogramowania."
+  },
+  "routing": {
+    "title": "Kierowanie (symulacja)",
+    "responder": "Przekazano do",
+    "queue": "Priorytet",
+    "autoDispatch": "Automatyczne wysłanie (symulacja)",
+    "confirmationRequired": "Wymagane potwierdzenie.",
+    "confirmationHint": "Zespół Haven sprawdzi z Tobą szczegóły, zanim podejmie działania.",
+    "explain": "Smart Router Haven wybiera odbiorcę według stałych, jawnych reguł — to nie jest AI. Każde zgłoszenie przegląda osoba z zespołu Haven.",
+    "call112": "Osoby w niebezpieczeństwie powinny dzwonić pod 112."
+  },
+  "escalation": {
+    "title": "Eskaluj to zgłoszenie",
+    "lead": "Jeśli sytuacja się pogarsza, możesz poprosić o pilniejsze potraktowanie zgłoszenia. Eskalacja wymaga potwierdzonej tożsamości.",
+    "verification": "Symulowana weryfikacja tożsamości (zastępstwo demonstracyjne)",
+    "submit": "Eskaluj to zgłoszenie",
+    "escalating": "Eskalowanie…",
+    "unconfirmed": "Najpierw zaznacz weryfikację tożsamości.",
+    "failed": "Nie udało się teraz eskalować zgłoszenia. Spróbuj ponownie."
+  },
+  "messages": {
+    "title": "Wiadomości od Haven",
+    "empty": "Brak wiadomości. Pojawią się tutaj.",
+    "kind": {
+      "request_information": "Potrzebujemy trochę więcej informacji",
+      "comment": "Aktualizacja",
+      "cancellation_notice": "To zgłoszenie jest zamknięte"
+    }
   }
 }

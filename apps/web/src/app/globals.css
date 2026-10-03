@@ -141,6 +141,12 @@
   .resident-button.secondary {
     @apply border-border bg-card text-foreground hover:bg-muted;
   }
+  .resident-button.destructive {
+    @apply bg-destructive text-white hover:bg-destructive/90;
+  }
+  .resident-button:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
 
   .resident-reference {
     @apply font-mono tabular-nums;

@@ -1,8 +1,12 @@
 import { Body, Controller, Get, HttpCode, Param, Post, Put, Query } from '@nestjs/common';
 import {
+  escalateReportRequestSchema,
   reportListQuerySchema,
+  submitReportRequestSchema,
   updateReportRequestSchema,
+  type EscalateReportRequest,
   type SessionPrincipal,
+  type SubmitReportRequest,
   type UpdateReportRequest,
 } from '@haven/shared';
 import type { z } from 'zod';
@@ -46,5 +50,26 @@ export class ReportsController {
     @Body(new ZodPipe(updateReportRequestSchema)) body: UpdateReportRequest,
   ) {
     return this.reports.update(principal, id, body);
+  }
+
+  @Post(':id/submit')
+  @HttpCode(200)
+  submit(
+    @CurrentPrincipal() principal: SessionPrincipal,
+    @Param('id', reportIdPipe()) id: string,
+    @Body(new ZodPipe(submitReportRequestSchema)) body: SubmitReportRequest,
+  ) {
+    return this.reports.submit(principal, id, body);
+  }
+
+  /** The verification is simulated; the body only confirms the resident ticked it. */
+  @Post(':id/escalation')
+  @HttpCode(200)
+  escalate(
+    @CurrentPrincipal() principal: SessionPrincipal,
+    @Param('id', reportIdPipe()) id: string,
+    @Body(new ZodPipe(escalateReportRequestSchema)) _body: EscalateReportRequest,
+  ) {
+    return this.reports.escalate(principal, id);
   }
 }

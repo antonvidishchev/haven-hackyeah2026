@@ -4,6 +4,7 @@ import { DateTime, RecordId } from 'surrealdb';
 import { principalRecord } from '../auth/principal.repository.js';
 import { SurrealService } from '../db/surreal.service.js';
 import { toIso } from '../db/values.js';
+import type { FilingPlan } from '../cases/routing.js';
 import type { ReportCursor } from './cursor.js';
 
 export type ReportRow = {
@@ -125,6 +126,91 @@ export class ReportsRepository {
         zone_id: zoneIdOf(fields),
         author: principalRecord(authorId),
       },
+    );
+    return results.at(-2) === 1;
+  }
+
+  /**
+   * Files a draft in one transaction: allocates the reference, records the routing decision,
+   * opens the case (and stores the recommendation, when planned), and writes the `filed`
+   * revision. Only applies while the report is still a draft at `expectedRevision` and its
+   * evidence still matches the plan; returns false otherwise.
+   */
+  async file(
+    id: string,
+    expectedRevision: number,
+    plan: FilingPlan,
+    authorId: string,
+  ): Promise<boolean> {
+    const recommendation = plan.recommendation
+      ? `CREATE recommendation CONTENT {
+           report: $id, action: $rec.action, status: $rec.status,
+           confidence: <float>$rec.confidence, rationale: $rec.rationale, source: $rec.source,
+           input_hash: $rec.inputHash, output_hash: $rec.outputHash
+         };`
+      : '';
+    const results = await this.surreal.query<unknown[]>(
+      `BEGIN TRANSACTION;
+       LET $has_evidence = count((SELECT VALUE id FROM evidence WHERE report = $id)) > 0;
+       LET $updated = UPDATE $id SET
+         state = 'submitted', current_revision = $expected + 1,
+         submitted_at = time::now(), updated_at = time::now()
+       WHERE current_revision = $expected AND state = 'draft'
+         AND $has_evidence = $input.hasEvidence
+       RETURN AFTER;
+       IF array::len($updated) > 0 {
+         LET $reference = fn::next_report_reference(time::year(time::now()));
+         UPDATE $id SET reference = $reference;
+         CREATE report_revision CONTENT {
+           report: $id, revision: $expected + 1, fields: $updated[0].fields, note: 'filed',
+           author: $author
+         };
+         LET $decision = CREATE routing_decision CONTENT {
+           report: $id, rule_id: $result.ruleId, ruleset_version: $result.rulesetVersion,
+           ruleset_digest: $digest, input_snapshot: $input, result: $result
+         };
+         CREATE haven_case CONTENT {
+           report: $id, routing_decision: $decision[0].id, organization_id: $result.responder,
+           state: 'open', triage_status: 'needs_review', queue_priority: $result.queue,
+           version: 1
+         };
+         ${recommendation}
+       };
+       RETURN array::len($updated);
+       COMMIT TRANSACTION;`,
+      {
+        id: reportRecord(id),
+        expected: expectedRevision,
+        input: plan.input,
+        result: plan.result,
+        digest: plan.rulesetDigest,
+        author: principalRecord(authorId),
+        ...(plan.recommendation ? { rec: plan.recommendation } : {}),
+      },
+    );
+    return results.at(-2) === 1;
+  }
+
+  /**
+   * Marks a filed report escalated with an `escalated` revision (fields unchanged). Returns
+   * false when the report is not filed or was already escalated.
+   */
+  async escalate(id: string, authorId: string): Promise<boolean> {
+    const results = await this.surreal.query<unknown[]>(
+      `BEGIN TRANSACTION;
+       LET $before = UPDATE $id SET
+         escalated = true, escalated_at = time::now(), current_revision += 1,
+         updated_at = time::now()
+       WHERE state = 'submitted' AND escalated = false RETURN BEFORE;
+       IF array::len($before) > 0 {
+         CREATE report_revision CONTENT {
+           report: $id, revision: $before[0].current_revision + 1, fields: $before[0].fields,
+           note: 'escalated', author: $author
+         };
+       };
+       RETURN array::len($before);
+       COMMIT TRANSACTION;`,
+      { id: reportRecord(id), author: principalRecord(authorId) },
     );
     return results.at(-2) === 1;
   }

@@ -1,11 +1,13 @@
 import {
   apiErrorBodySchema,
   type AuthResponse,
+  type EscalateReportRequest,
   type EvidenceItem,
   type LoginRequest,
   type ReportDetail,
   type ReportListResponse,
   type SessionResponse,
+  type SubmitReportRequest,
   type UpdateReportRequest,
 } from '@haven/shared';
 
@@ -101,6 +103,16 @@ export function createHavenClient(options: HavenClientOptions) {
         request<ReportDetail>('GET', `/reports/${encodeURIComponent(id)}`, init),
       update: (id: string, body: UpdateReportRequest, init?: Omit<RequestOptions, 'body'>) =>
         request<ReportDetail>('PUT', `/reports/${encodeURIComponent(id)}`, { ...init, body }),
+      submit: (id: string, body: SubmitReportRequest, init?: Omit<RequestOptions, 'body'>) =>
+        request<ReportDetail>('POST', `/reports/${encodeURIComponent(id)}/submit`, {
+          ...init,
+          body,
+        }),
+      escalate: (id: string, body: EscalateReportRequest, init?: Omit<RequestOptions, 'body'>) =>
+        request<ReportDetail>('POST', `/reports/${encodeURIComponent(id)}/escalation`, {
+          ...init,
+          body,
+        }),
     },
     evidence: {
       /** Multipart upload with a single `file` field. */

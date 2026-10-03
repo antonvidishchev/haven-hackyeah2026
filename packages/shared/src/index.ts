@@ -8,3 +8,4 @@ export * from './auth.js';
 export * from './geometry.js';
 export * from './reports.js';
 export * from './evidence.js';
+export * from './router.js';
