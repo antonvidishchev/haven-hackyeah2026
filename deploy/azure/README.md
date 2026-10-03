@@ -51,6 +51,35 @@ cd /opt/haven && docker compose -f compose.yaml -f deploy/azure/compose.azure.ya
   --profile full run --rm -e HAVEN_CONFIRM_RESET=yes migrate node dist/db/cli.js reset
 ```
 
+## Stop and start
+
+Deallocate the VM when nobody needs the demo. Compute billing stops; the disk and the public IP
+(a few euros a month) remain, and the URL, data and certificate are kept.
+
+```bash
+az vm deallocate -g haven-demo -n haven-vm   # down
+az vm start -g haven-demo -n haven-vm        # up: the site is back in about 2 minutes
+az vm show -d -g haven-demo -n haven-vm --query powerState -o tsv
+```
+
+Every service restarts with the VM. To stop only the app and keep the VM running, on the VM:
+
+```bash
+cd /opt/haven
+docker compose -f compose.yaml -f deploy/azure/compose.azure.yaml --profile full stop   # down
+docker compose -f compose.yaml -f deploy/azure/compose.azure.yaml --profile full up -d  # up
+docker compose -f compose.yaml -f deploy/azure/compose.azure.yaml --profile full ps     # status
+```
+
+Use `stop`, not `down -v`: `-v` deletes the volumes with every report, upload and certificate.
+
+If your IP address has changed since `deploy.sh` ran, SSH is refused. Allow your new address:
+
+```bash
+az network nsg rule update -g haven-demo --nsg-name haven-vmNSG -n ssh-deployer \
+  --source-address-prefixes "$(curl -fsS https://api.ipify.org)"
+```
+
 ## Tear down
 
 A `Standard_B2s` VM costs roughly €35 a month while it runs. Delete everything after the demo:
