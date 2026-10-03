@@ -9,6 +9,7 @@ import {
 import type { MultipartFile } from '@fastify/multipart';
 import type { Readable } from 'node:stream';
 import { CasesRepository } from '../cases/cases.repository.js';
+import { AuditService } from '../audit/audit.service.js';
 import { apiError } from '../common/http-exception.filter.js';
 import { APP_CONFIG, type AppConfig } from '../config/env.js';
 import { randomRecordId } from '../db/values.js';
@@ -54,6 +55,7 @@ export class EvidenceService {
     private readonly storage: EvidenceStorage,
     private readonly reports: ReportsService,
     private readonly cases: CasesRepository,
+    private readonly audit: AuditService,
     @Inject(APP_CONFIG) private readonly config: AppConfig,
   ) {}
 
@@ -95,8 +97,9 @@ export class EvidenceService {
       throw rejectionError(rejection, maxBytes);
     }
 
+    let item: EvidenceItem;
     try {
-      return await this.evidence.create({
+      item = await this.evidence.create({
         id,
         reportId,
         ownerId: principal.id,
@@ -110,6 +113,12 @@ export class EvidenceService {
       await this.storage.remove(storagePath);
       throw error;
     }
+    await this.audit.record(principal, 'evidence.uploaded', { type: 'evidence', id }, {
+      reportId,
+      mediaType,
+      byteSize: written.byteSize,
+    });
+    return item;
   }
 
   /** Owners may remove evidence while the report is a draft; filed evidence stays. */
@@ -145,13 +154,13 @@ export class EvidenceService {
     // The controller answers 416 with `Content-Range: bytes */size`.
     if (range === 'unsatisfiable') return { status: 416, size };
 
-    this.logger.log({
-      event: 'evidence.view',
-      actorId: principal.id,
-      role: principal.role,
-      evidenceId: id,
-      range: range ? `${range.start}-${range.end}` : null,
-    });
+    // A player fetches many ranges; only the opening request counts as a view.
+    if (!range || range.start === 0) {
+      await this.audit.record(principal, 'evidence.viewed', { type: 'evidence', id }, {
+        reportId: String(row.report.id),
+        owner: String(row.owner.id) === principal.id,
+      });
+    }
 
     return {
       status: range ? 206 : 200,

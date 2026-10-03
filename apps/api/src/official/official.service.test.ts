@@ -15,6 +15,7 @@ import type {
   CaseRow,
   OperatorRepository,
 } from '../operator/operator.repository.js';
+import type { AuditService } from '../audit/audit.service.js';
 import type { OfficialRepository } from './official.repository.js';
 import { OfficialService } from './official.service.js';
 
@@ -68,14 +69,16 @@ function setup() {
   const official = { listForOrganization: vi.fn(async (): Promise<CaseRow[]> => []) };
   const cases = { routingFor: vi.fn(async () => ({ responder: 'professional_paid' })) };
   const evidence = { listForReport: vi.fn(async () => []) };
+  const audit = { record: vi.fn(async () => {}) };
   const service = new OfficialService(
     operator as unknown as OperatorRepository,
     official as unknown as OfficialRepository,
     cases as unknown as CasesRepository,
     evidence as unknown as EvidenceRepository,
+    audit as unknown as AuditService,
   );
   const written = () => operator.decide.mock.calls[0]?.[0] as CaseDecisionWrite;
-  return { operator, official, service, written };
+  return { operator, official, service, written, audit };
 }
 
 describe('OfficialService.list', () => {
@@ -132,6 +135,13 @@ describe('OfficialService decisions', () => {
       type: 'official.external_action',
       payload: { type: 'phone_call', note: 'Called the resident' },
     });
+    expect(t.audit.record).toHaveBeenCalledWith(
+      support,
+      'case.action_recorded',
+      { type: 'haven_case', id: 'c1' },
+      expect.objectContaining({ actionType: 'phone_call', noteLength: 19 }),
+    );
+    expect(JSON.stringify(t.audit.record.mock.calls)).not.toContain('Called the resident');
   });
 
   it('closes with the comment', async () => {

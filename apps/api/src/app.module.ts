@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
 import { LoggerModule } from 'nestjs-pino';
+import { AuditModule } from './audit/audit.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { HttpExceptionFilter } from './common/http-exception.filter.js';
 import { ConfigModule } from './config/config.module.js';
@@ -34,6 +35,7 @@ const pretty = process.env.NODE_ENV !== 'production' && process.stdout.isTTY;
     }),
     ConfigModule,
     DatabaseModule,
+    AuditModule,
     AuthModule,
     HealthModule,
     ReportsModule,

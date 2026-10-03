@@ -300,13 +300,25 @@
   },
   "audit": {
     "title": "Audit log",
-    "lead": "Every access and decision, append-only.",
+    "lead": "Every sign-in, report change, evidence view and case decision. Append-only; details hold ids and lengths, never message text.",
     "when": "When",
     "actor": "Actor",
     "action": "Action",
     "subject": "Subject",
     "emptyTitle": "No audit events yet",
-    "emptyBody": "Events are recorded as people use Haven."
+    "emptyBody": "Events are recorded as people use Haven.",
+    "role": "Role",
+    "details": "Details",
+    "filters": "Filter the audit log",
+    "anyAction": "Any action",
+    "anyActor": "Anyone",
+    "apply": "Apply filters",
+    "clear": "Clear filters",
+    "emptyFiltered": "No events match these filters.",
+    "anonymous": "Not signed in",
+    "pagination": "Audit log pages",
+    "newest": "Newest events",
+    "older": "Older events"
   },
   "access": {
     "title": "You don't have access to this page",

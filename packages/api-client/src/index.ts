@@ -1,4 +1,6 @@
 import {
+  type AuditAction,
+  type AuditListResponse,
   apiErrorBodySchema,
   type CancelCaseRequest,
   type ClaimCaseRequest,
@@ -185,6 +187,12 @@ export function createHavenClient(options: HavenClientOptions) {
     hotspots: {
       list: (init?: Omit<RequestOptions, 'body'>) =>
         request<HotspotsResponse>('GET', '/hotspots', { ...init, token: null }),
+    },
+    admin: {
+      audit: (
+        query: { action?: AuditAction; actor?: string; cursor?: string; limit?: number } = {},
+        init?: Omit<RequestOptions, 'body'>,
+      ) => request<AuditListResponse>('GET', `/admin/audit${queryString(query)}`, init),
     },
   };
 }

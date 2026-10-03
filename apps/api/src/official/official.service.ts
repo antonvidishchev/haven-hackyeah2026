@@ -15,6 +15,8 @@ import {
   type SessionPrincipal,
 } from '@haven/shared';
 import type { z } from 'zod';
+import { AuditService } from '../audit/audit.service.js';
+import { caseAuditEntry } from '../audit/case-audit.js';
 import { CasesRepository } from '../cases/cases.repository.js';
 import { apiError } from '../common/http-exception.filter.js';
 import { EvidenceRepository } from '../evidence/evidence.repository.js';
@@ -66,6 +68,7 @@ export class OfficialService {
     private readonly official: OfficialRepository,
     private readonly cases: CasesRepository,
     private readonly evidence: EvidenceRepository,
+    private readonly audit: AuditService,
   ) {}
 
   async list(principal: SessionPrincipal): Promise<OfficialCaseListResponse> {
@@ -162,7 +165,7 @@ export class OfficialService {
     }
     if (expectedVersion !== row.version) throw staleVersion();
 
-    const applied = await this.operator.decide({
+    const decision: CaseDecisionWrite = {
       caseId,
       expectedVersion,
       next,
@@ -170,11 +173,13 @@ export class OfficialService {
       recommendationId: null,
       disposition: null,
       ...write,
-    });
-    if (!applied) {
+    };
+    if (!(await this.operator.decide(decision))) {
       const latest = await this.operator.findCase(caseId);
       throw latest && isTerminal(latest.state) ? caseClosed() : staleVersion();
     }
+    const { action, meta } = caseAuditEntry(decision);
+    await this.audit.record(principal, action, { type: 'haven_case', id: caseId }, meta);
     return this.detail(principal, caseId);
   }
 }

@@ -21,6 +21,8 @@ import {
   type VaultListResponse,
 } from '@haven/shared';
 import type { z } from 'zod';
+import { AuditService } from '../audit/audit.service.js';
+import { caseAuditEntry } from '../audit/case-audit.js';
 import { CasesRepository, toResidentMessage } from '../cases/cases.repository.js';
 import { apiError } from '../common/http-exception.filter.js';
 import { toIso } from '../db/values.js';
@@ -96,6 +98,7 @@ export class OperatorService {
     private readonly cases: CasesRepository,
     private readonly reports: ReportsRepository,
     private readonly evidence: EvidenceRepository,
+    private readonly audit: AuditService,
   ) {}
 
   async list(view: TriageStatus): Promise<OperatorCaseListResponse> {
@@ -224,7 +227,7 @@ export class OperatorService {
     if (body.expectedVersion !== row.version) throw staleVersion();
 
     const recommendation = await this.operator.recommendationFor(String(row.report_id.id));
-    const applied = await this.operator.decide({
+    const write: CaseDecisionWrite = {
       caseId,
       expectedVersion: body.expectedVersion,
       next,
@@ -236,11 +239,13 @@ export class OperatorService {
         body.followedRecommendation,
       ),
       ...plan(row),
-    });
-    if (!applied) {
+    };
+    if (!(await this.operator.decide(write))) {
       const latest = await this.operator.findCase(caseId);
       throw latest && isTerminal(latest.state) ? caseClosed() : staleVersion();
     }
+    const { action, meta } = caseAuditEntry(write);
+    await this.audit.record(principal, action, { type: 'haven_case', id: caseId }, meta);
     return this.detail(caseId);
   }
 }

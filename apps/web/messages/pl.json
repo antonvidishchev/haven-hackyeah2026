@@ -300,13 +300,25 @@
   },
   "audit": {
     "title": "Dziennik audytu",
-    "lead": "Każdy dostęp i każda decyzja, tylko do dopisywania.",
+    "lead": "Każde logowanie, zmiana zgłoszenia, wyświetlenie dowodu i decyzja w sprawie. Tylko do dopisywania; szczegóły zawierają identyfikatory i długości, nigdy treść wiadomości.",
     "when": "Kiedy",
     "actor": "Kto",
     "action": "Działanie",
     "subject": "Obiekt",
     "emptyTitle": "Brak zdarzeń audytu",
-    "emptyBody": "Zdarzenia są zapisywane, gdy ludzie korzystają z Haven."
+    "emptyBody": "Zdarzenia są zapisywane, gdy ludzie korzystają z Haven.",
+    "role": "Rola",
+    "details": "Szczegóły",
+    "filters": "Filtruj dziennik audytu",
+    "anyAction": "Dowolne działanie",
+    "anyActor": "Dowolna osoba",
+    "apply": "Zastosuj filtry",
+    "clear": "Wyczyść filtry",
+    "emptyFiltered": "Brak zdarzeń pasujących do filtrów.",
+    "anonymous": "Niezalogowany",
+    "pagination": "Strony dziennika audytu",
+    "newest": "Najnowsze zdarzenia",
+    "older": "Starsze zdarzenia"
   },
   "access": {
     "title": "Nie masz dostępu do tej strony",
