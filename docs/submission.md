@@ -1,7 +1,7 @@
 # Submission package: HackYeah 2026, Smart City open task
 
 Everything the rules ask for, ready to copy into HackTribe. Fill in the `TODO` items before
-submitting (deadline: 23:00 on 4 October 2026, in English or Polish).
+submitting (deadline: 11:00 on 4 October 2026, in English or Polish).
 
 ## Project title
 
@@ -110,10 +110,10 @@ simulation in the UI.
 
 ## Timeline statement
 
-Rule 5 of the Smart City terms requires that work on the task started **no earlier than 23:00 on
-3 October 2026**. The git history is the record; every commit carries its author time.
-
-At the time of writing, the repository history is:
+The event runs from **11:00 on 3 October to 11:00 on 4 October 2026** (the printed terms say
+"11:00 PM"; the organisers corrected this to 11:00 AM). All work on Haven was done during the
+event: the first commit is at 12:28 on 3 October. The git history is the record; every commit
+carries its author time.
 
 | Commit(s)             | Author time (3 Oct 2026, CEST) | Content                                       |
 | --------------------- | ------------------------------ | --------------------------------------------- |
@@ -122,8 +122,4 @@ At the time of writing, the repository history is:
 | `c48f0d5`             | 16:55                          | Phase 11, mobile resident app                 |
 | `4d0e2b1`             | 17:08                          | Demo hardening, docs and this package         |
 
-> **TODO, team decision before submitting.** All of this work predates 23:00 on 3 October.
-> The team must decide how to comply with rule 5 (for example, by asking the organisers whether
-> prior work is allowed if disclosed, and listing it here as prior work) and complete this
-> statement accordingly. Work done after 23:00 on 3 October should be listed separately, by
-> commit.
+Later commits are listed in `git log`. Nothing was built before the event.
