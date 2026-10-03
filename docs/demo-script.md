@@ -22,13 +22,13 @@ All organisations, people and resources are fictional, and nothing leaves the la
 
 | Time | Who              | Do                                                                                                                                                                                                       | Say                                                                                                                     |
 | ---- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| 0:00 | —                | Home page.                                                                                                                                                                                               | Harassment on trams goes unreported: "call the police" feels too much, so people say nothing. Haven is the middle path. |
+| 0:00 | —                | Front page: **Area reports**, then **Start**.                                                                                                                                                            | Harassment on trams goes unreported: "call the police" feels too much, so people say nothing. Haven is the middle path. |
 | 0:20 | Resident (guest) | **Report an incident**. Kind: _Verbal harassment_. "A man shouted insults about my accent on tram 8 near Teatr Bagatela." Severity: _Low_. **Continue**.                                                 | No account, no sign-in. The draft autosaves and stays private until filed.                                              |
 | 0:50 | Resident         | **Where**: **Pick on map**, drop the pin by Teatr Bagatela, which shows "Pin is in I Stare Miasto". **Continue**, then **File a report**.                                                                | Location is a district, never a public exact spot.                                                                      |
 | 1:10 | Resident         | Show the reference, the routing card (Neighborhood Volunteer Network, normal queue, "not AI") and **Help that fits your situation** with "Matched because: Verbal harassment · I Stare Miasto · “tram”". | Deterministic, explainable routing, and help in the resident's language right away.                                     |
 | 1:40 | Operator         | Sign in as **Local Operator**. The new case is in **Needs review**; the seeded knife threat sits on top as **Top priority**. Open the tram case, then **Follow AI recommendation** and **Confirm**.      | Every case gets a human. The suggestion is a labelled, rule-based simulation, and following it is audited.              |
 | 2:10 | Official         | Sign in as **Volunteer Network Official**. **Claim case**, **Record action** (phone call), **Close case** with a comment.                                                                                | The organisation records what it did outside Haven. A closed case cannot change.                                        |
-| 2:35 | Public           | **Area reports**. III Prądnik Czerwony shows a count; I Stare Miasto, with two filed reports, is still "below privacy threshold".                                                                        | Counts per district, below 3 suppressed. Never a safety score.                                                          |
+| 2:35 | Public           | **Area reports**. III Prądnik Czerwony shows a count; I Stare Miasto, with two filed reports, is still "below privacy threshold".                                                                        | Counts per district, below 3 suppressed, also per incident type.                                                        |
 | 2:50 | —                | —                                                                                                                                                                                                        | Web and Expo app, EN/PL, WCAG 2.1 AA, Docker Compose. Ready to pilot with real organisations.                           |
 
 ## 10-minute version, by role
@@ -79,7 +79,8 @@ All organisations, people and resources are fictional, and nothing leaves the la
 2. Open **Area reports** signed out. III Prądnik Czerwony shows a count. I Stare Miasto has two
    filed reports (the seeded one and today's), so it still shows "below privacy threshold"; the
    cancelled duplicate doesn't count. File one more tram report as a guest and refresh: the
-   district appears with 3.
+   district appears with 3. Filter by **Verbal harassment**: III Prądnik Czerwony drops below the
+   threshold, because only one of its three reports is of that type.
 
 ### 6. Wrap-up (0.5 min)
 

@@ -40,9 +40,9 @@ describe('defaultLandingPath', () => {
     expect(defaultLandingPath('operator')).toBe('/queue');
     expect(defaultLandingPath('admin')).toBe('/queue');
     expect(defaultLandingPath('official')).toBe('/cases');
-    expect(defaultLandingPath('resident')).toBe('/');
-    expect(defaultLandingPath('guest')).toBe('/');
-    expect(defaultLandingPath(null)).toBe('/');
+    expect(defaultLandingPath('resident')).toBe('/area-reports');
+    expect(defaultLandingPath('guest')).toBe('/area-reports');
+    expect(defaultLandingPath(null)).toBe('/area-reports');
   });
 });
 

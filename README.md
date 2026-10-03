@@ -20,8 +20,8 @@ options feel like "call the police" or "say nothing". Haven is the middle path:
 - **Officials** claim cases for their organisation, record what they did outside Haven and close
   them. **Admins** read an append-only audit log.
 - **Support matchmaking** links each report to fictional local help, with "matched because…".
-- **Area reports** show privacy-protected counts per district (fewer than 3 reports are
-  suppressed). It is never a safety score.
+- **Area reports**, the front page, show privacy-protected counts per district, for all
+  incidents or one incident type (fewer than 3 reports are suppressed).
 
 More: [demo script](docs/demo-script.md) · [pilot estimate](docs/pilot-estimate.md) ·
 [submission package](docs/submission.md)
@@ -125,7 +125,7 @@ real data behind them. The sign-in page also offers one-tap cards for each.
 | `official-volunteer` | `HavenOfficial1!` | official | Volunteer Network Official | community_volunteer |
 
 Visitors don't need an account: opening a reporting page creates a guest session automatically.
-Residents land on the home page, operators and admins on the response queue, officials on their
+Residents land on Area reports (the reporting start page is `/start`), operators and admins on the response queue, officials on their
 assigned cases. Staff accounts sign in on the web only.
 
 ## Demo data
@@ -159,7 +159,7 @@ The 25 support resources are fictional too.
 | Advisory recommendation | Rule-based fixture, stored immutably, with dispositions in the audit trail  | Any real AI or LLM call                                    |
 | Escalation              | Recorded on the report and in the queue                                     | Identity verification (a demo checkbox)                    |
 | Staff workflows         | Operator, official and admin flows with optimistic concurrency and audit    | Real organisations; all are fictional                      |
-| Area reports            | Counts per Kraków district with k=3 suppression                             | —                                                          |
+| Area reports            | Counts per Kraków district and incident type with k=3 suppression           | —                                                          |
 | Matchmaking             | Keyword and tag scoring with SurrealDB full-text search, "matched because…" | The resources themselves                                   |
 | Location                | Kraków district boundaries, map pin, device location (mobile)               | Third-party geocoding                                      |
 | Mobile                  | Expo Go app: report, evidence, in-app audio and video capture, My reports   | Background recording; staff screens are web-only           |

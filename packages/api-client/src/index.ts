@@ -11,6 +11,7 @@ import {
   type OperatorCaseDetail,
   type OperatorCaseListResponse,
   type PromoteCaseRequest,
+  type ReportCategory,
   type ReplyCaseRequest,
   type TriageStatus,
   type VaultListResponse,
@@ -198,8 +199,11 @@ export function createHavenClient(options: HavenClientOptions) {
         }),
     },
     hotspots: {
-      list: (init?: Omit<RequestOptions, 'body'>) =>
-        request<HotspotsResponse>('GET', '/hotspots', { ...init, token: null }),
+      list: (query: { category?: ReportCategory } = {}, init?: Omit<RequestOptions, 'body'>) =>
+        request<HotspotsResponse>('GET', `/hotspots${queryString(query)}`, {
+          ...init,
+          token: null,
+        }),
     },
     admin: {
       audit: (

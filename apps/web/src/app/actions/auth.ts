@@ -56,5 +56,5 @@ export async function signOut(): Promise<void> {
   const token = jar.get(SESSION_COOKIE)?.value;
   if (token) await publicApi.auth.logout({ token }).catch(() => undefined);
   jar.delete(SESSION_COOKIE);
-  redirect('/');
+  redirect(defaultLandingPath(null));
 }
