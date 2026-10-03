@@ -1,0 +1,29 @@
+#cloud-config
+# Rendered by deploy.sh: __HAVEN_DOMAIN__ and __HAVEN_REF__ are replaced before upload.
+package_update: true
+packages: [ca-certificates, curl, git, openssl]
+
+swap:
+  filename: /swapfile
+  size: 2G
+
+runcmd:
+  - install -m 0755 -d /etc/apt/keyrings
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+  - >-
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc]
+    https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable"
+    > /etc/apt/sources.list.d/docker.list
+  - apt-get update
+  - apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  - usermod -aG docker azureuser
+  - git clone --branch __HAVEN_REF__ https://github.com/antonvidishchev/haven-hackyeah2026.git /opt/haven
+  - chown -R azureuser:azureuser /opt/haven
+  - >-
+    printf 'HAVEN_DOMAIN=%s\nSURREAL_PASS=%s\nJWT_SECRET=%s\nAI_RECOMMENDATION_MODE=local\n'
+    __HAVEN_DOMAIN__ "$(openssl rand -hex 24)" "$(openssl rand -hex 32)" > /opt/haven/.env
+  - chmod 600 /opt/haven/.env
+  - chown azureuser:azureuser /opt/haven/.env
+  - >-
+    cd /opt/haven && docker compose -f compose.yaml -f deploy/azure/compose.azure.yaml
+    --profile full up -d --build

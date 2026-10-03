@@ -187,6 +187,11 @@ The app covers the resident side: report (what, where with a map pin or current 
 evidence), file, follow messages and support matches, escalate, and capture audio or video in the
 app. Staff use the web app.
 
+## Deploying to Azure
+
+A single VM with Docker Compose and automatic HTTPS, for a public web demo: see
+[`deploy/azure/README.md`](deploy/azure/README.md).
+
 ## Environment
 
 See [`.env.example`](.env.example). `JWT_SECRET` there is a demo value; generate your own for
