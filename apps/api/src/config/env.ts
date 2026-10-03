@@ -20,6 +20,11 @@ const envSchema = z.object({
     .default(100 * 1024 * 1024),
   AI_RECOMMENDATION_MODE: z.enum(['local', 'disabled']).default('local'),
   WEB_ORIGIN: z.string().url().default('http://127.0.0.1:3000'),
+  /**
+   * Which peers may set `X-Forwarded-For` (proxy-addr syntax: `loopback`, `uniquelocal`, CIDRs).
+   * Login rate limits key on the client IP, so only trusted proxies may name it.
+   */
+  TRUST_PROXY: z.string().min(1).default('loopback'),
 });
 
 export type AppConfig = z.infer<typeof envSchema>;

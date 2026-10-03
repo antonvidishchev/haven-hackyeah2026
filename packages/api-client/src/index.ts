@@ -1,4 +1,9 @@
-import { apiErrorBodySchema } from '@haven/shared';
+import {
+  apiErrorBodySchema,
+  type AuthResponse,
+  type LoginRequest,
+  type SessionResponse,
+} from '@haven/shared';
 
 export class ApiError extends Error {
   constructor(
@@ -25,6 +30,8 @@ export interface RequestOptions {
   signal?: AbortSignal;
   /** Overrides `getToken` for this call. `null` sends no token. */
   token?: string | null;
+  /** Extra request headers, e.g. `x-forwarded-for` when calling on a visitor's behalf. */
+  headers?: Record<string, string>;
 }
 
 export function createHavenClient(options: HavenClientOptions) {
@@ -34,7 +41,7 @@ export function createHavenClient(options: HavenClientOptions) {
 
   async function request<T>(method: string, path: string, init: RequestOptions = {}): Promise<T> {
     const token = init.token !== undefined ? init.token : await options.getToken?.();
-    const headers: Record<string, string> = { accept: 'application/json' };
+    const headers: Record<string, string> = { ...init.headers, accept: 'application/json' };
     if (token) headers.authorization = `Bearer ${token}`;
     if (init.body !== undefined) headers['content-type'] = 'application/json';
 
@@ -64,6 +71,15 @@ export function createHavenClient(options: HavenClientOptions) {
     request,
     get: <T>(path: string, init?: RequestOptions) => request<T>('GET', path, init),
     post: <T>(path: string, init?: RequestOptions) => request<T>('POST', path, init),
+    auth: {
+      login: (body: LoginRequest, init?: Omit<RequestOptions, 'body'>) =>
+        request<AuthResponse>('POST', '/auth/login', { ...init, body, token: null }),
+      guest: (init?: Omit<RequestOptions, 'body'>) =>
+        request<AuthResponse>('POST', '/auth/guest', { ...init, token: null }),
+      logout: (init?: Omit<RequestOptions, 'body'>) => request<void>('POST', '/auth/logout', init),
+      session: (init?: Omit<RequestOptions, 'body'>) =>
+        request<SessionResponse>('GET', '/session', init),
+    },
   };
 }
 

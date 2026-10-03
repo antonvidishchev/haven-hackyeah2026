@@ -9,6 +9,7 @@ import { useEffect, useMemo } from 'react';
 
 // Importing @/i18n also initialises i18next before any screen renders.
 import { loadStoredLocale } from '@/i18n';
+import { SessionProvider } from '@/session/SessionProvider';
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
 
 export { ErrorBoundary } from 'expo-router';
@@ -49,7 +50,9 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider>
-      <ThemedNavigation />
+      <SessionProvider>
+        <ThemedNavigation />
+      </SessionProvider>
     </ThemeProvider>
   );
 }

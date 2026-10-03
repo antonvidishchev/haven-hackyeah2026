@@ -3,8 +3,9 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { canAccessPath, type Role } from '@haven/shared';
 
+import { SignOutButton } from '@/components/auth/sign-out-button';
 import { HavenLogo } from '@/components/brand/haven-mark';
-import type { SessionPrincipal } from '@/lib/session';
+import type { SessionPrincipal } from '@haven/shared';
 
 import { LanguageSwitch } from './language-switch';
 import { NavLink } from './nav-link';
@@ -19,6 +20,9 @@ function descriptorKey(role: Role | undefined) {
       return 'operatorWorkspace';
   }
 }
+
+const signOutClass =
+  'min-h-10 rounded-md px-1 text-sm font-medium text-sidebar-foreground/80 hover:text-sidebar-foreground';
 
 export async function StaffShell({
   principal,
@@ -36,7 +40,6 @@ export async function StaffShell({
     { href: '/admin/audit', label: t('audit'), icon: ScrollText },
     { href: '/area-reports', label: t('areaReports'), icon: Map },
     { href: '/settings', label: t('account'), icon: UserRound },
-    // Without a session (before sign-in exists) every item is shown.
   ].filter((item) => !role || canAccessPath(role, item.href));
   const descriptor = t(descriptorKey(role));
 
@@ -74,6 +77,7 @@ export async function StaffShell({
         <div className="mt-auto flex flex-col gap-3 px-2">
           {principal ? <p className="text-sm font-medium">{principal.name}</p> : null}
           <LanguageSwitch />
+          {principal ? <SignOutButton className={signOutClass} /> : null}
         </div>
       </aside>
 
@@ -90,6 +94,7 @@ export async function StaffShell({
           <div className="flex flex-col gap-4 border-t px-4 py-3">
             <nav aria-label={t('workspace')}>{list}</nav>
             <LanguageSwitch />
+            {principal ? <SignOutButton className={signOutClass} /> : null}
           </div>
         </details>
       </header>

@@ -56,8 +56,18 @@
   "login": {
     "title": "Zaloguj się",
     "lead": "Zaloguj się, aby śledzić zgłoszenia na innym urządzeniu lub otworzyć panel pracowników.",
-    "placeholder": "Logowanie kontami demonstracyjnymi pojawi się w kolejnym etapie.",
-    "guest": "Do zgłoszenia nie potrzebujesz konta."
+    "guest": "Nie potrzebujesz konta, aby zgłosić zdarzenie.",
+    "username": "Nazwa użytkownika",
+    "password": "Hasło",
+    "submit": "Zaloguj się",
+    "submitting": "Logowanie…",
+    "errorInvalid": "Nieprawidłowa nazwa użytkownika lub hasło.",
+    "errorTooMany": "Zbyt wiele prób logowania. Odczekaj minutę i spróbuj ponownie.",
+    "errorUnavailable": "Nie można teraz połączyć się z Haven. Spróbuj ponownie za chwilę.",
+    "demoTitle": "Konta demonstracyjne",
+    "demoLead": "To fikcyjne konta demonstracyjne. Ich hasła są publiczne — nigdy nie używaj ich do prawdziwych danych.",
+    "demoSignIn": "Zaloguj jako {name}",
+    "or": "lub"
   },
   "stages": {
     "label": "Postęp zgłoszenia",
@@ -112,7 +122,10 @@
     "themeSystem": "Jak na urządzeniu",
     "themeLight": "Jasny",
     "themeDark": "Ciemny",
-    "languageTitle": "Język"
+    "languageTitle": "Język",
+    "signedInAs": "Zalogowano jako {name}",
+    "roleLabel": "Rola: {role}",
+    "signOut": "Wyloguj się"
   },
   "staff": {
     "reference": "Numer",
@@ -163,5 +176,15 @@
     "subject": "Obiekt",
     "emptyTitle": "Brak zdarzeń audytu",
     "emptyBody": "Zdarzenia są zapisywane, gdy ludzie korzystają z Haven."
+  },
+  "access": {
+    "title": "Nie masz dostępu do tej strony",
+    "operator": "Wymagany dostęp operatora",
+    "official": "Wymagany dostęp urzędnika",
+    "admin": "Wymagany dostęp administratora",
+    "resident": "Ta strona jest dla mieszkańców. Konta pracowników działają w panelu pracowników.",
+    "lead": "Zalogowano jako {name}. Zaloguj się na inne konto lub wróć do swojej części aplikacji.",
+    "switchAccount": "Zaloguj się jako ktoś inny",
+    "goToMyArea": "Przejdź do mojej części"
   }
 }

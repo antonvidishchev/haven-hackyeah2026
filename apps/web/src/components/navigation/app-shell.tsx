@@ -1,6 +1,6 @@
 import { isStaffRole } from '@haven/shared';
 
-import type { SessionPrincipal } from '@/lib/session';
+import type { SessionPrincipal } from '@haven/shared';
 
 import { ResidentShell } from './resident-shell';
 import { StaffShell } from './staff-shell';

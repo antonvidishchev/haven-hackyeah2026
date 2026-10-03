@@ -28,3 +28,15 @@ export async function writePreference(key: string, value: string): Promise<void>
     // Ignore storage failures; the in-memory value still applies for this session.
   }
 }
+
+export async function removePreference(key: string): Promise<void> {
+  try {
+    if (Platform.OS === 'web') {
+      if (typeof localStorage !== 'undefined') localStorage.removeItem(key);
+      return;
+    }
+    await SecureStore.deleteItemAsync(key);
+  } catch {
+    // Ignore storage failures; the caller has already dropped the in-memory value.
+  }
+}

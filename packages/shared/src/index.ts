@@ -4,3 +4,4 @@ export * from './api-error.js';
 export * from './enums.js';
 export * from './i18n/index.js';
 export * from './navigation-access.js';
+export * from './auth.js';

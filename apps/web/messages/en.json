@@ -56,8 +56,18 @@
   "login": {
     "title": "Sign in",
     "lead": "Sign in to follow your reports from another device, or to open a staff workspace.",
-    "placeholder": "Sign-in with demo accounts arrives in the next phase.",
-    "guest": "You don't need an account to report."
+    "guest": "You don't need an account to report.",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "errorInvalid": "Incorrect username or password.",
+    "errorTooMany": "Too many sign-in attempts. Please wait a minute and try again.",
+    "errorUnavailable": "Haven can't be reached right now. Please try again in a moment.",
+    "demoTitle": "Demo accounts",
+    "demoLead": "These accounts are fictional demo fixtures. Their passwords are public — never use them for real data.",
+    "demoSignIn": "Sign in as {name}",
+    "or": "or"
   },
   "stages": {
     "label": "Report progress",
@@ -112,7 +122,10 @@
     "themeSystem": "Match my device",
     "themeLight": "Light",
     "themeDark": "Dark",
-    "languageTitle": "Language"
+    "languageTitle": "Language",
+    "signedInAs": "Signed in as {name}",
+    "roleLabel": "Role: {role}",
+    "signOut": "Sign out"
   },
   "staff": {
     "reference": "Reference",
@@ -163,5 +176,15 @@
     "subject": "Subject",
     "emptyTitle": "No audit events yet",
     "emptyBody": "Events are recorded as people use Haven."
+  },
+  "access": {
+    "title": "You don't have access to this page",
+    "operator": "Operator access required",
+    "official": "Official access required",
+    "admin": "Admin access required",
+    "resident": "This page is for residents. Staff accounts work in the staff workspace.",
+    "lead": "You are signed in as {name}. Sign in with a different account, or go back to your own area.",
+    "switchAccount": "Sign in as someone else",
+    "goToMyArea": "Go to my area"
   }
 }

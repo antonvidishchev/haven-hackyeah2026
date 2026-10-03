@@ -2,6 +2,7 @@ import { locales } from '@haven/shared';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
+import { SessionSection } from '@/components/session';
 import { Card, Choice, Label, Note, Screen } from '@/components/ui';
 import { Spacing } from '@/constants/theme';
 import { useLocale } from '@/i18n';
@@ -14,6 +15,8 @@ export default function AccountScreen() {
 
   return (
     <Screen>
+      <SessionSection />
+
       <Note>{t('account.intro')}</Note>
 
       <Card>

@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { HavenLogo } from '@/components/brand/haven-mark';
 import { buttonVariants } from '@/components/ui/button';
-import type { SessionPrincipal } from '@/lib/session';
+import type { SessionPrincipal } from '@haven/shared';
 import { cn } from '@/lib/utils';
 
 import { LanguageSwitch } from './language-switch';

@@ -1,6 +1,21 @@
+import { demoAccounts } from '@haven/shared';
+import { principalRecord } from '../auth/principal.repository.js';
+import { hashPassword } from '../auth/password.js';
 import type { QueryFn } from './migrations.js';
 
-/** Idempotent demo fixtures. Later phases add users, organisations and resources here. */
-export async function seed(_query: QueryFn, log: (message: string) => void = () => {}) {
-  log('nothing to seed yet');
+/** Idempotent demo fixtures. Re-running refreshes them to their documented values. */
+export async function seed(query: QueryFn, log: (message: string) => void = () => {}) {
+  for (const account of demoAccounts) {
+    await query('UPSERT $id MERGE $data', {
+      id: principalRecord(account.username),
+      data: {
+        kind: account.role,
+        username: account.username,
+        password_hash: await hashPassword(account.password),
+        display_name: account.name,
+        organization_id: account.organizationId,
+      },
+    });
+  }
+  log(`seeded ${demoAccounts.length} demo accounts`);
 }

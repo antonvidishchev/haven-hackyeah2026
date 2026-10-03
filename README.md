@@ -65,6 +65,25 @@ same port.
 
 First Playwright run: `pnpm --filter @haven/web exec playwright install chromium`.
 
+## Demo accounts
+
+`pnpm db:seed` creates these **fictional demo fixtures**. Their passwords are public — never put
+real data behind them. The sign-in page also offers one-tap cards for each.
+
+| Username             | Password          | Role     | Name                       | Organisation        |
+| -------------------- | ----------------- | -------- | -------------------------- | ------------------- |
+| `resident`           | `HavenResident1!` | resident | Local Resident             | —                   |
+| `resident2`          | `HavenResident2!` | resident | Second Resident            | —                   |
+| `operator`           | `HavenOperator1!` | operator | Local Operator             | —                   |
+| `admin`              | `HavenAdmin1!`    | admin    | Local Administrator        | —                   |
+| `official-police`    | `HavenOfficial1!` | official | Police Liaison Official    | police_municipal    |
+| `official-support`   | `HavenOfficial1!` | official | Support Services Official  | professional_paid   |
+| `official-volunteer` | `HavenOfficial1!` | official | Volunteer Network Official | community_volunteer |
+
+Visitors don't need an account: opening a reporting page creates a guest session automatically.
+Residents land on the home page, operators and admins on the response queue, officials on their
+assigned cases. Staff accounts sign in on the web only.
+
 ## Mobile
 
 Expo reads its own env file. Create `apps/mobile/.env` with your laptop's LAN address so the
