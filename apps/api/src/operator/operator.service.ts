@@ -8,6 +8,7 @@ import {
   queuePriorityRank,
   reportFieldsSchema,
   type cancelCaseRequestSchema,
+  type CaseActionItem,
   type CaseStatus,
   type OperatorCaseDetail,
   type OperatorCaseListResponse,
@@ -20,21 +21,28 @@ import {
   type VaultListResponse,
 } from '@haven/shared';
 import type { z } from 'zod';
+import { AuditService } from '../audit/audit.service.js';
+import { caseAuditEntry } from '../audit/case-audit.js';
 import { CasesRepository, toResidentMessage } from '../cases/cases.repository.js';
 import { apiError } from '../common/http-exception.filter.js';
 import { toIso } from '../db/values.js';
 import { EvidenceRepository } from '../evidence/evidence.repository.js';
 import { ReportsRepository } from '../reports/reports.repository.js';
-import { type CaseDecisionWrite, type CaseRow, OperatorRepository } from './operator.repository.js';
+import {
+  type CaseActionRow,
+  type CaseDecisionWrite,
+  type CaseRow,
+  OperatorRepository,
+} from './operator.repository.js';
 
 export const VAULT_LIMIT = 200;
 
 export const caseNotFound = () => apiError(404, 'case_not_found', 'We could not find that case');
 
-const caseClosed = () =>
+export const caseClosed = () =>
   apiError(409, 'case_closed', 'This case is closed and can no longer change');
 
-const staleVersion = () =>
+export const staleVersion = () =>
   apiError(409, 'stale_version', 'This case changed somewhere else. Reload to see the latest.');
 
 /** Parsed request bodies (defaults applied). */
@@ -62,6 +70,17 @@ export function toCaseSummary(row: CaseRow): OperatorCaseSummary {
   };
 }
 
+export const toCaseAction = (a: CaseActionRow): CaseActionItem => ({
+  id: String(a.id.id),
+  type: a.type,
+  actorName: a.actor_name ?? 'Unknown',
+  payload: a.payload,
+  disposition: a.disposition ?? null,
+  priorVersion: a.prior_version,
+  resultingVersion: a.resulting_version,
+  createdAt: toIso(a.created_at),
+});
+
 /** Highest queue priority first, then the longest-waiting report. */
 export function compareQueue(a: OperatorCaseSummary, b: OperatorCaseSummary): number {
   return (
@@ -79,6 +98,7 @@ export class OperatorService {
     private readonly cases: CasesRepository,
     private readonly reports: ReportsRepository,
     private readonly evidence: EvidenceRepository,
+    private readonly audit: AuditService,
   ) {}
 
   async list(view: TriageStatus): Promise<OperatorCaseListResponse> {
@@ -121,16 +141,7 @@ export class OperatorService {
           }
         : null,
       messages: messages.map(toResidentMessage),
-      actions: actions.map((a) => ({
-        id: String(a.id.id),
-        type: a.type,
-        actorName: a.actor_name ?? 'Unknown',
-        payload: a.payload,
-        disposition: a.disposition ?? null,
-        priorVersion: a.prior_version,
-        resultingVersion: a.resulting_version,
-        createdAt: toIso(a.created_at),
-      })),
+      actions: actions.map(toCaseAction),
       cancelReasonCategory: row.cancel_reason_category ?? null,
       cancelComment: row.cancel_comment ?? null,
     };
@@ -196,9 +207,12 @@ export class OperatorService {
     caseId: string,
     body: { expectedVersion: number; followedRecommendation: boolean },
     decision: OperatorDecision,
-    plan: (
-      row: CaseRow,
-    ) => Pick<CaseDecisionWrite, 'type' | 'payload' | 'organizationId' | 'cancel' | 'message'>,
+    plan: (row: CaseRow) => Pick<
+      CaseDecisionWrite,
+      'payload' | 'organizationId' | 'cancel' | 'message'
+    > & {
+      type: Extract<CaseDecisionWrite['type'], `operator.${string}`>;
+    },
   ): Promise<OperatorCaseDetail> {
     const row = await this.operator.findCase(caseId);
     if (!row) throw caseNotFound();
@@ -213,7 +227,7 @@ export class OperatorService {
     if (body.expectedVersion !== row.version) throw staleVersion();
 
     const recommendation = await this.operator.recommendationFor(String(row.report_id.id));
-    const applied = await this.operator.decide({
+    const write: CaseDecisionWrite = {
       caseId,
       expectedVersion: body.expectedVersion,
       next,
@@ -225,11 +239,13 @@ export class OperatorService {
         body.followedRecommendation,
       ),
       ...plan(row),
-    });
-    if (!applied) {
+    };
+    if (!(await this.operator.decide(write))) {
       const latest = await this.operator.findCase(caseId);
       throw latest && isTerminal(latest.state) ? caseClosed() : staleVersion();
     }
+    const { action, meta } = caseAuditEntry(write);
+    await this.audit.record(principal, action, { type: 'haven_case', id: caseId }, meta);
     return this.detail(caseId);
   }
 }

@@ -6,6 +6,7 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { CasesRepository } from '../cases/cases.repository.js';
 import type { AppConfig } from '../config/env.js';
 import type { ReportsService } from '../reports/reports.service.js';
+import type { AuditService } from '../audit/audit.service.js';
 import type { EvidenceRepository, EvidenceWithReport } from './evidence.repository.js';
 import { EvidenceService } from './evidence.service.js';
 import type { EvidenceStorage } from './evidence.storage.js';
@@ -34,6 +35,7 @@ describe('EvidenceService.media access', () => {
     storage as unknown as EvidenceStorage,
     {} as ReportsService,
     cases as unknown as CasesRepository,
+    { record: vi.fn(async () => {}) } as unknown as AuditService,
     { EVIDENCE_MAX_BYTES: 10 } as AppConfig,
   );
 

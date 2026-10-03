@@ -7,6 +7,7 @@ import type {
   ReportState,
   Role,
   Severity,
+  SupportResourceKind,
   TriageStatus,
 } from '../enums.js';
 
@@ -81,6 +82,16 @@ export const en = {
     XVII: 'XVII Wzgórza Krzesławickie',
     XVIII: 'XVIII Nowa Huta',
   } satisfies Record<DistrictId, string>,
+  supportKind: {
+    legal_aid: 'Legal aid',
+    translation: 'Translation',
+    psychological_support: 'Psychological support',
+    victim_support: 'Victim support',
+    ngo: 'NGO',
+    helpline: 'Helpline',
+    community_mediation: 'Community mediation',
+    digital_safety: 'Digital safety',
+  } satisfies Record<SupportResourceKind, string>,
 };
 
 export type EnumLabels = typeof en;

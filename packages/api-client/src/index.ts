@@ -1,6 +1,13 @@
 import {
+  type AuditAction,
+  type AuditListResponse,
   apiErrorBodySchema,
   type CancelCaseRequest,
+  type ClaimCaseRequest,
+  type CloseCaseRequest,
+  type OfficialCaseDetail,
+  type OfficialCaseListResponse,
+  type RecordActionRequest,
   type OperatorCaseDetail,
   type OperatorCaseListResponse,
   type PromoteCaseRequest,
@@ -16,6 +23,7 @@ import {
   type ReportListResponse,
   type SessionResponse,
   type SubmitReportRequest,
+  type SupportMatchesResponse,
   type UpdateReportRequest,
 } from '@haven/shared';
 
@@ -121,6 +129,12 @@ export function createHavenClient(options: HavenClientOptions) {
           ...init,
           body,
         }),
+      supportMatches: (id: string, init?: Omit<RequestOptions, 'body'>) =>
+        request<SupportMatchesResponse>(
+          'GET',
+          `/reports/${encodeURIComponent(id)}/support-matches`,
+          init,
+        ),
     },
     evidence: {
       /** Multipart upload with a single `file` field. */
@@ -153,12 +167,45 @@ export function createHavenClient(options: HavenClientOptions) {
           ...init,
           body,
         }),
+      supportMatches: (id: string, init?: Omit<RequestOptions, 'body'>) =>
+        request<SupportMatchesResponse>(
+          'GET',
+          `/operator/cases/${encodeURIComponent(id)}/support-matches`,
+          init,
+        ),
       vault: (init?: Omit<RequestOptions, 'body'>) =>
         request<VaultListResponse>('GET', '/operator/evidence', init),
+    },
+    official: {
+      cases: (init?: Omit<RequestOptions, 'body'>) =>
+        request<OfficialCaseListResponse>('GET', '/official/cases', init),
+      case: (id: string, init?: Omit<RequestOptions, 'body'>) =>
+        request<OfficialCaseDetail>('GET', `/official/cases/${encodeURIComponent(id)}`, init),
+      claim: (id: string, body: ClaimCaseRequest, init?: Omit<RequestOptions, 'body'>) =>
+        request<OfficialCaseDetail>('POST', `/official/cases/${encodeURIComponent(id)}/claim`, {
+          ...init,
+          body,
+        }),
+      recordAction: (id: string, body: RecordActionRequest, init?: Omit<RequestOptions, 'body'>) =>
+        request<OfficialCaseDetail>('POST', `/official/cases/${encodeURIComponent(id)}/actions`, {
+          ...init,
+          body,
+        }),
+      close: (id: string, body: CloseCaseRequest, init?: Omit<RequestOptions, 'body'>) =>
+        request<OfficialCaseDetail>('POST', `/official/cases/${encodeURIComponent(id)}/close`, {
+          ...init,
+          body,
+        }),
     },
     hotspots: {
       list: (init?: Omit<RequestOptions, 'body'>) =>
         request<HotspotsResponse>('GET', '/hotspots', { ...init, token: null }),
+    },
+    admin: {
+      audit: (
+        query: { action?: AuditAction; actor?: string; cursor?: string; limit?: number } = {},
+        init?: Omit<RequestOptions, 'body'>,
+      ) => request<AuditListResponse>('GET', `/admin/audit${queryString(query)}`, init),
     },
   };
 }

@@ -9,5 +9,6 @@ import { OperatorService } from './operator.service.js';
   imports: [CasesModule, ReportsModule],
   controllers: [OperatorController],
   providers: [OperatorRepository, OperatorService],
+  exports: [OperatorRepository],
 })
 export class OperatorModule {}

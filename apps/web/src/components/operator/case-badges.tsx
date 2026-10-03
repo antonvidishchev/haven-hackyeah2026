@@ -18,8 +18,13 @@ const stateTone = {
   cancelled: 'neutral',
 } as const satisfies Record<OperatorCaseSummary['state'], StatusTone>;
 
+type BadgeSummary = Pick<OperatorCaseSummary, 'queue' | 'state' | 'escalated'> & {
+  /** Operators only: the advisory recommendation suggests an action. */
+  hasSuggestion?: boolean;
+};
+
 /** Priority, case state, "AI suggests" and escalation, as text-carrying badges. */
-export async function CaseBadges({ summary }: { summary: OperatorCaseSummary }) {
+export async function CaseBadges({ summary }: { summary: BadgeSummary }) {
   const [t, labels] = await Promise.all([getTranslations('queue'), getEnumLabels()]);
   return (
     <span className="flex flex-wrap gap-1.5">

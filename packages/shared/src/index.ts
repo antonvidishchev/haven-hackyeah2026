@@ -11,3 +11,5 @@ export * from './evidence.js';
 export * from './router.js';
 export * from './hotspots.js';
 export * from './cases.js';
+export * from './audit.js';
+export * from './matchmaking.js';

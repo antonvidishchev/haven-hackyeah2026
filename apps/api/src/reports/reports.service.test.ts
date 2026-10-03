@@ -10,6 +10,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { CasesRepository } from '../cases/cases.repository.js';
 import type { AppConfig } from '../config/env.js';
 import type { EvidenceRepository } from '../evidence/evidence.repository.js';
+import type { AuditService } from '../audit/audit.service.js';
 import type { ReportRow, ReportsRepository } from './reports.repository.js';
 import { descriptionExcerpt, ReportsService } from './reports.service.js';
 
@@ -55,6 +56,7 @@ describe('ReportsService.update', () => {
       routingFor: vi.fn(async () => null),
       messagesForReport: vi.fn(async () => []),
     } as unknown as CasesRepository,
+    { record: vi.fn(async () => {}) } as unknown as AuditService,
     { AI_RECOMMENDATION_MODE: 'local' } as AppConfig,
   );
 

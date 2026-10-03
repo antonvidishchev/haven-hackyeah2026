@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
 import { LoggerModule } from 'nestjs-pino';
+import { AuditModule } from './audit/audit.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { HttpExceptionFilter } from './common/http-exception.filter.js';
 import { ConfigModule } from './config/config.module.js';
@@ -8,8 +9,10 @@ import { DatabaseModule } from './db/database.module.js';
 import { EvidenceModule } from './evidence/evidence.module.js';
 import { HealthModule } from './health/health.module.js';
 import { HotspotsModule } from './hotspots/hotspots.module.js';
+import { OfficialModule } from './official/official.module.js';
 import { OperatorModule } from './operator/operator.module.js';
 import { ReportsModule } from './reports/reports.module.js';
+import { SupportModule } from './support/support.module.js';
 
 const pretty = process.env.NODE_ENV !== 'production' && process.stdout.isTTY;
 
@@ -33,12 +36,15 @@ const pretty = process.env.NODE_ENV !== 'production' && process.stdout.isTTY;
     }),
     ConfigModule,
     DatabaseModule,
+    AuditModule,
     AuthModule,
     HealthModule,
     ReportsModule,
     EvidenceModule,
     HotspotsModule,
     OperatorModule,
+    OfficialModule,
+    SupportModule,
   ],
   providers: [{ provide: APP_FILTER, useClass: HttpExceptionFilter }],
 })

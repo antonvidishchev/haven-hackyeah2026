@@ -11,6 +11,7 @@ import type { CasesRepository } from '../cases/cases.repository.js';
 import type { FilingPlan } from '../cases/routing.js';
 import type { AppConfig } from '../config/env.js';
 import type { EvidenceRepository } from '../evidence/evidence.repository.js';
+import type { AuditService } from '../audit/audit.service.js';
 import type { ReportRow, ReportsRepository } from './reports.repository.js';
 import { ReportsService } from './reports.service.js';
 
@@ -61,6 +62,7 @@ function setup(mode: AppConfig['AI_RECOMMENDATION_MODE'] = 'local') {
     reports as unknown as ReportsRepository,
     evidence as unknown as EvidenceRepository,
     cases as unknown as CasesRepository,
+    { record: vi.fn(async () => {}) } as unknown as AuditService,
     { AI_RECOMMENDATION_MODE: mode } as AppConfig,
   );
   const plan = () => reports.file.mock.calls[0]?.[2] as unknown as FilingPlan;

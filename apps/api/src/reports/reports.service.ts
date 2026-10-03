@@ -13,6 +13,7 @@ import {
   type SubmitReportRequest,
   type UpdateReportRequest,
 } from '@haven/shared';
+import { AuditService } from '../audit/audit.service.js';
 import { CasesRepository } from '../cases/cases.repository.js';
 import { planFiling } from '../cases/routing.js';
 import { apiError } from '../common/http-exception.filter.js';
@@ -43,6 +44,8 @@ const alreadyFiled = () => apiError(409, 'already_filed', 'This report has alrea
 
 const notFiled = () => apiError(409, 'not_filed', 'File this report before escalating it');
 
+const reportSubject = (id: string) => ({ type: 'report', id }) as const;
+
 /** Stored fields in the shared shape (and key order). */
 const fieldsOf = (row: ReportRow) => reportFieldsSchema.parse(row.fields);
 
@@ -67,11 +70,13 @@ export class ReportsService {
     private readonly reports: ReportsRepository,
     private readonly evidence: EvidenceRepository,
     private readonly cases: CasesRepository,
+    private readonly audit: AuditService,
     @Inject(APP_CONFIG) private readonly config: AppConfig,
   ) {}
 
   async create(principal: SessionPrincipal): Promise<ReportDetail> {
     const row = await this.reports.createDraft(principal.id, emptyReportFields());
+    await this.audit.record(principal, 'report.created', reportSubject(String(row.id.id)));
     return this.detail(row);
   }
 
@@ -129,6 +134,10 @@ export class ReportsService {
       principal.id,
     );
     if (!saved) throw revisionConflict();
+    await this.audit.record(principal, 'report.revised', reportSubject(id), {
+      revision: body.expectedRevision + 1,
+      state: row.state,
+    });
     return this.get(principal, id);
   }
 
@@ -157,6 +166,13 @@ export class ReportsService {
       const latest = await this.reports.findOwned(id, principal.id);
       throw latest?.state === 'submitted' ? alreadyFiled() : revisionConflict();
     }
+    await this.audit.record(principal, 'report.submitted', reportSubject(id), {
+      ruleId: plan.result.ruleId,
+      organization: plan.result.responder,
+      queue: plan.result.queue,
+      emergency: plan.result.emergency,
+      evidenceCount,
+    });
     return this.get(principal, id);
   }
 
@@ -166,6 +182,7 @@ export class ReportsService {
     if (row.state !== 'submitted') throw notFiled();
     if (row.escalated) return this.detail(row);
     await this.reports.escalate(id, principal.id);
+    await this.audit.record(principal, 'report.escalated', reportSubject(id));
     return this.get(principal, id);
   }
 

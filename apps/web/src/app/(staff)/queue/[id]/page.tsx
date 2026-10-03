@@ -10,8 +10,10 @@ import { StaffHeader } from '@/components/haven/staff-header';
 import { CaseBadges } from '@/components/operator/case-badges';
 import { DecisionPanel } from '@/components/operator/decision-panel';
 import { EvidenceList } from '@/components/report/evidence-list';
+import { SupportMatchesPanel } from '@/components/support/support-matches';
 import { getEnumLabels } from '@/i18n/labels';
 import { getOperatorCase } from '@/lib/operator';
+import { getCaseSupportMatches } from '@/lib/support';
 
 const actionKey = {
   'operator.promote': 'operator_promote',
@@ -29,8 +31,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function QueueCasePage({ params }: PageProps<'/queue/[id]'>) {
   const { id } = await params;
   if (!caseIdSchema.safeParse(id).success) notFound();
-  const [detail, t, ts, tr, tm, td, labels, format] = await Promise.all([
+  const [detail, matches, t, ts, tr, tm, td, labels, format] = await Promise.all([
     getOperatorCase(id),
+    getCaseSupportMatches(id),
     getTranslations('queue'),
     getTranslations('staff'),
     getTranslations('routing'),
@@ -174,6 +177,8 @@ export default async function QueueCasePage({ params }: PageProps<'/queue/[id]'>
             )}
             <p className="text-xs text-muted-foreground">{t('advisoryBody')}</p>
           </section>
+
+          {matches ? <SupportMatchesPanel matches={matches} /> : null}
 
           {isTerminal(detail.state) ? (
             <section className="staff-panel" aria-labelledby="decision-title">

@@ -12,7 +12,7 @@ import { RecordIdPipe } from '../common/id.pipe.js';
 import { ZodPipe } from '../common/zod.pipe.js';
 import { type Cancel, OperatorService, type Promote, type Reply } from './operator.service.js';
 
-const caseIdPipe = () => new RecordIdPipe('case_not_found', 'We could not find that case');
+export const caseIdPipe = () => new RecordIdPipe('case_not_found', 'We could not find that case');
 
 const caseListQuerySchema = z.object({ view: caseViewSchema.default('needs_review') });
 

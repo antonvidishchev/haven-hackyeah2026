@@ -36,6 +36,9 @@ export type CaseRow = {
   has_suggestion: boolean;
   cancel_reason_category?: CancelReason;
   cancel_comment?: string;
+  assigned_official?: RecordId<'principal'>;
+  assigned_official_name?: string;
+  closure_comment?: string;
 };
 
 export type RecommendationRow = {
@@ -71,13 +74,16 @@ export type VaultRow = {
   created_at: DateTime;
 };
 
-/** One operator decision, applied atomically only while the case is still at `expectedVersion`. */
+/**
+ * One staff decision (operator or official), applied atomically only while the case is still at
+ * `expectedVersion`.
+ */
 export type CaseDecisionWrite = {
   caseId: string;
   expectedVersion: number;
   next: CaseStatus;
   actorId: string;
-  type: Extract<CaseActionType, `operator.${string}`>;
+  type: CaseActionType;
   payload: Record<string, unknown>;
   recommendationId: string | null;
   disposition: Disposition | null;
@@ -87,14 +93,19 @@ export type CaseDecisionWrite = {
   cancel?: { reasonCategory: CancelReason; comment: string };
   /** A message for the resident, written with the decision. */
   message?: { kind: ReplyKind | 'cancellation_notice'; body: string };
+  /** claim: the official who takes the case. */
+  assignOfficialId?: string;
+  /** close: the official's closing comment. */
+  closureComment?: string;
 };
 
 export const caseRecord = (id: string) => new RecordId('haven_case', id);
 
-const CASE_FIELDS = `id, report AS report_id, report.reference AS reference,
+export const CASE_FIELDS = `id, report AS report_id, report.reference AS reference,
   report.fields AS fields, report.escalated AS escalated, report.submitted_at AS submitted_at,
   report.current_revision AS revision, organization_id, state, triage_status, queue_priority,
-  version, updated_at, cancel_reason_category, cancel_comment,
+  version, updated_at, cancel_reason_category, cancel_comment, assigned_official,
+  assigned_official.display_name AS assigned_official_name, closure_comment,
   count((SELECT VALUE id FROM recommendation
          WHERE report = $parent.report AND status = 'suggested')) > 0 AS has_suggestion`;
 
@@ -177,6 +188,8 @@ export class OperatorRepository {
       ...(write.cancel
         ? ['cancel_reason_category = $reason_category', 'cancel_comment = $cancel_comment']
         : []),
+      ...(write.assignOfficialId ? ['assigned_official = $official'] : []),
+      ...(write.closureComment ? ['closure_comment = $closure_comment'] : []),
     ];
     const message = write.message
       ? `CREATE case_message CONTENT {
@@ -216,6 +229,8 @@ export class OperatorRepository {
         ...(write.message
           ? { message_kind: write.message.kind, message_body: write.message.body }
           : {}),
+        ...(write.assignOfficialId ? { official: principalRecord(write.assignOfficialId) } : {}),
+        ...(write.closureComment ? { closure_comment: write.closureComment } : {}),
       },
     );
     return results.at(-2) === 1;

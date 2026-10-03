@@ -12,6 +12,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { CasesRepository } from '../cases/cases.repository.js';
 import type { EvidenceRepository } from '../evidence/evidence.repository.js';
 import type { ReportsRepository } from '../reports/reports.repository.js';
+import type { AuditService } from '../audit/audit.service.js';
 import type {
   CaseDecisionWrite,
   CaseRow,
@@ -79,14 +80,16 @@ function setup() {
   const cases = { routingFor: vi.fn(async () => ({ responder: 'community_volunteer' })) };
   const reports = { revisions: vi.fn(async () => []) };
   const evidence = { listForReport: vi.fn(async () => []) };
+  const audit = { record: vi.fn(async () => {}) };
   const service = new OperatorService(
     repo as unknown as OperatorRepository,
     cases as unknown as CasesRepository,
     reports as unknown as ReportsRepository,
     evidence as unknown as EvidenceRepository,
+    audit as unknown as AuditService,
   );
   const written = () => repo.decide.mock.calls[0]?.[0] as CaseDecisionWrite;
-  return { repo, service, written };
+  return { repo, service, written, audit };
 }
 
 describe('OperatorService.list', () => {
@@ -147,6 +150,19 @@ describe('OperatorService decisions', () => {
       },
     });
     expect(t.written().message).toBeUndefined();
+    expect(t.audit.record).toHaveBeenCalledWith(
+      operator,
+      'case.promoted',
+      { type: 'haven_case', id: 'c1' },
+      expect.objectContaining({
+        fromOrganization: 'community_volunteer',
+        targetOrganization: 'professional_paid',
+        reasonLength: 'Needs a paid service'.length,
+        disposition: 'followed',
+        resultingVersion: 4,
+      }),
+    );
+    expect(JSON.stringify(t.audit.record.mock.calls)).not.toContain('Needs a paid service');
   });
 
   it('cancels with the fixed notice, rejecting the recommendation', async () => {
@@ -227,6 +243,7 @@ describe('OperatorService decisions', () => {
     expect(result.status).toBe(409);
     expect(result.body).toMatchObject({ error: { code: 'stale_version' } });
     expect(t.repo.decide).not.toHaveBeenCalled();
+    expect(t.audit.record).not.toHaveBeenCalled();
   });
 
   it('answers 409 stale_version when another decision wins the race', async () => {

@@ -8,6 +8,12 @@ export class RateLimiter {
     private readonly now: () => number = Date.now,
   ) {}
 
+  /** True while the key has used up its window, without recording a hit. */
+  blocked(key: string): boolean {
+    const current = this.windows.get(key);
+    return !!current && this.now() - current.startedAt < this.windowMs && current.count >= this.limit;
+  }
+
   /** Records a hit; false when the key is over the limit. */
   hit(key: string): boolean {
     const now = this.now();
