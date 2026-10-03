@@ -169,6 +169,9 @@
   .report-stages > li[aria-current='step'] {
     @apply border-primary font-semibold text-foreground;
   }
+  .report-stages button {
+    @apply min-h-11 w-full rounded-md text-left;
+  }
 
   /* Staff density: 8–12px radii, denser tables. */
   .staff-page {
@@ -180,4 +183,11 @@
   .staff-panel {
     @apply rounded-lg border bg-card p-4 text-card-foreground;
   }
+}
+
+/* Kraków district outlines on the location map (themed, so they follow dark mode). */
+.district-outline {
+  stroke: var(--primary);
+  fill: var(--primary);
+  fill-opacity: 0.04;
 }

@@ -9,9 +9,7 @@ test('the API is healthy', async ({ request }) => {
 const routes: { path: string; heading: string | RegExp }[] = [
   { path: '/', heading: 'Start with what you have' },
   { path: '/login', heading: 'Sign in' },
-  { path: '/report/new', heading: 'Report an incident' },
   { path: '/my-reports', heading: 'My reports' },
-  { path: '/report/sample', heading: 'Verbal harassment' },
   { path: '/area-reports', heading: 'Area reports' },
   { path: '/settings', heading: 'Account and settings' },
 ];

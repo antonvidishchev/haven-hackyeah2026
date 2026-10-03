@@ -5,3 +5,6 @@ export * from './enums.js';
 export * from './i18n/index.js';
 export * from './navigation-access.js';
 export * from './auth.js';
+export * from './geometry.js';
+export * from './reports.js';
+export * from './evidence.js';

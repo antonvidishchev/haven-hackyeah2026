@@ -7,8 +7,6 @@ Built for the HackYeah 2026 **Smart City** open task.
 > **Prototype.** All organisations, people and resources are fictional, and no real services are
 > contacted. In danger, call **112**.
 
-The full implementation plan lives in [`docs/plans/implementation-plan.md`](docs/plans/implementation-plan.md).
-
 ## Repository layout
 
 | Path                  | What                                                              |
@@ -97,3 +95,15 @@ echo "EXPO_PUBLIC_API_BASE_URL=http://192.168.1.10:3001/api/v1" > apps/mobile/.e
 
 See [`.env.example`](.env.example). `JWT_SECRET` there is a demo value; generate your own for
 anything beyond local use (`openssl rand -hex 32`).
+
+## Third-party data and services
+
+- **Kraków district boundaries** (`packages/shared/src/data/krakow-districts.ts`) are converted
+  from [andilabs/krakow-dzielnice-geojson](https://github.com/andilabs/krakow-dzielnice-geojson),
+  with coordinates rounded to 5 decimals. The repository publishes no licence; its README invites
+  reuse ("Use it and build great apps for locals!").
+- **Maps** use [Leaflet](https://leafletjs.com/) (BSD-2-Clause) through
+  [React Leaflet](https://react-leaflet.js.org/) (Hippocratic License 2.1), with tiles from
+  [OpenStreetMap](https://www.openstreetmap.org/copyright) (© OpenStreetMap contributors, ODbL),
+  used under the [tile usage policy](https://operations.osmfoundation.org/policies/tiles/) for
+  this low-traffic prototype.

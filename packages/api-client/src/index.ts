@@ -1,8 +1,12 @@
 import {
   apiErrorBodySchema,
   type AuthResponse,
+  type EvidenceItem,
   type LoginRequest,
+  type ReportDetail,
+  type ReportListResponse,
   type SessionResponse,
+  type UpdateReportRequest,
 } from '@haven/shared';
 
 export class ApiError extends Error {
@@ -43,12 +47,18 @@ export function createHavenClient(options: HavenClientOptions) {
     const token = init.token !== undefined ? init.token : await options.getToken?.();
     const headers: Record<string, string> = { ...init.headers, accept: 'application/json' };
     if (token) headers.authorization = `Bearer ${token}`;
-    if (init.body !== undefined) headers['content-type'] = 'application/json';
+    const multipart = typeof FormData !== 'undefined' && init.body instanceof FormData;
+    if (init.body !== undefined && !multipart) headers['content-type'] = 'application/json';
 
     const response = await doFetch(`${baseUrl}${path}`, {
       method,
       headers,
-      body: init.body === undefined ? undefined : JSON.stringify(init.body),
+      body:
+        init.body === undefined
+          ? undefined
+          : multipart
+            ? (init.body as FormData)
+            : JSON.stringify(init.body),
       signal: init.signal,
       cache: 'no-store',
     });
@@ -80,10 +90,42 @@ export function createHavenClient(options: HavenClientOptions) {
       session: (init?: Omit<RequestOptions, 'body'>) =>
         request<SessionResponse>('GET', '/session', init),
     },
+    reports: {
+      create: (init?: Omit<RequestOptions, 'body'>) =>
+        request<ReportDetail>('POST', '/reports', init),
+      list: (
+        query: { cursor?: string; limit?: number } = {},
+        init?: Omit<RequestOptions, 'body'>,
+      ) => request<ReportListResponse>('GET', `/reports${queryString(query)}`, init),
+      get: (id: string, init?: Omit<RequestOptions, 'body'>) =>
+        request<ReportDetail>('GET', `/reports/${encodeURIComponent(id)}`, init),
+      update: (id: string, body: UpdateReportRequest, init?: Omit<RequestOptions, 'body'>) =>
+        request<ReportDetail>('PUT', `/reports/${encodeURIComponent(id)}`, { ...init, body }),
+    },
+    evidence: {
+      /** Multipart upload with a single `file` field. */
+      upload: (reportId: string, form: FormData, init?: Omit<RequestOptions, 'body'>) =>
+        request<EvidenceItem>('POST', `/reports/${encodeURIComponent(reportId)}/evidence`, {
+          ...init,
+          body: form,
+        }),
+      remove: (id: string, init?: Omit<RequestOptions, 'body'>) =>
+        request<void>('DELETE', `/evidence/${encodeURIComponent(id)}`, init),
+      mediaPath: (id: string) => `/evidence/${encodeURIComponent(id)}/media`,
+    },
   };
 }
 
 export type HavenClient = ReturnType<typeof createHavenClient>;
+
+function queryString(query: Record<string, string | number | undefined>): string {
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(query)) {
+    if (value !== undefined) params.set(key, String(value));
+  }
+  const text = params.toString();
+  return text ? `?${text}` : '';
+}
 
 function safeJson(text: string): unknown {
   try {

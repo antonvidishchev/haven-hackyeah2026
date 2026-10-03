@@ -1,73 +1,77 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { getFormatter, getTranslations } from 'next-intl/server';
+import { reportIdSchema, reportTimeline } from '@haven/shared';
 
-import { ReportStages } from '@/components/haven/report-stages';
-import { SimulationNote } from '@/components/haven/simulation-note';
+import { DisclaimerCard } from '@/components/haven/disclaimer-card';
 import { StatusBadge } from '@/components/haven/status-badge';
+import { ReportEditor } from '@/components/report/report-editor';
 import { getEnumLabels } from '@/i18n/labels';
+import { evidenceMaxBytes } from '@/lib/env';
+import { getOwnReport } from '@/lib/reports';
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getTranslations('report'))('title') };
 }
 
-// Phase 1: a fixture layout. Real reports load from the API in Phase 3.
-const sample = {
-  reference: 'HVN-2026-000123',
-  filedAt: new Date('2026-09-28T18:40:00Z'),
-  routedAt: new Date('2026-09-28T18:41:00Z'),
-  messageAt: new Date('2026-09-29T09:15:00Z'),
-};
-
-export default async function ReportPage() {
-  const [t, ts, tc, labels, format] = await Promise.all([
+export default async function ReportPage({ params }: PageProps<'/report/[id]'>) {
+  const { id } = await params;
+  if (!reportIdSchema.safeParse(id).success) notFound();
+  const [report, t, labels, format] = await Promise.all([
+    getOwnReport(id),
     getTranslations('report'),
-    getTranslations('stages'),
-    getTranslations('common'),
     getEnumLabels(),
     getFormatter(),
   ]);
-  const when = (date: Date) => format.dateTime(date, { dateStyle: 'medium', timeStyle: 'short' });
+  if (!report) notFound();
+
+  const when = (iso: string) =>
+    format.dateTime(new Date(iso), { dateStyle: 'medium', timeStyle: 'short' });
+  const draft = report.state === 'draft';
   return (
     <div className="resident-page">
-      <SimulationNote>{tc('example')}</SimulationNote>
       <div className="flex flex-col gap-3">
-        <h1>{labels.category.verbal_harassment}</h1>
+        <h1>{draft ? t('draftTitle') : labels.category[report.fields.category]}</h1>
         <dl className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
           <div className="flex gap-2">
             <dt className="text-muted-foreground">{t('reference')}</dt>
-            <dd className="resident-reference font-medium">{sample.reference}</dd>
+            <dd className={report.reference ? 'resident-reference font-medium' : 'font-medium'}>
+              {report.reference ?? t('referencePending')}
+            </dd>
           </div>
           <div className="flex items-center gap-2">
             <dt className="text-muted-foreground">{t('status')}</dt>
             <dd>
-              <StatusBadge tone="info">{labels.reportState.submitted}</StatusBadge>
+              <StatusBadge tone={draft ? 'neutral' : 'info'}>
+                {labels.reportState[report.state]}
+              </StatusBadge>
             </dd>
           </div>
+          <div className="flex gap-2">
+            <dt className="text-muted-foreground">{t('version')}</dt>
+            <dd className="tabular-nums">{report.revision}</dd>
+          </div>
         </dl>
+        {draft ? <p className="text-muted-foreground">{t('draftLead')}</p> : null}
       </div>
-      <ReportStages
-        label={ts('label')}
-        steps={[ts('draft'), ts('filed'), ts('routed')]}
-        current={2}
+
+      <ReportEditor
+        report={report}
+        evidenceMaxBytes={evidenceMaxBytes}
+        disclaimer={<DisclaimerCard />}
       />
-      <section className="resident-card">
-        <p className="text-base text-foreground">{t('sampleWhat')}</p>
-      </section>
-      <section className="flex flex-col gap-4" aria-labelledby="timeline">
-        <h2 id="timeline">{t('timeline')}</h2>
+
+      <section className="flex flex-col gap-4" aria-labelledby="history">
+        <h2 id="history">{t('history')}</h2>
         <ol className="resident-timeline">
-          <li>
-            <p className="font-medium">{t('eventMessage')}</p>
-            <p className="text-sm text-muted-foreground">{when(sample.messageAt)}</p>
-          </li>
-          <li>
-            <p className="font-medium">{t('eventRouted')}</p>
-            <p className="text-sm text-muted-foreground">{when(sample.routedAt)}</p>
-          </li>
-          <li>
-            <p className="font-medium">{t('eventFiled')}</p>
-            <p className="text-sm text-muted-foreground">{when(sample.filedAt)}</p>
-          </li>
+          {reportTimeline(report.revisions).map((event) => (
+            <li key={event.revision}>
+              <p className="font-medium">{t(`event.${event.kind}`)}</p>
+              <p className="text-sm text-muted-foreground">
+                <time dateTime={event.at}>{when(event.at)}</time>
+              </p>
+            </li>
+          ))}
         </ol>
       </section>
     </div>

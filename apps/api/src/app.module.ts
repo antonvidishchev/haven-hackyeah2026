@@ -5,7 +5,9 @@ import { AuthModule } from './auth/auth.module.js';
 import { HttpExceptionFilter } from './common/http-exception.filter.js';
 import { ConfigModule } from './config/config.module.js';
 import { DatabaseModule } from './db/database.module.js';
+import { EvidenceModule } from './evidence/evidence.module.js';
 import { HealthModule } from './health/health.module.js';
+import { ReportsModule } from './reports/reports.module.js';
 
 const pretty = process.env.NODE_ENV !== 'production' && process.stdout.isTTY;
 
@@ -31,6 +33,8 @@ const pretty = process.env.NODE_ENV !== 'production' && process.stdout.isTTY;
     DatabaseModule,
     AuthModule,
     HealthModule,
+    ReportsModule,
+    EvidenceModule,
   ],
   providers: [{ provide: APP_FILTER, useClass: HttpExceptionFilter }],
 })

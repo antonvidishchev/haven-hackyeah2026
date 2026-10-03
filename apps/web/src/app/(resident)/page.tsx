@@ -4,11 +4,32 @@ import { getTranslations } from 'next-intl/server';
 
 import { DisclaimerCard } from '@/components/haven/disclaimer-card';
 import { SimulationNote } from '@/components/haven/simulation-note';
+import { listOwnReports } from '@/lib/reports';
+import { getPrincipal } from '@/lib/session';
+
+/** The newest private draft, for the "Continue your draft" card. */
+async function latestDraft() {
+  const principal = await getPrincipal();
+  if (principal?.role !== 'guest' && principal?.role !== 'resident') return null;
+  const { items } = await listOwnReports();
+  return items.find((report) => report.state === 'draft') ?? null;
+}
 
 export default async function HomePage() {
-  const t = await getTranslations('home');
+  const [t, draft] = await Promise.all([getTranslations('home'), latestDraft()]);
   return (
     <div className="resident-page">
+      {draft ? (
+        <section className="resident-card" aria-labelledby="continue-draft">
+          <h2 id="continue-draft">{t('continueTitle')}</h2>
+          <p>{draft.descriptionExcerpt || t('continueEmpty')}</p>
+          <Link href={`/report/${draft.id}`} className="resident-button self-start">
+            {t('continue')}
+            <ArrowRight aria-hidden className="size-5" />
+          </Link>
+        </section>
+      ) : null}
+
       <section className="flex flex-col gap-4">
         <h1>{t('title')}</h1>
         <p className="text-lg leading-relaxed text-muted-foreground">{t('lead')}</p>
