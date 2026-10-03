@@ -32,8 +32,8 @@ ask the resident for more (the resident answers in the app), or cancel it with a
 A labelled, rule-based advisory suggestion can be followed in one click, and whether it was
 followed is audited. **Officials** of the receiving organisation claim the case, record what they
 did outside Haven and close it. **Admins** read an append-only audit log. The public sees **Area
-reports**: privacy-protected counts per district (fewer than 3 are suppressed), never a safety
-score.
+reports** first: privacy-protected counts per district, filterable by incident type (fewer than 3
+are suppressed).
 
 How it fits Smart City:
 

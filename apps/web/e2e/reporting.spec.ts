@@ -17,7 +17,7 @@ async function signInAs(browser: Browser, name: string): Promise<Page> {
   const page = await (await browser.newContext()).newPage();
   await page.goto('/login');
   await page.getByRole('button', { name: `Sign in as ${name}` }).click();
-  await expect(page).toHaveURL('/');
+  await expect(page).toHaveURL('/area-reports');
   return page;
 }
 
@@ -45,7 +45,7 @@ test('a guest draft autosaves and survives a reload', async ({ page }) => {
   await page.goto('/my-reports');
   await expect(page.getByText('tied to this browser')).toBeVisible();
   await expect(page.getByRole('link', { name: 'Verbal harassment' }).first()).toBeVisible();
-  await page.goto('/');
+  await page.goto('/start');
   await expect(page.getByRole('heading', { name: 'Continue your draft' })).toBeVisible();
   expect(errors).toEqual([]);
 });

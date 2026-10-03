@@ -55,7 +55,7 @@ export function defaultLandingPath(role: Role | null): string {
     case 'official':
       return '/cases';
     default:
-      return '/';
+      return '/area-reports';
   }
 }
 

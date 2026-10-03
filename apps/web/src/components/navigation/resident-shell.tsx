@@ -19,9 +19,9 @@ export async function ResidentShell({
 }) {
   const t = await getTranslations('nav');
   const items = [
-    { href: '/', label: t('home'), icon: House },
-    { href: '/my-reports', label: t('myReports'), icon: FileText },
     { href: '/area-reports', label: t('areaReports'), icon: Map },
+    { href: '/start', label: t('home'), icon: House },
+    { href: '/my-reports', label: t('myReports'), icon: FileText },
     { href: '/settings', label: t('account'), icon: UserRound },
   ];
   const signedIn = principal && principal.role !== 'guest';
@@ -36,7 +36,7 @@ export async function ResidentShell({
       </a>
       <header className="border-b bg-card">
         <div className="mx-auto flex w-full max-w-5xl items-center gap-4 px-5 py-3">
-          <Link href="/" className="rounded-md" aria-label={t('homeLabel')}>
+          <Link href="/area-reports" className="rounded-md" aria-label={t('homeLabel')}>
             <HavenLogo />
           </Link>
           <nav aria-label={t('main')} className="hidden md:block">

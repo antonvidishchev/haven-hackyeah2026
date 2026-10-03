@@ -75,5 +75,5 @@ operators who triage every report, and the partners who act on them.
 - **Misuse** (spam, false reports): the operator cancels, with a neutral notice; rate limits stay.
 - **Fear of the police:** routing to the police only for weapon emergencies stays a firm rule, and
   the copy says so.
-- **A public map read as "dangerous areas":** keep k=3 suppression and the "not a safety score"
-  framing; publish counts, not locations.
+- **A public map read as "dangerous areas":** keep k=3 suppression, also within each incident
+  type, and publish counts, not locations.

@@ -22,7 +22,7 @@
     "workspace": "Workspace",
     "skip": "Skip to content",
     "homeLabel": "Haven home",
-    "home": "Home",
+    "home": "Start",
     "myReports": "My reports",
     "areaReports": "Area reports",
     "account": "Account",
@@ -128,12 +128,14 @@
   "area": {
     "title": "Area reports",
     "lead": "How many incidents were filed in each Kraków district. Exact locations are never shown.",
-    "notScore": "The public map is not a safety score.",
     "belowThreshold": "below privacy threshold",
     "privacy": "To protect the people who report, a district with fewer than {threshold} filed reports shows no number. Drafts and cancelled reports are never counted.",
     "reports": "{count, plural, one {# report} other {# reports}}",
     "mapLabel": "Map of Kraków districts shaded by filed reports",
+    "filterLabel": "Incident type",
+    "allTypes": "All incident types",
     "listTitle": "Reports by district",
+    "listTitleFiltered": "Reports by district: {category}",
     "unavailable": "Area reports are unavailable right now. Please try again later."
   },
   "settings": {

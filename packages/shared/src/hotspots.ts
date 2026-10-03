@@ -1,4 +1,10 @@
-import { districtIds, type DistrictId } from './enums.js';
+import { z } from 'zod';
+import {
+  districtIds,
+  reportCategorySchema,
+  type DistrictId,
+  type ReportCategory,
+} from './enums.js';
 
 /** Districts with fewer filed reports than this show no number (k-anonymity style). */
 export const HOTSPOT_PRIVACY_THRESHOLD = 3;
@@ -11,8 +17,13 @@ export type ZoneCount = {
 
 export type HotspotsResponse = {
   threshold: number;
+  /** The incident type the counts are limited to; null for all types. */
+  category: ReportCategory | null;
   zones: ZoneCount[];
 };
+
+export const hotspotsQuerySchema = z.object({ category: reportCategorySchema.optional() });
+export type HotspotsQuery = z.infer<typeof hotspotsQuerySchema>;
 
 /**
  * Public Area reports counts: every district, always in order, with counts below the threshold

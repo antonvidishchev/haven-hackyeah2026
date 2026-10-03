@@ -7,7 +7,7 @@ test('the API is healthy', async ({ request }) => {
 });
 
 const routes: { path: string; heading: string | RegExp }[] = [
-  { path: '/', heading: 'Start with what you have' },
+  { path: '/start', heading: 'Start with what you have' },
   { path: '/login', heading: 'Sign in' },
   { path: '/my-reports', heading: 'My reports' },
   { path: '/area-reports', heading: 'Area reports' },
@@ -36,7 +36,7 @@ const roles: { name: string; landing: string; heading: string; visits: [string, 
   { name: 'Police Liaison Official', landing: '/cases', heading: 'Assigned cases', visits: [] },
   { name: 'Support Services Official', landing: '/cases', heading: 'Assigned cases', visits: [] },
   { name: 'Volunteer Network Official', landing: '/cases', heading: 'Assigned cases', visits: [] },
-  { name: 'Second Resident', landing: '/', heading: 'Start with what you have', visits: [] },
+  { name: 'Second Resident', landing: '/area-reports', heading: 'Area reports', visits: [] },
 ];
 
 for (const { name, landing, heading, visits } of roles) {
@@ -71,7 +71,7 @@ test('a wrong password shows an error', async ({ page }) => {
 
 test('a resident is denied the operator queue, then signs out', async ({ page }) => {
   await signInAs(page, 'Local Resident');
-  await expect(page).toHaveURL('/');
+  await expect(page).toHaveURL('/area-reports');
   await page.goto('/queue');
   await expect(
     page.getByRole('heading', { level: 1, name: 'Operator access required' }),
@@ -79,7 +79,7 @@ test('a resident is denied the operator queue, then signs out', async ({ page })
   await page.goto('/settings');
   await expect(page.getByText('Signed in as Local Resident')).toBeVisible();
   await page.getByRole('button', { name: 'Sign out' }).click();
-  await expect(page).toHaveURL('/');
+  await expect(page).toHaveURL('/area-reports');
   await page.goto('/settings');
   await expect(page.getByText('You are using Haven as a guest.')).toBeVisible();
 });
@@ -110,13 +110,19 @@ test('the active navigation item is marked', async ({ page }) => {
   );
 });
 
-test('the home page shows the 112 notice', async ({ page }) => {
+test('the front page is Area reports', async ({ page }) => {
   await page.goto('/');
+  await expect(page).toHaveURL('/area-reports');
+  await expect(page.getByRole('heading', { level: 1, name: 'Area reports' })).toBeVisible();
+});
+
+test('the start page shows the 112 notice', async ({ page }) => {
+  await page.goto('/start');
   await expect(page.getByRole('heading', { name: /Call 112/ })).toBeVisible();
 });
 
 test('switching to Polish persists in a cookie', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/start');
   await page.getByRole('button', { name: 'Polski' }).first().click();
   await expect(
     page.getByRole('heading', { level: 1, name: 'Zacznij od tego, co masz' }),

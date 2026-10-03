@@ -128,12 +128,14 @@
   "area": {
     "title": "Zgłoszenia w okolicy",
     "lead": "Ile incydentów zgłoszono w każdej dzielnicy Krakowa. Dokładne miejsca nigdy nie są pokazywane.",
-    "notScore": "Publiczna mapa nie jest oceną bezpieczeństwa.",
     "belowThreshold": "poniżej progu prywatności",
     "privacy": "Aby chronić osoby zgłaszające, dzielnica z mniej niż {threshold} złożonymi zgłoszeniami nie pokazuje liczby. Szkice i anulowane zgłoszenia nigdy nie są liczone.",
     "reports": "{count, plural, one {# zgłoszenie} few {# zgłoszenia} many {# zgłoszeń} other {# zgłoszenia}}",
     "mapLabel": "Mapa dzielnic Krakowa zacieniowana według złożonych zgłoszeń",
+    "filterLabel": "Rodzaj zdarzenia",
+    "allTypes": "Wszystkie rodzaje zdarzeń",
     "listTitle": "Zgłoszenia według dzielnic",
+    "listTitleFiltered": "Zgłoszenia według dzielnic: {category}",
     "unavailable": "Raporty z okolicy są teraz niedostępne. Spróbuj ponownie później."
   },
   "settings": {

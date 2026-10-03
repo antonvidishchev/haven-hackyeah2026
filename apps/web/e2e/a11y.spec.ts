@@ -23,7 +23,14 @@ async function signInAs(page: Page, name: string) {
   await page.waitForURL((url) => url.pathname !== '/login');
 }
 
-const publicPages = ['/', '/login', '/area-reports', '/settings', '/my-reports'];
+const publicPages = [
+  '/start',
+  '/login',
+  '/area-reports',
+  '/area-reports?category=verbal_harassment',
+  '/settings',
+  '/my-reports',
+];
 
 test('public pages pass axe in light and dark themes', async ({ page }) => {
   for (const scheme of ['light', 'dark'] as const) {
