@@ -10,7 +10,9 @@
     "back": "Back",
     "optional": "optional",
     "notFound": "We couldn't find that page.",
-    "goHome": "Go to the home page"
+    "goHome": "Go to the home page",
+    "credit": "Made by Anton Vidishchev for HackYeah 2026",
+    "creditLabel": "About this project"
   },
   "language": {
     "label": "Language",

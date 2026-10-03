@@ -10,7 +10,9 @@
     "back": "Wstecz",
     "optional": "opcjonalnie",
     "notFound": "Nie znaleźliśmy tej strony.",
-    "goHome": "Przejdź na stronę główną"
+    "goHome": "Przejdź na stronę główną",
+    "credit": "Stworzone przez Antona Vidishcheva na HackYeah 2026",
+    "creditLabel": "O projekcie"
   },
   "language": {
     "label": "Język",

@@ -14,7 +14,7 @@ export function AreaMap(props: {
   label: string;
 }) {
   return (
-    <div className="h-[480px] overflow-hidden rounded-2xl border bg-card">
+    <div className="isolate h-[480px] overflow-hidden rounded-2xl border bg-card">
       <DistrictMap {...props} />
     </div>
   );

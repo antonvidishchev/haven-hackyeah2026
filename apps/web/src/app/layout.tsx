@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getTranslations } from 'next-intl/server';
 
+import { CreditBar } from '@/components/brand/credit-bar';
 import { systemThemeScript, ThemeSync } from '@/components/theme-sync';
 import { getThemePreference } from '@/lib/preferences';
 import { cn } from '@/lib/utils';
@@ -54,6 +55,7 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
       <body className="flex min-h-full flex-col">
         <NextIntlClientProvider>
           <ThemeSync theme={theme} />
+          <CreditBar />
           {children}
         </NextIntlClientProvider>
       </body>

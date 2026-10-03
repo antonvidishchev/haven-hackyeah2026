@@ -27,7 +27,7 @@ export async function ResidentShell({
   const signedIn = principal && principal.role !== 'guest';
 
   return (
-    <div className="flex min-h-dvh flex-col">
+    <div className="flex flex-1 flex-col">
       <a
         href="#main"
         className="sr-only z-50 rounded-md bg-card px-3 py-2 focus:not-sr-only focus:fixed focus:top-2 focus:left-2"

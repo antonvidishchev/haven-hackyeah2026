@@ -35,7 +35,7 @@ export default function LocationMap({
   onMove: (center: LatLng) => void;
 }) {
   return (
-    <div className="relative size-full">
+    <div className="relative isolate size-full">
       <MapContainer
         center={[initial.lat, initial.lng]}
         zoom={zoom}

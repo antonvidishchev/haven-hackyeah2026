@@ -61,14 +61,14 @@ export async function StaffShell({
   );
 
   return (
-    <div className="flex min-h-dvh flex-col lg:flex-row">
+    <div className="flex flex-1 flex-col lg:flex-row">
       <a
         href="#main"
         className="sr-only z-50 rounded-md bg-card px-3 py-2 focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
       >
         {t('skip')}
       </a>
-      <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col gap-6 border-r bg-sidebar p-4 lg:flex">
+      <aside className="sticky top-9 hidden h-[calc(100dvh-2.25rem)] w-64 shrink-0 flex-col gap-6 border-r bg-sidebar p-4 lg:flex">
         <Link href="/" className="flex flex-col gap-1 rounded-md px-2" aria-label={t('homeLabel')}>
           <HavenLogo />
           <span className="text-xs font-medium text-muted-foreground">{descriptor}</span>
