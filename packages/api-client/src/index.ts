@@ -3,6 +3,7 @@ import {
   type AuthResponse,
   type EscalateReportRequest,
   type EvidenceItem,
+  type HotspotsResponse,
   type LoginRequest,
   type ReportDetail,
   type ReportListResponse,
@@ -124,6 +125,10 @@ export function createHavenClient(options: HavenClientOptions) {
       remove: (id: string, init?: Omit<RequestOptions, 'body'>) =>
         request<void>('DELETE', `/evidence/${encodeURIComponent(id)}`, init),
       mediaPath: (id: string) => `/evidence/${encodeURIComponent(id)}/media`,
+    },
+    hotspots: {
+      list: (init?: Omit<RequestOptions, 'body'>) =>
+        request<HotspotsResponse>('GET', '/hotspots', { ...init, token: null }),
     },
   };
 }
