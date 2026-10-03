@@ -172,3 +172,6 @@ next-env.d.ts
 
 # OS
 .DS_Store
+
+# Planning docs (kept local for now)
+docs/plans/

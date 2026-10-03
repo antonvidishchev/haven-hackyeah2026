@@ -2,7 +2,7 @@
 
 Haven is a safe, low-barrier way for residents of Kraków to report social-safety incidents —
 mainly anti-immigrant and xenophobic harassment — and get routed to the right kind of human help.
-Built for HackYeah 2026 (HubMi.pl partner task).
+Built for the HackYeah 2026 **Smart City** open task.
 
 > **Prototype.** All organisations, people and resources are fictional, and no real services are
 > contacted. In danger, call **112**.
