@@ -51,27 +51,29 @@ the public, an Expo mobile app for residents, shared typed rules, unit and end-t
 one-command Docker Compose demo. All organisations, people and resources are fictional, and no
 real service is contacted.
 
-## Presentation outline (PDF, at most 10 slides)
+## Presentation (PDF, 10 slides)
 
-1. **Haven**: one line, the 112 notice, team name.
-2. **The problem**: harassment on trams and at stops goes unreported; "call the police" or "say
-   nothing".
-3. **Who it is for**: residents (often migrants), operators, partner organisations, the city.
-4. **The scenario**: insults on tram 8 at Teatr Bagatela, from the resident's phone to a closed
-   case, in five screenshots.
-5. **Smart City fit**: the four areas above, on Kraków's 18 districts.
-6. **How routing and matching work**: the Smart Router table, the advisory fixture, "matched
-   because…". Explainable, not AI.
-7. **Privacy and trust**: guest reports, k=3 Area reports, the evidence vault, the audit trail,
-   neutral cancellation notices.
-8. **Design**: the Calm Haven design system, resident and staff densities, light and dark, WCAG
-   2.1 AA, EN/PL, mobile.
-9. **Architecture and what is real**: the README diagram and the "Real vs simulated" table.
-10. **Path to a pilot**: three districts, partners, 6 months, about 500,000 PLN, success
-    measures ([pilot estimate](pilot-estimate.md)). Repository and demo links.
+The deck is [`pitch/haven-pitch.pdf`](pitch/haven-pitch.pdf), built with Marp from
+[`pitch/deck.md`](pitch/deck.md). Screenshots of the live demo are in `pitch/img/`. The slides:
 
-Optional extras: screenshots of each role, the repository link, a screen recording of the
-[demo script](demo-script.md).
+1. Haven, plus the live and repository links
+2. The problem
+3. Who it serves
+4. One report's journey
+5. Explainable routing and matching
+6. Operators and officials
+7. Area reports with privacy
+8. Trust, low barrier and accessibility
+9. Architecture and what is real
+10. What's next and the pilot
+
+To rebuild it:
+
+```bash
+npx @marp-team/marp-cli docs/pitch/deck.md --pdf --allow-local-files -o docs/pitch/haven-pitch.pdf
+```
+
+The submission page text, ready to paste, is in [`submission-page.md`](submission-page.md).
 
 ## AI and third-party resources disclosure
 

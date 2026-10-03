@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
-// The seed files three fictional reports in III Prądnik Czerwony; no e2e test files into it,
-// or into XVIII Nowa Huta.
+// The seed files 15 fictional reports in III Prądnik Czerwony and 2 in XVII Wzgórza
+// Krzesławickie; no e2e test files into either.
 test('an anonymous visitor sees privacy-protected district counts', async ({ page }) => {
   await page.goto('/area-reports');
   await expect(page.getByRole('heading', { level: 1, name: 'Area reports' })).toBeVisible();
@@ -9,8 +9,10 @@ test('an anonymous visitor sees privacy-protected district counts', async ({ pag
 
   const list = page.getByRole('region', { name: 'Reports by district' });
   await expect(list.getByRole('listitem')).toHaveCount(18);
-  await expect(list.getByText('III Prądnik Czerwony — 3 reports')).toBeVisible();
-  await expect(list.getByText('XVIII Nowa Huta — below privacy threshold')).toBeVisible();
+  await expect(list.getByText('III Prądnik Czerwony — 15 reports')).toBeVisible();
+  await expect(
+    list.getByText('XVII Wzgórza Krzesławickie — below privacy threshold'),
+  ).toBeVisible();
 
   // The map draws every district, shaded or muted.
   const map = page.getByLabel('Map of Kraków districts shaded by filed reports');
@@ -19,7 +21,7 @@ test('an anonymous visitor sees privacy-protected district counts', async ({ pag
   await expect(map.locator('path.district-suppressed').first()).toBeVisible();
 });
 
-// The three III Prądnik Czerwony seed reports are of three different incident types.
+// Only one of the III Prądnik Czerwony seed reports is verbal harassment.
 test('filtering by incident type keeps the privacy threshold', async ({ page }) => {
   await page.goto('/area-reports');
   const filter = page.getByRole('navigation', { name: 'Incident type' });
@@ -48,7 +50,7 @@ test('filtering by incident type keeps the privacy threshold', async ({ page }) 
   await expect(
     page
       .getByRole('region', { name: 'Reports by district' })
-      .getByText('III Prądnik Czerwony — 3 reports'),
+      .getByText('III Prądnik Czerwony — 15 reports'),
   ).toBeVisible();
 });
 

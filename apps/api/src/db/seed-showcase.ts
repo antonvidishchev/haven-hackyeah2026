@@ -42,7 +42,7 @@ export type ShowcaseReport = {
 
 /**
  * Fictional reports in every state the demo walks through. They avoid III Prądnik Czerwony,
- * XIII Podgórze and XVIII Nowa Huta, whose public counts the e2e suite checks.
+ * XIII Podgórze and XVII Wzgórza Krzesławickie, whose public counts the e2e suite checks.
  */
 export const showcaseReports: ShowcaseReport[] = [
   {
@@ -210,11 +210,13 @@ export const showcaseReports: ShowcaseReport[] = [
     createdAt: '2026-09-30T21:00:00Z',
     filedAt: '2026-09-30T21:15:00Z',
     fields: {
-      category: 'online_harassment',
+      category: 'verbal_harassment',
       severity: 'medium',
+      isRepeatIncident: true,
       description:
-        'Fictional showcase: abusive comments about my nationality in a Bronowice neighbourhood group.',
-      locationLabel: 'Neighbourhood online group (fictional)',
+        'Fictional showcase: a neighbour shouts abuse about my nationality whenever we meet in the courtyard.',
+      location: { lat: 50.0825, lng: 19.8915 },
+      locationLabel: 'Courtyard of a block in Bronowice Małe (fictional)',
       zoneId: 'VI',
     },
   },

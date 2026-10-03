@@ -30,7 +30,7 @@ describe('showcase seed', () => {
 
   it('stays out of the districts whose counts the e2e suite checks', () => {
     for (const report of showcaseReports) {
-      expect(['III', 'XIII', 'XVIII']).not.toContain(report.fields.zoneId);
+      expect(['III', 'XIII', 'XVII']).not.toContain(report.fields.zoneId);
     }
   });
 

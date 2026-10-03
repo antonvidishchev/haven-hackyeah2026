@@ -26,7 +26,6 @@ export const en = {
     physical_intimidation: 'Physical intimidation',
     threat: 'Threat',
     discrimination: 'Discrimination',
-    online_harassment: 'Online harassment',
     vandalism_hate_symbols: 'Vandalism or hate symbols',
     other: 'Other',
   } satisfies Record<ReportCategory, string>,
