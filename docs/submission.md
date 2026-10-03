@@ -120,7 +120,7 @@ At the time of writing, the repository history is:
 | `ebd31e7` … `a803d35` | 12:28–13:02                    | Initial commit, implementation plan           |
 | `2a03239` … `0a95046` | 13:33–16:16                    | Phases 0–10 (scaffold to support matchmaking) |
 | `c48f0d5`             | 16:55                          | Phase 11, mobile resident app                 |
-| Phase 12 commit       | about 17:30                    | Demo hardening, docs and this package         |
+| `4d0e2b1`             | 17:08                          | Demo hardening, docs and this package         |
 
 > **TODO, team decision before submitting.** All of this work predates 23:00 on 3 October.
 > The team must decide how to comply with rule 5 (for example, by asking the organisers whether
