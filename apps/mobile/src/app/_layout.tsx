@@ -38,6 +38,18 @@ function ThemedNavigation() {
       <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="report/[id]"
+          options={{
+            headerStyle: { backgroundColor: colors.background },
+            headerTintColor: colors.text,
+            headerShadowVisible: false,
+          }}
+        />
+        <Stack.Screen
+          name="record"
+          options={{ presentation: 'fullScreenModal', headerShown: false, gestureEnabled: false }}
+        />
       </Stack>
     </NavigationThemeProvider>
   );

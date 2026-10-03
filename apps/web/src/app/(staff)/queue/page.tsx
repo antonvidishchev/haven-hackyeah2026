@@ -54,12 +54,12 @@ export default async function QueuePage({ searchParams }: PageProps<'/queue'>) {
                 href={status === 'needs_review' ? '/queue' : `/queue?view=${status}`}
                 aria-current={status === view ? 'page' : undefined}
                 className={cn(
-                  'inline-flex min-h-9 items-center gap-2 rounded-md px-3 text-sm font-medium text-foreground/70 hover:text-foreground',
+                  'inline-flex min-h-9 items-center gap-2 rounded-md px-3 text-sm font-medium text-muted-foreground hover:text-foreground',
                   status === view && 'bg-background text-foreground shadow-sm',
                 )}
               >
                 {labels.triageStatus[status]}
-                <span className="rounded-full bg-secondary px-2 text-xs tabular-nums">
+                <span className="rounded-full bg-secondary px-2 text-xs text-secondary-foreground tabular-nums">
                   {queue.counts[status]}
                 </span>
               </Link>

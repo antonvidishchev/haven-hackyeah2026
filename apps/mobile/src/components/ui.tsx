@@ -64,6 +64,18 @@ export function Title({ style, ...props }: TextProps) {
   );
 }
 
+/** A section heading inside a screen. */
+export function Heading({ style, ...props }: TextProps) {
+  const { colors } = useTheme();
+  return (
+    <Text
+      accessibilityRole="header"
+      style={[styles.heading, { color: colors.text }, style]}
+      {...props}
+    />
+  );
+}
+
 export function Label({ style, ...props }: TextProps) {
   const { colors } = useTheme();
   return <Text style={[styles.label, { color: colors.text }, style]} {...props} />;
@@ -77,9 +89,10 @@ export function Note({ style, ...props }: TextProps) {
 type ActionProps = {
   label: string;
   onPress: () => void;
-  variant?: 'filled' | 'outlined';
+  variant?: 'filled' | 'outlined' | 'destructive';
   disabled?: boolean;
   accessibilityHint?: string;
+  accessibilityLabel?: string;
 };
 
 export function Action({
@@ -88,20 +101,23 @@ export function Action({
   variant = 'filled',
   disabled = false,
   accessibilityHint,
+  accessibilityLabel,
 }: ActionProps) {
   const { colors } = useTheme();
-  const filled = variant === 'filled';
+  const filled = variant !== 'outlined';
+  const fill = variant === 'destructive' ? colors.destructive : colors.primary;
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityState={{ disabled }}
       accessibilityHint={accessibilityHint}
+      accessibilityLabel={accessibilityLabel}
       disabled={disabled}
       onPress={onPress}
       style={({ pressed }) => [
         styles.action,
         filled
-          ? { backgroundColor: colors.primary, borderColor: colors.primary }
+          ? { backgroundColor: fill, borderColor: fill }
           : { backgroundColor: 'transparent', borderColor: colors.input },
         (pressed || disabled) && { opacity: disabled ? 0.5 : 0.8 },
       ]}
@@ -156,18 +172,21 @@ type ToggleProps = {
   description?: string;
   value: boolean;
   onValueChange: (value: boolean) => void;
+  disabled?: boolean;
 };
 
-export function Toggle({ label, description, value, onValueChange }: ToggleProps) {
+export function Toggle({ label, description, value, onValueChange, disabled }: ToggleProps) {
   const { colors } = useTheme();
   return (
-    <View style={styles.toggle}>
+    <View style={[styles.toggle, disabled && { opacity: 0.6 }]}>
       <View style={styles.flex}>
         <Label>{label}</Label>
         {description ? <Note>{description}</Note> : null}
       </View>
       <Switch
         accessibilityLabel={label}
+        accessibilityHint={description}
+        disabled={disabled}
         value={value}
         onValueChange={onValueChange}
         trackColor={{ false: colors.input, true: colors.primary }}
@@ -188,6 +207,7 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   title: { fontSize: FontSize.heading, fontWeight: '600', lineHeight: 34 },
+  heading: { fontSize: FontSize.title, fontWeight: '600', lineHeight: 28 },
   label: { fontSize: FontSize.body, lineHeight: 22 },
   note: { fontSize: FontSize.note, lineHeight: 18 },
   action: {

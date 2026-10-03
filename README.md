@@ -7,6 +7,52 @@ Built for the HackYeah 2026 **Smart City** open task.
 > **Prototype.** All organisations, people and resources are fictional, and no real services are
 > contacted. In danger, call **112**.
 
+Harassment on trams, at stops and in neighbourhoods mostly goes unreported, because the only
+options feel like "call the police" or "say nothing". Haven is the middle path:
+
+- **Residents** report in under a minute, without an account if they like, in English or Polish,
+  on the web or in the Expo app. They can add photos, video or audio and follow replies.
+- A deterministic **Smart Router** (explainable rules, not AI) sends each filed report to the
+  right kind of human help: a volunteer network, a professional support service, or, only for an
+  emergency with a weapon, a police coordination unit.
+- **Operators** triage every case: send it to an organisation, ask the resident for more, or
+  cancel it with a neutral notice. A simulated advisory suggestion can be followed in one click.
+- **Officials** claim cases for their organisation, record what they did outside Haven and close
+  them. **Admins** read an append-only audit log.
+- **Support matchmaking** links each report to fictional local help, with "matched because…".
+- **Area reports** show privacy-protected counts per district (fewer than 3 reports are
+  suppressed). It is never a safety score.
+
+More: [demo script](docs/demo-script.md) · [pilot estimate](docs/pilot-estimate.md) ·
+[submission package](docs/submission.md)
+
+## Architecture
+
+```text
+ Resident (web, Expo Go)        Operator / Official / Admin (web)        Public (web)
+            │                                  │                              │
+            ▼                                  ▼                              ▼
+   ┌──────────────────┐  HttpOnly cookie  ┌──────────────────────────────────────────┐
+   │ Expo app         │                   │ Next.js 16 web (App Router, next-intl)   │
+   │ expo-router      │                   │ server components + server actions       │
+   └────────┬─────────┘                   └──────────────────┬───────────────────────┘
+            │ Bearer JWT (SecureStore)                       │ Bearer JWT
+            ▼                                                ▼
+   ┌─────────────────────────────────────────────────────────────────────────────────┐
+   │ NestJS 12 API (Fastify)  /api/v1                                                │
+   │ auth + role guards · reports + revisions · evidence (multipart, SHA-256)        │
+   │ Smart Router + case creation · operator / official workflows · audit · matching │
+   └───────────────┬──────────────────────────────────────────────┬──────────────────┘
+                   │ SurrealDB SDK                                │ local disk
+                   ▼                                              ▼
+          ┌─────────────────┐                            ┌─────────────────┐
+          │ SurrealDB 3     │                            │ evidence volume │
+          └─────────────────┘                            └─────────────────┘
+
+ packages/shared: zod schemas, enums, Smart Router, case rules, k-anonymity, matchmaking, i18n labels
+ packages/api-client: typed fetch client used by web and mobile
+```
+
 ## Repository layout
 
 | Path                  | What                                                              |
@@ -54,7 +100,7 @@ same port.
 | `pnpm db:reset`   | Wipes and recreates the database — requires `HAVEN_CONFIRM_RESET=yes`         |
 | `pnpm demo:up`    | Builds and runs everything in containers (`docker compose --profile full up`) |
 | `pnpm demo:down`  | Stops the containerised demo                                                  |
-| `pnpm mobile`     | Starts the Expo dev server; scan the QR code with Expo Go                     |
+| `pnpm mobile`     | Prints the LAN API address, then starts Expo; scan the QR code with Expo Go   |
 | `pnpm typecheck`  | Type-checks every workspace                                                   |
 | `pnpm lint`       | Lints every workspace                                                         |
 | `pnpm test`       | Runs the Vitest unit tests                                                    |
@@ -82,14 +128,64 @@ Visitors don't need an account: opening a reporting page creates a guest session
 Residents land on the home page, operators and admins on the response queue, officials on their
 assigned cases. Staff accounts sign in on the web only.
 
+## Demo data
+
+Besides the accounts, `pnpm db:seed` creates (once; re-running leaves them as the demo left them):
+
+- three filed reports in III Prądnik Czerwony, so Area reports has a district above the privacy
+  threshold;
+- eight showcase reports, one per state the demo walks through:
+
+| Report (district)                  | State                                                     | Owner     |
+| ---------------------------------- | --------------------------------------------------------- | --------- |
+| Shouting on a tram (I)             | Draft                                                     | resident  |
+| Insults on tram 8 (I)              | Needs review, recommendation "transfer to NGO"            | fictional |
+| Landlord refused a viewing (II)    | Awaiting resident, with a request for the recording       | resident  |
+| Knife threat at a bus stop (IV)    | Needs review, **Top priority**, police coordination unit  | fictional |
+| Intimidation near the market (V)   | Sent to volunteers, claimed, phone call recorded          | fictional |
+| Hate symbols by the river (VIII)   | Closed by the volunteer official                          | fictional |
+| Duplicate of the tram 8 report (I) | Cancelled as a duplicate, resident got the neutral notice | fictional |
+| Abusive comments online (VI)       | Needs review                                              | resident2 |
+
+The 25 support resources are fictional too.
+
+## Real vs simulated
+
+| Area                    | Real in the prototype                                                       | Simulated or out of scope                                  |
+| ----------------------- | --------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| Reporting               | Guest and account drafts, autosave, revisions, history, filing references   | Offline drafts                                             |
+| Evidence                | Upload with type and size limits, SHA-256, authorised playback              | Malware scanning, retention, legal holds, export           |
+| Routing                 | Deterministic, versioned Smart Router with a digest of the rules            | Dispatch: no institution, email or SMS is ever contacted   |
+| Advisory recommendation | Rule-based fixture, stored immutably, with dispositions in the audit trail  | Any real AI or LLM call                                    |
+| Escalation              | Recorded on the report and in the queue                                     | Identity verification (a demo checkbox)                    |
+| Staff workflows         | Operator, official and admin flows with optimistic concurrency and audit    | Real organisations; all are fictional                      |
+| Area reports            | Counts per Kraków district with k=3 suppression                             | —                                                          |
+| Matchmaking             | Keyword and tag scoring with SurrealDB full-text search, "matched because…" | The resources themselves                                   |
+| Location                | Kraków district boundaries, map pin, device location (mobile)               | Third-party geocoding                                      |
+| Mobile                  | Expo Go app: report, evidence, in-app audio and video capture, My reports   | Background recording; staff screens are web-only           |
+| Deployment              | Docker Compose (`pnpm demo:up`)                                             | Cloud hosting, guest-to-account transfer, grant management |
+
+## Accessibility
+
+The design targets WCAG 2.1 AA: verified colour contrast in light and dark themes, landmarks and
+a skip link, `aria-current` navigation, polite live regions for autosave and uploads, 44 px
+resident touch targets, reduced motion, and full EN/PL copy. `e2e/a11y.spec.ts` runs axe (WCAG
+2.1 A/AA rules) on the public, resident, operator, official and admin pages.
+
 ## Mobile
 
-Expo reads its own env file. Create `apps/mobile/.env` with your laptop's LAN address so the
-phone can reach the API (the API listens on `0.0.0.0`), then run `pnpm mobile`:
+Expo reads its own env file. Copy [`apps/mobile/.env.example`](apps/mobile/.env.example) to
+`apps/mobile/.env` and set your laptop's LAN address so the phone can reach the API (the API
+listens on `0.0.0.0`). `pnpm mobile` prints the address to use, then starts Expo:
 
 ```bash
-echo "EXPO_PUBLIC_API_BASE_URL=http://192.168.1.10:3001/api/v1" > apps/mobile/.env
+cp apps/mobile/.env.example apps/mobile/.env   # then edit the address
+pnpm mobile
 ```
+
+The app covers the resident side: report (what, where with a map pin or current location,
+evidence), file, follow messages and support matches, escalate, and capture audio or video in the
+app. Staff use the web app.
 
 ## Environment
 
@@ -107,3 +203,8 @@ anything beyond local use (`openssl rand -hex 32`).
   [OpenStreetMap](https://www.openstreetmap.org/copyright) (© OpenStreetMap contributors, ODbL),
   used under the [tile usage policy](https://operations.osmfoundation.org/policies/tiles/) for
   this low-traffic prototype.
+- **Accessibility checks** use [axe-core](https://github.com/dequelabs/axe-core) (MPL-2.0)
+  through `@axe-core/playwright`.
+
+The full list of tools, libraries and the AI disclosure is in
+[`docs/submission.md`](docs/submission.md).
