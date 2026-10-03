@@ -30,7 +30,7 @@ nothing leaves the laptop. The same flow also works on the live web demo,
 | 1:10 | Resident         | Show the reference, the routing card (Neighborhood Volunteer Network, normal queue, "not AI") and **Help that fits your situation** with "Matched because: Verbal harassment · I Stare Miasto · “tram”". | Deterministic, explainable routing, and help in the resident's language right away.                                     |
 | 1:40 | Operator         | Sign in as **Local Operator**. The new case is in **Needs review**; the seeded knife threat sits on top as **Top priority**. Open the tram case, then **Follow AI recommendation** and **Confirm**.      | Every case gets a human. The suggestion is a labelled, rule-based simulation, and following it is audited.              |
 | 2:10 | Official         | Sign in as **Volunteer Network Official**. **Claim case**, **Record action** (phone call), **Close case** with a comment.                                                                                | The organisation records what it did outside Haven. A closed case cannot change.                                        |
-| 2:35 | Public           | **Area reports**. III Prądnik Czerwony shows a count; I Stare Miasto, with two filed reports, is still "below privacy threshold".                                                                        | Counts per district, below 3 suppressed, also per incident type.                                                        |
+| 2:35 | Public           | **Area reports**. Filter **Verbal harassment**, then **Vandalism or hate symbols**: the centre, then the eastern estates light up. XVII stays "below privacy threshold".                                 | Counts per district, below 3 suppressed, also per incident type.                                                        |
 | 2:50 | —                | —                                                                                                                                                                                                        | Web and Expo app, EN/PL, WCAG 2.1 AA, Docker Compose. Ready to pilot with real organisations.                           |
 
 ## 10-minute version, by role
@@ -78,11 +78,12 @@ nothing leaves the laptop. The same flow also works on the live web demo,
 
 1. Sign in as **Local Administrator**. **Audit log**: every filing, decision (with recommendation
    disposition), claim, action and close, append-only. Filter by action.
-2. Open **Area reports** signed out. III Prądnik Czerwony shows a count. I Stare Miasto has two
-   filed reports (the seeded one and today's), so it still shows "below privacy threshold"; the
-   cancelled duplicate doesn't count. File one more tram report as a guest and refresh: the
-   district appears with 3. Filter by **Verbal harassment**: III Prądnik Czerwony drops below the
-   threshold, because only one of its three reports is of that type.
+2. Open **Area reports** signed out. Nine months of fictional history fill the map; I Stare
+   Miasto is the darkest, and the cancelled duplicate doesn't count. Filter by **Verbal
+   harassment**: the centre and the tram corridors stand out, and III Prądnik Czerwony drops
+   below the threshold, because only one of its reports is of that type. Filter by **Vandalism or
+   hate symbols**: the eastern estates (Nowa Huta, Mistrzejowice, Bieńczyce) take over. XVII
+   Wzgórza Krzesławickie, with two reports, always shows "below privacy threshold".
 
 ### 6. Wrap-up (0.5 min)
 

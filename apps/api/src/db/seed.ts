@@ -2,6 +2,7 @@ import { demoAccounts } from '@haven/shared';
 import { principalRecord } from '../auth/principal.repository.js';
 import { hashPassword } from '../auth/password.js';
 import type { QueryFn } from './migrations.js';
+import { seedHistoryReports } from './seed-history.js';
 import { seedReportsFixtures } from './seed-reports.js';
 import { seedShowcaseReports } from './seed-showcase.js';
 import { seedSupportResources } from './seed-resources.js';
@@ -26,6 +27,9 @@ export async function seed(query: QueryFn, log: (message: string) => void = () =
 
   const reports = await seedReportsFixtures(query);
   log(`created ${reports} seed report(s)`);
+
+  const history = await seedHistoryReports(query);
+  log(`created ${history} history report(s)`);
 
   const showcase = await seedShowcaseReports(query);
   log(`created ${showcase} showcase report(s)`);

@@ -11,7 +11,6 @@ const allCategories: SupportResource['categories'] = [
   'physical_intimidation',
   'threat',
   'discrimination',
-  'online_harassment',
   'vandalism_hate_symbols',
   'other',
 ];
@@ -92,7 +91,7 @@ export const supportResources: SupportResource[] = [
       'Bezpłatne porady o zgłoszeniu na policję, skargach i prawach w sądzie.',
     ],
     {
-      categories: ['threat', 'discrimination', 'online_harassment', 'vandalism_hate_symbols'],
+      categories: ['threat', 'discrimination', 'vandalism_hate_symbols'],
       districts: [],
       severities: ['medium', 'high'],
       keywords: [
@@ -166,13 +165,7 @@ export const supportResources: SupportResource[] = [
       'Krótkoterminowe wsparcie przy lęku, stresie i bezsenności po zdarzeniu.',
     ],
     {
-      categories: [
-        'verbal_harassment',
-        'physical_intimidation',
-        'threat',
-        'discrimination',
-        'online_harassment',
-      ],
+      categories: ['verbal_harassment', 'physical_intimidation', 'threat', 'discrimination'],
       districts: [],
       severities: ['medium', 'high'],
       keywords: [
@@ -209,7 +202,7 @@ export const supportResources: SupportResource[] = [
       'Dla uczniów i nastolatków doświadczających nękania w szkole lub w sieci.',
     ],
     {
-      categories: ['verbal_harassment', 'online_harassment', 'discrimination'],
+      categories: ['verbal_harassment', 'discrimination'],
       districts: [],
       severities: ['low', 'medium', 'high'],
       keywords: [
@@ -228,7 +221,7 @@ export const supportResources: SupportResource[] = [
       'Pomoc w zabezpieczeniu kont, zapisaniu obraźliwych wiadomości i usunięciu wpisów.',
     ],
     {
-      categories: ['online_harassment', 'threat'],
+      categories: ['threat'],
       districts: [],
       severities: ['low', 'medium', 'high'],
       keywords: [
@@ -246,7 +239,7 @@ export const supportResources: SupportResource[] = [
       'Plan bezpieczeństwa, gdy ktoś uporczywie Cię śledzi, obserwuje lub kontaktuje się z Tobą.',
     ],
     {
-      categories: ['threat', 'online_harassment', 'physical_intimidation'],
+      categories: ['threat', 'physical_intimidation'],
       districts: [],
       severities: ['medium', 'high'],
       keywords: [
@@ -428,7 +421,7 @@ export const supportResources: SupportResource[] = [
       'Poufna pomoc dla studentów nękanych na kampusie, w akademikach lub w sieci.',
     ],
     {
-      categories: ['verbal_harassment', 'discrimination', 'online_harassment'],
+      categories: ['verbal_harassment', 'discrimination'],
       districts: ['V', 'VII', 'II'],
       severities: ['low', 'medium', 'high'],
       keywords: [

@@ -29,9 +29,9 @@ support, and services lack a clear picture of where help is needed.
 ## What is your solution?
 
 Haven is a safe middle path for reporting harassment and discrimination in Kraków. It covers
-everyday settings: trams and stops, streets, neighbourhoods, shared spaces and online. A resident
-can report verbal abuse, intimidation, threats, discrimination, online harassment or hate symbols
-and vandalism in a few minutes. They can do it without an account, in English or Polish, on the
+everyday settings: trams and stops, streets, neighbourhoods and shared spaces. A resident can
+report verbal abuse, intimidation, threats, discrimination or hate symbols and vandalism in a few
+minutes. They can do it without an account, in English or Polish, on the
 web or in a mobile app, and add photos, video, audio and a location.
 
 Every filed report reaches a human:
@@ -167,7 +167,9 @@ The mobile app needs the local API; the Azure demo is web-only.
 8. **Mobile.** Expo Go needs the LAN address in `apps/mobile/.env`, and the Azure deployment
    doesn't expose the API to phones.
 9. **Demo accounts** are mentioned so the jury can try the staff roles.
-10. **Typos:** HakYeah → HackYeah, assisant → assistant, Ofiical → official, evidences →
+10. **Online harassment** is no longer an incident type. Area reports count incidents per
+    district, and online abuse has no district.
+11. **Typos:** HakYeah → HackYeah, assisant → assistant, Ofiical → official, evidences →
     evidence, "Nationwide study" → "A nationwide study", "to police" → "to the police".
 
 **Before submitting:**

@@ -34,6 +34,9 @@ style: |
   .shot { border: 1px solid #d5dbd3; border-radius: 10px; box-shadow: 0 6px 20px rgba(0,0,0,.08); }
   section.lead { background: #285f4e; color: #fff; justify-content: center; }
   section.lead h1, section.lead h2, section.lead strong, section.lead a { color: #fff; }
+  h1.brand { display: flex; align-items: center; gap: 18px; font-size: 64px; }
+  .maps { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
+  .maps img { width: 100%; height: 170px; object-fit: cover; }
   section::after { color: #8a958f; font-size: 16px; }
   footer { color: #8a958f; font-size: 14px; }
 footer: 'Haven · HackYeah 2026 · Smart City · haven-hackyeah.polandcentral.cloudapp.azure.com'
@@ -43,7 +46,7 @@ footer: 'Haven · HackYeah 2026 · Smart City · haven-hackyeah.polandcentral.cl
 <!-- _paginate: false -->
 <!-- _footer: '' -->
 
-# Haven
+<h1 class="brand"><img src="img/haven-mark-white.svg" alt="" width="64" height="64">Haven</h1>
 
 ## A safe middle path for reporting harassment and discrimination in Kraków
 
@@ -69,7 +72,7 @@ Made by Anton Vidishchev for HackYeah 2026 · Smart City open task
 
 <br>
 
-- A person harassed on a tram, at a stop, in their street or online often isn't ready to go to the police, so **most say nothing**.
+- A person harassed on a tram, at a stop or in their street often isn't ready to go to the police, so **most say nothing**.
 - Residents miss support, and the city's services **can't see where help is needed**.
 
 <p class="muted">Sources: nationwide study of women in Poland, czasopisma.inp.pan.pl/index.php/bk/article/view/5715 · Police figures via Notes from Poland, 17 Jul 2026. The figures measure different harms, not a single Kraków trend.</p>
@@ -88,7 +91,7 @@ Made by Anton Vidishchev for HackYeah 2026 · Smart City open task
 | **Partner organisations** | Volunteer network, professional support, police coordination unit claim and act      |
 | **The city**              | Sees demand per district without seeing people                                       |
 
-<p class="muted">Incident types: verbal harassment, intimidation, threats, discrimination, online harassment, hate symbols and vandalism.</p>
+<p class="muted">Incident types: verbal harassment, intimidation, threats, discrimination, hate symbols and vandalism, each tied to a place in the city.</p>
 
 </div>
 <div>
@@ -177,6 +180,8 @@ Each decision stores its rule, ruleset version and a SHA-256 digest of the rules
 
 ---
 
+<!-- _class: dense -->
+
 ## Data for the city, with privacy first
 
 <div class="cols">
@@ -187,14 +192,18 @@ Each decision stores its rule, ruleset version and a SHA-256 digest of the rules
 </div>
 <div>
 
-**Area reports** is the public front page.
+**Area reports**, the public front page, counts filed reports in each of the 18 districts, by incident type.
 
-- Filed reports counted per district for all 18 Kraków districts, filterable by incident type
-- A district with **fewer than 3 reports shows no number** (k-anonymity)
-- Drafts and cancelled reports are never counted
-- Exact locations are never shown; no area is labelled "unsafe"
+- **Fewer than 3 reports shows no number** (k-anonymity); drafts and cancelled reports never count
+- No exact locations; no area is labelled "unsafe"
 
-**Shows where to put** volunteers, outreach and support hours.
+Each type tells the city where to put volunteers, outreach and support hours:
+
+<div class="maps">
+<div><img class="shot" src="img/map-verbal.png"><div class="caption">Verbal harassment: the centre</div></div>
+<div><img class="shot" src="img/map-vandalism.png"><div class="caption">Hate symbols: the eastern estates</div></div>
+</div>
+<div class="caption">Demo data: about 330 fictional reports over nine months.</div>
 
 </div>
 </div>

@@ -22,7 +22,6 @@ export const reportCategories = [
   'physical_intimidation',
   'threat',
   'discrimination',
-  'online_harassment',
   'vandalism_hate_symbols',
   'other',
 ] as const;

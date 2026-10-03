@@ -14,7 +14,6 @@ export const pl: EnumLabels = {
     physical_intimidation: 'Zastraszanie fizyczne',
     threat: 'Groźba',
     discrimination: 'Dyskryminacja',
-    online_harassment: 'Nękanie w internecie',
     vandalism_hate_symbols: 'Wandalizm lub symbole nienawiści',
     other: 'Inne',
   },

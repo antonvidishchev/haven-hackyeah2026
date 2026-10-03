@@ -159,7 +159,6 @@ const NGO_CATEGORIES: readonly ReportCategory[] = [
   'verbal_harassment',
   'physical_intimidation',
   'discrimination',
-  'online_harassment',
 ];
 
 const mentionsEvidence = (description: string) => {

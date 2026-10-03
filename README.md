@@ -32,8 +32,8 @@ Haven gives residents a low-barrier way to tell someone, and makes sure a human 
 
 - **Report in a few minutes.** Residents can report as a guest or with an account, in English
   or Polish, on the web or in the Expo mobile app. A report covers verbal harassment,
-  intimidation, threats, discrimination, online harassment, or hate symbols and vandalism. It can
-  include photos, video, audio and a place on the map. Drafts stay private and autosave until the
+  intimidation, threats, discrimination, or hate symbols and vandalism: incidents that happen
+  somewhere in the city. It can include photos, video, audio and a place on the map. Drafts stay private and autosave until the
   resident chooses to file.
 - **Get routed to the right kind of help.** A deterministic **Smart Router** (published rules,
   not AI) proposes a responder and a priority:
@@ -201,8 +201,11 @@ assigned cases. Staff accounts sign in on the web only.
 
 Besides the accounts, `pnpm db:seed` creates (once; re-running leaves them as the demo left them):
 
-- three filed reports in III Prądnik Czerwony, so Area reports has a district above the privacy
-  threshold;
+- three filed reports in III Prądnik Czerwony, which the e2e suite counts on;
+- about 320 closed history reports from January to September 2026, spread over the districts
+  with a different pattern per incident type (verbal harassment in the centre, discrimination
+  where students rent, hate symbols on the eastern estates), so each Area reports filter shows its
+  own map. Their cases are in the operator's Handled tab and the officials' finished cases;
 - eight showcase reports, one per state the demo walks through:
 
 | Report (district)                  | State                                                     | Owner     |
@@ -214,7 +217,7 @@ Besides the accounts, `pnpm db:seed` creates (once; re-running leaves them as th
 | Intimidation near the market (V)   | Sent to volunteers, claimed, phone call recorded          | fictional |
 | Hate symbols by the river (VIII)   | Closed by the volunteer official                          | fictional |
 | Duplicate of the tram 8 report (I) | Cancelled as a duplicate, resident got the neutral notice | fictional |
-| Abusive comments online (VI)       | Needs review                                              | resident2 |
+| Abuse from a neighbour (VI)        | Needs review                                              | resident2 |
 
 The 25 support resources are fictional too.
 
