@@ -23,6 +23,7 @@ import {
   type ReportListResponse,
   type SessionResponse,
   type SubmitReportRequest,
+  type SupportMatchesResponse,
   type UpdateReportRequest,
 } from '@haven/shared';
 
@@ -128,6 +129,12 @@ export function createHavenClient(options: HavenClientOptions) {
           ...init,
           body,
         }),
+      supportMatches: (id: string, init?: Omit<RequestOptions, 'body'>) =>
+        request<SupportMatchesResponse>(
+          'GET',
+          `/reports/${encodeURIComponent(id)}/support-matches`,
+          init,
+        ),
     },
     evidence: {
       /** Multipart upload with a single `file` field. */
@@ -160,6 +167,12 @@ export function createHavenClient(options: HavenClientOptions) {
           ...init,
           body,
         }),
+      supportMatches: (id: string, init?: Omit<RequestOptions, 'body'>) =>
+        request<SupportMatchesResponse>(
+          'GET',
+          `/operator/cases/${encodeURIComponent(id)}/support-matches`,
+          init,
+        ),
       vault: (init?: Omit<RequestOptions, 'body'>) =>
         request<VaultListResponse>('GET', '/operator/evidence', init),
     },

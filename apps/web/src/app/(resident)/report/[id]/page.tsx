@@ -10,9 +10,11 @@ import { EscalateCard } from '@/components/report/escalate-card';
 import { HavenMessages } from '@/components/report/haven-messages';
 import { ReportEditor } from '@/components/report/report-editor';
 import { RoutingCard } from '@/components/report/routing-card';
+import { SupportMatches } from '@/components/support/support-matches';
 import { getEnumLabels } from '@/i18n/labels';
 import { evidenceMaxBytes } from '@/lib/env';
 import { getOwnReport } from '@/lib/reports';
+import { getReportSupportMatches } from '@/lib/support';
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getTranslations('report'))('title') };
@@ -32,6 +34,7 @@ export default async function ReportPage({ params }: PageProps<'/report/[id]'>) 
   const when = (iso: string) =>
     format.dateTime(new Date(iso), { dateStyle: 'medium', timeStyle: 'short' });
   const draft = report.state === 'draft';
+  const matches = draft ? null : await getReportSupportMatches(report.id);
   return (
     <div className="resident-page">
       <div className="flex flex-col gap-3">
@@ -81,6 +84,8 @@ export default async function ReportPage({ params }: PageProps<'/report/[id]'>) 
       )}
 
       {report.routing ? <RoutingCard routing={report.routing} /> : null}
+
+      {matches ? <SupportMatches matches={matches} /> : null}
 
       {draft ? null : <HavenMessages messages={report.messages} />}
 

@@ -68,3 +68,16 @@ export const districtIds = [
 ] as const;
 export const districtIdSchema = z.enum(districtIds);
 export type DistrictId = z.infer<typeof districtIdSchema>;
+
+export const supportResourceKinds = [
+  'legal_aid',
+  'translation',
+  'psychological_support',
+  'victim_support',
+  'ngo',
+  'helpline',
+  'community_mediation',
+  'digital_safety',
+] as const;
+export const supportResourceKindSchema = z.enum(supportResourceKinds);
+export type SupportResourceKind = z.infer<typeof supportResourceKindSchema>;

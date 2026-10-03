@@ -503,5 +503,19 @@
       "invalid": "Check the form and try again.",
       "unavailable": "The decision wasn’t saved. Try again in a moment."
     }
+  },
+  "support": {
+    "title": "Help that fits your situation",
+    "staffTitle": "Support suggested to the resident",
+    "none": "We have no specific suggestions for this report yet. Haven’s team will be in touch.",
+    "languages": "Languages",
+    "hours": "Hours",
+    "contact": "Contact",
+    "matchedBecause": "Matched because: {reasons}",
+    "citywide": "Citywide",
+    "keyword": "“{keyword}”",
+    "fictional": "Fictional resources for the prototype. Names, numbers and addresses are not real.",
+    "emergency": "Emergency signals: the resident is shown the 112 notice first.",
+    "staffNote": "Matched from the report’s category, district, severity and words. Fictional resources."
   }
 }

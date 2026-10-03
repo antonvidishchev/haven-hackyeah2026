@@ -503,5 +503,19 @@
       "invalid": "Sprawdź formularz i spróbuj ponownie.",
       "unavailable": "Decyzja nie została zapisana. Spróbuj ponownie za chwilę."
     }
+  },
+  "support": {
+    "title": "Pomoc dopasowana do Twojej sytuacji",
+    "staffTitle": "Wsparcie zaproponowane mieszkańcowi",
+    "none": "Nie mamy jeszcze konkretnych propozycji dla tego zgłoszenia. Zespół Haven skontaktuje się z Tobą.",
+    "languages": "Języki",
+    "hours": "Godziny",
+    "contact": "Kontakt",
+    "matchedBecause": "Dopasowano, bo: {reasons}",
+    "citywide": "Całe miasto",
+    "keyword": "„{keyword}”",
+    "fictional": "Fikcyjne zasoby na potrzeby prototypu. Nazwy, numery i adresy nie są prawdziwe.",
+    "emergency": "Sygnały zagrożenia: mieszkaniec najpierw widzi informację o numerze 112.",
+    "staffNote": "Dopasowano na podstawie kategorii, dzielnicy, pilności i słów zgłoszenia. Fikcyjne zasoby."
   }
 }

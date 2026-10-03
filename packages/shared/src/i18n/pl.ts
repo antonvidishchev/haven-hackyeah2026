@@ -70,4 +70,14 @@ export const pl: EnumLabels = {
     XVII: 'XVII Wzgórza Krzesławickie',
     XVIII: 'XVIII Nowa Huta',
   },
+  supportKind: {
+    legal_aid: 'Pomoc prawna',
+    translation: 'Tłumaczenie',
+    psychological_support: 'Wsparcie psychologiczne',
+    victim_support: 'Wsparcie dla pokrzywdzonych',
+    ngo: 'Organizacja pozarządowa',
+    helpline: 'Telefon zaufania',
+    community_mediation: 'Mediacje sąsiedzkie',
+    digital_safety: 'Bezpieczeństwo cyfrowe',
+  },
 };

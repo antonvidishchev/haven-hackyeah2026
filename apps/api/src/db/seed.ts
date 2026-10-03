@@ -3,6 +3,7 @@ import { principalRecord } from '../auth/principal.repository.js';
 import { hashPassword } from '../auth/password.js';
 import type { QueryFn } from './migrations.js';
 import { seedReportsFixtures } from './seed-reports.js';
+import { seedSupportResources } from './seed-resources.js';
 
 /** Idempotent demo fixtures. Re-running refreshes them to their documented values. */
 export async function seed(query: QueryFn, log: (message: string) => void = () => {}) {
@@ -19,6 +20,8 @@ export async function seed(query: QueryFn, log: (message: string) => void = () =
     });
   }
   log(`seeded ${demoAccounts.length} demo accounts`);
+
+  log(`seeded ${await seedSupportResources(query)} fictional support resources`);
 
   const reports = await seedReportsFixtures(query);
   log(`created ${reports} seed report(s)`);

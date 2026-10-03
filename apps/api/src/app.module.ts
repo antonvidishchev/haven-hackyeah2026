@@ -12,6 +12,7 @@ import { HotspotsModule } from './hotspots/hotspots.module.js';
 import { OfficialModule } from './official/official.module.js';
 import { OperatorModule } from './operator/operator.module.js';
 import { ReportsModule } from './reports/reports.module.js';
+import { SupportModule } from './support/support.module.js';
 
 const pretty = process.env.NODE_ENV !== 'production' && process.stdout.isTTY;
 
@@ -43,6 +44,7 @@ const pretty = process.env.NODE_ENV !== 'production' && process.stdout.isTTY;
     HotspotsModule,
     OperatorModule,
     OfficialModule,
+    SupportModule,
   ],
   providers: [{ provide: APP_FILTER, useClass: HttpExceptionFilter }],
 })
