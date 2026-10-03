@@ -31,8 +31,8 @@ support, and services lack a clear picture of where help is needed.
 Haven is a safe middle path for reporting harassment and discrimination in Kraków. It covers
 everyday settings: trams and stops, streets, neighbourhoods and shared spaces. A resident can
 report verbal abuse, intimidation, threats, discrimination or hate symbols and vandalism in a few
-minutes. They can do it without an account, in English or Polish, on the
-web or in a mobile app, and add photos, video, audio and a location.
+minutes. They can do it without an account, in English or Polish, on the web or in a mobile app,
+and add photos, video, audio and a location.
 
 Every filed report reaches a human:
 
