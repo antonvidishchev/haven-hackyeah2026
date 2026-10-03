@@ -16,6 +16,8 @@ FROM node:24-alpine
 ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=build /out .
+# Owned by node, so a new evidence volume mounted here is writable by the API.
+RUN mkdir -p /data/evidence && chown node:node /data/evidence
 USER node
 EXPOSE 3001
 CMD ["node", "dist/main.js"]
